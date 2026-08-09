@@ -9,78 +9,128 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #000;
+            background: #000; /* плоский чёрный */
             color: #fff;
             font-family: 'Press Start 2P', monospace;
             height: 100dvh;
             width: 100vw;
             overflow: hidden;
             margin: 0;
-            background: radial-gradient(circle at 20% 30%, #1a1a1a, #000 80%);
             position: relative;
         }
 
-        /* Зернистый слой */
-        body::before {
-            content: '';
+        /* Экран загрузки (появляется первым) */
+        #loader-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.15;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-            background-repeat: repeat;
-            background-size: 256px 256px;
-        }
-
-        /* Неоновые акценты по краям */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            box-shadow: inset 0 0 80px rgba(255, 0, 0, 0.05), inset 0 0 120px rgba(0, 150, 255, 0.03);
-        }
-
-        /* Экран вступления (заменяет старый loader) */
-        #intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent;
+            background: #000;
             z-index: 20;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             opacity: 1;
-            transition: opacity 1s ease;
+            transition: opacity 0.5s ease;
             pointer-events: auto;
         }
+
+        #loader-screen img.logo {
+            position: fixed;
+            left: 50%;
+            width: auto;
+            height: auto;
+            max-width: 90vw;
+            max-height: 90vh;
+            image-rendering: pixelated;
+        }
+
+        .loader-bottom {
+            position: fixed;
+            left: 0;
+            bottom: 60px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #fff;
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .progress-wrapper {
+            width: 80%;
+            max-width: 400px;
+            border: 4px solid #fff;
+            background: #111;
+            padding: 2px;
+            image-rendering: pixelated;
+        }
+
+        .progress-bar {
+            height: 20px;
+            width: 0%;
+            background: #fff;
+            box-shadow: inset 0 0 0 2px #000;
+            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000),
+                              linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+            background-size: 8px 8px;
+            background-position: 0 0, 4px 4px;
+            animation: load 4s linear forwards;
+        }
+
+        @keyframes load {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
+        /* Экран PRESS START (появляется после загрузки) */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 20;
+            display: none; /* изначально скрыт */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: auto;
+        }
+
+        /* Размер PRESS START теперь как у LOADING */
         #intro-screen .press-start {
-            font-size: 24px;
-            letter-spacing: 8px;
+            font-size: 12px;
+            letter-spacing: 4px;
             color: #fff;
             animation: pulse 1.5s ease-in-out infinite;
             cursor: pointer;
             user-select: none;
-            z-index: 21;
         }
+
         @keyframes pulse {
             0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
         }
 
-        /* Основной контейнер (скрыт до нажатия) */
+        /* Основной контейнер (появляется после PRESS START) */
         #main-container {
             display: none;
             height: 100dvh;
@@ -96,7 +146,7 @@
         h1 {
             font-size: 25px;
             text-align: center;
-            margin-top: 40px;          /* опущен вниз */
+            margin-top: 40px;
             margin-bottom: 30px;
             color: #fff;
             -webkit-text-stroke: 1px #ff0000;
@@ -135,7 +185,6 @@
             background: #333;
         }
 
-        /* Карточки */
         .card {
             background: #111;
             border: 2px solid #333;
@@ -165,7 +214,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 6px; /* увеличен отступ между строками */
+            gap: 6px;
         }
 
         .card-title {
@@ -177,8 +226,8 @@
             color: #999;
             line-height: 1.5;
             font-family: sans-serif;
-            margin-top: 2px;      /* небольшой отступ сверху */
-            margin-bottom: 4px;   /* отступ снизу, чтобы не прилипало к цене */
+            margin-top: 2px;
+            margin-bottom: 4px;
         }
 
         .card-bottom {
@@ -192,7 +241,6 @@
             font-size: 14px;
         }
 
-        /* Белая кнопка */
         .btn {
             background: #fff;
             color: #000;
@@ -229,13 +277,23 @@
     </style>
 </head>
 <body>
+    <!-- Экран загрузки -->
+    <div id="loader-screen">
+        <img class="logo" src="https://i.imgur.com/KL2y07V.png" alt="Logo">
+        <div class="loader-bottom">
+            <div class="loading-text">LOADING</div>
+            <div class="progress-wrapper">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Экран вступления -->
+    <!-- Экран PRESS START (появляется после загрузки) -->
     <div id="intro-screen">
         <div class="press-start" onclick="startApp()">PRESS START</div>
     </div>
 
-    <!-- Основной контейнер (изначально скрыт) -->
+    <!-- Основной контейнер -->
     <div id="main-container">
         <h1>FLUGGA STORE</h1>
 
@@ -387,7 +445,6 @@
             <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
             <h2>Template FL Studio</h2>
             
-            <!-- Карточка 1 -->
             <div class="card">
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
@@ -415,7 +472,6 @@
                 </div>
             </div>
 
-            <!-- Карточка 2 -->
             <div class="card">
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
@@ -443,7 +499,6 @@
                 </div>
             </div>
 
-            <!-- Карточка 3 -->
             <div class="card">
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
@@ -522,71 +577,55 @@
             setTimeout(() => playTone(784, 0.2, 'square', 0.15), 300);
         }
 
-        // ---- Фоновая музыка ----
-        let bgMusic = null;
-        let bgMusicGain = null;
-        let isMusicMuted = false; // состояние можно сохранить в localStorage
+        // ---- Центрирование логотипа с Safe Area ----
+        const logo = document.querySelector('#loader-screen img.logo');
+        const webapp = window.Telegram?.WebApp;
 
-        function startBackgroundMusic() {
-            if (bgMusic) return; // уже играет
-            try {
-                initAudio();
-                // Создаём простой луп (можно заменить на аудиофайл)
-                // Для примера используем генератор низкой частоты с небольшим изменением
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.value = 120; // низкий гул
-                // Добавляем небольшую модуляцию
-                const lfo = audioCtx.createOscillator();
-                const lfoGain = audioCtx.createGain();
-                lfo.frequency.value = 0.5;
-                lfoGain.gain.value = 30;
-                lfo.connect(lfoGain);
-                lfoGain.connect(osc.frequency);
-                // Настраиваем громкость
-                gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + 2.5); // плавное нарастание до 12%
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                lfo.start();
-
-                bgMusic = osc;
-                bgMusicGain = gain;
-
-                // Если музыка отключена, сразу приглушаем
-                if (isMusicMuted) {
-                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                }
-
-                // Не останавливаем при переходах между разделами
-            } catch (e) {
-                console.warn('Фоновая музыка не поддерживается');
+        function centerLogo() {
+            if (!logo) return;
+            let topOffset = 0;
+            if (webapp && webapp.viewportStableHeight) {
+                const stableHeight = webapp.viewportStableHeight;
+                const windowHeight = window.innerHeight;
+                const diff = windowHeight - stableHeight;
+                if (diff > 0) topOffset = diff / 2;
             }
+            logo.style.top = '50%';
+            logo.style.transform = `translate(-50%, calc(-50% + ${topOffset}px)) scale(1.25)`;
         }
 
-        // ---- Вступление ----
-        function startApp() {
-            const intro = document.getElementById('intro-screen');
-            const main = document.getElementById('main-container');
+        centerLogo();
+        window.addEventListener('resize', centerLogo);
+        if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
-            // Запускаем музыку
-            startBackgroundMusic();
+        // ---- Переключение экрана загрузки -> PRESS START ----
+        const loaderScreen = document.getElementById('loader-screen');
+        const introScreen = document.getElementById('intro-screen');
+        const progressBar = document.querySelector('.progress-bar');
 
-            // Плавное исчезновение intro
-            intro.style.opacity = '0';
+        progressBar.addEventListener('animationend', () => {
+            // Скрываем загрузчик и показываем PRESS START
+            loaderScreen.style.opacity = '0';
             setTimeout(() => {
-                intro.style.display = 'none';
-                main.style.display = 'flex';
-                if (window.Telegram && window.Telegram.WebApp) {
-                    window.Telegram.WebApp.ready();
-                }
-            }, 1000);
-        }
+                loaderScreen.style.display = 'none';
+                introScreen.style.display = 'flex';
+                // Плавное появление
+                setTimeout(() => {
+                    introScreen.style.opacity = '1';
+                }, 50);
+            }, 500);
+        });
 
-        // ---- Центрирование логотипа с Safe Area (оставлено, но не используется) ----
-        // (можно удалить, если не нужно)
+        // ---- Запуск приложения после нажатия PRESS START ----
+        function startApp() {
+            const mainContainer = document.getElementById('main-container');
+            introScreen.style.opacity = '0';
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                mainContainer.style.display = 'flex';
+                if (webapp) webapp.ready();
+            }, 500);
+        }
 
         // ---- Навигация (главные категории) ----
         function openCategory(id) {
