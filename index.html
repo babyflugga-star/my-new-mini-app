@@ -36,10 +36,8 @@
     <script>
         function buyProduct(productName) {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
-            
-            // Надёжная проверка пользователя
             if (!user || !user.id) {
-                alert("Пожалуйста, откройте этот магазин через красную кнопку в Telegram (не в браузере).");
+                alert("Пожалуйста, откройте этот магазин через красную кнопку в Telegram (на телефоне).");
                 return;
             }
 
