@@ -144,31 +144,58 @@
             background: #333;
         }
 
+        /* --- Улучшенные карточки с аккуратными отступами --- */
         .card {
             background: #111;
             border: 2px solid #333;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 20px 24px;          /* больше внутреннего пространства */
+            margin-bottom: 20px;         /* больше расстояния между карточками */
             display: flex;
-            gap: 15px;
+            gap: 20px;                   /* больше расстояния между иконкой и текстом */
             align-items: center;
         }
 
-        .card svg.card-icon {
+        .card svg.card-icon,
+        .card img {
             width: 60px;
             height: 60px;
             border-radius: 6px;
             border: 2px solid #555;
             flex-shrink: 0;
             shape-rendering: crispEdges;
+            image-rendering: pixelated;
+            object-fit: cover;
             display: block;
         }
 
-        .card-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-        .card-title { font-size: 10px; }
-        .card-desc { font-size: 8px; color: #999; line-height: 1.5; font-family: sans-serif; }
-        .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
-        .price { font-size: 12px; }
+        .card-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;                   /* увеличен отступ между названием и описанием */
+        }
+
+        .card-title {
+            font-size: 10px;
+        }
+
+        .card-desc {
+            font-size: 8px;
+            color: #999;
+            line-height: 1.5;
+            font-family: sans-serif;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;            /* увеличен отступ от описания до низа */
+        }
+
+        .price {
+            font-size: 14px;             /* цена стала крупнее и заметнее */
+        }
 
         .btn {
             background: #ff0000;
@@ -238,7 +265,7 @@
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>BEATS</h2>
             <div class="card">
-                <img src="https://i.imgur.com/6Y2u9Zd.png" alt="Beat Pack 1" style="width:60px;height:60px;border-radius:6px;border:2px solid #555;image-rendering:pixelated;object-fit:cover;">
+                <img src="https://i.imgur.com/6Y2u9Zd.png" alt="Beat Pack 1">
                 <div class="card-info">
                     <div class="card-title">Beat Pack 1</div>
                     <div class="card-desc">Набор из 5 качественных битов.</div>
@@ -321,7 +348,7 @@
             </div>
         </div>
 
-        <!-- TEMPLATES (обновлённая структура) -->
+        <!-- TEMPLATES -->
         <div id="templates-screen" class="category-screen">
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2 style="margin-top: 20px;">TEMPLATE</h2>
@@ -337,7 +364,7 @@
             </div>
         </div>
 
-        <!-- TEMPLATES: LOGIC PRO (товар) -->
+        <!-- TEMPLATES: LOGIC PRO -->
         <div id="template-logicpro-screen" class="category-screen">
             <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
             <h2>Template Logic Pro</h2>
