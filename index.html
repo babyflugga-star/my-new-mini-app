@@ -108,7 +108,7 @@
 
         /* FLUGGA STORE: размер шрифта увеличен до 25px */
         h1 {
-            font-size: 25px; /* было 21px */
+            font-size: 25px;
             text-align: center;
             margin-bottom: 30px;
             color: #fff;
@@ -131,11 +131,10 @@
             margin-top: 20px;
         }
 
-        /* Ячейки категорий: увеличен padding для большей высоты */
         .menu-item {
             background: #111;
             border: 2px solid #fff;
-            padding: 40px 10px; /* было 30px 10px */
+            padding: 40px 10px;
             text-align: center;
             font-size: 14px;
             cursor: pointer;
@@ -236,6 +235,7 @@
             </div>
         </div>
 
+        <!-- BEATS -->
         <div id="beats-screen" class="category-screen">
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>BEATS</h2>
@@ -252,27 +252,84 @@
             </div>
         </div>
 
+        <!-- VOCAL PRESETS (теперь с подкатегориями) -->
         <div id="presets-screen" class="category-screen">
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>VOCAL PRESETS</h2>
+            <div class="menu-grid">
+                <div class="menu-item" onclick="openSubCategory('flstudio'); clickSound()">
+                    <span>FL STUDIO</span>
+                </div>
+                <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()">
+                    <span>LOGIC PRO</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FL STUDIO подкатегория -->
+        <div id="flstudio-screen" class="category-screen">
+            <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
+            <h2>FL Studio</h2>
             <div class="card">
-                <img src="https://i.imgur.com/7Vx8wKl.png" alt="Vocal пресеты" style="width:60px;height:60px;border-radius:6px;border:2px solid #555;image-rendering:pixelated;object-fit:cover;">
+                <!-- Иконка FL Studio (можно использовать существующий SVG или упрощённый) -->
+                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                    <rect width="32" height="32" fill="#222222"/>
+                    <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
+                    <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
+                    <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
+                    <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
+                    <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
+                    <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
+                    <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
+                    <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
+                    <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
+                    <rect x="4" y="6" width="4" height="4" fill="#009900"/>
+                    <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
+                    <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
+                    <rect x="14" y="0" width="2" height="4" fill="#886644"/>
+                </svg>
                 <div class="card-info">
-                    <div class="card-title">Vocal пресеты (мой рак)</div>
-                    <div class="card-desc">Цепочки/пресеты вокала из моих самых удачных треков.</div>
+                    <div class="card-title">FLUGGA Vocal Rec</div>
+                    <div class="card-desc">Профессиональная вокальная запись.</div>
                     <div class="card-bottom">
                         <span class="price">2 490 ₽</span>
-                        <button class="btn" onclick="buyProduct('Vocal пресеты (мой рак)', 2490); clickSound()">Выбрать</button>
+                        <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">Выбрать</button>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- LOGIC PRO подкатегория -->
+        <div id="logicpro-screen" class="category-screen">
+            <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
+            <h2>Logic Pro</h2>
+            <div class="card">
+                <!-- Иконка Logic Pro -->
+                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                    <rect width="32" height="32" fill="#222222"/>
+                    <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
+                    <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
+                    <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
+                    <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
+                    <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
+                    <rect x="14" y="14" width="4" height="4" fill="#000000"/>
+                </svg>
+                <div class="card-info">
+                    <div class="card-title">FLUGGA Vocal Rec</div>
+                    <div class="card-desc">Профессиональная вокальная запись.</div>
+                    <div class="card-bottom">
+                        <span class="price">2 490 ₽</span>
+                        <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">Выбрать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEMPLATES (остался без изменений) -->
         <div id="templates-screen" class="category-screen">
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>TEMPLATE</h2>
             <div class="card">
-                <!-- Logic Pro: чистый диск без лишних полос -->
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
                     <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
@@ -292,7 +349,6 @@
                 </div>
             </div>
             <div class="card">
-                <!-- FL Studio: перерисовано по вашему референсу -->
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
                     <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
@@ -475,7 +531,7 @@
         initAudio();
         startTvAtmosphere();
 
-        // ---- Навигация и покупка ----
+        // ---- Навигация (основные категории) ----
         function openCategory(id) {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById(id + '-screen').classList.add('active');
@@ -486,6 +542,19 @@
             document.getElementById('menu-screen').classList.add('active');
         }
 
+        // ---- Навигация (подкатегории внутри VOCAL PRESETS) ----
+        function openSubCategory(id) {
+            // Скрываем все экраны, затем показываем подкатегорию
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(id + '-screen').classList.add('active');
+        }
+
+        function goBackToPresets() {
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('presets-screen').classList.add('active');
+        }
+
+        // ---- Покупка ----
         function buyProduct(productName, productPrice) {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
