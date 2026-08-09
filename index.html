@@ -67,11 +67,19 @@
         .card {
             background: #111; border: 2px solid #333;
             padding: 15px; margin-bottom: 15px;
-            display: flex; flex-direction: column; gap: 10px;
+            display: flex; gap: 15px; align-items: center;
         }
+        .card img {
+            width: 60px; height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            image-rendering: pixelated;
+            border: 2px solid #555;
+        }
+        .card-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
         .card-title { font-size: 10px; }
         .card-desc { font-size: 8px; color: #999; line-height: 1.5; font-family: sans-serif; }
-        .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
         .price { font-size: 12px; }
         .btn {
             background: #fff; color: #000; border: none;
@@ -117,11 +125,14 @@
             <button class="back-btn" onclick="goBack()">← BACK</button>
             <h2>BEATS</h2>
             <div class="card">
-                <div class="card-title">Beat Pack 1</div>
-                <div class="card-desc">Набор из 5 качественных битов.</div>
-                <div class="card-bottom">
-                    <span class="price">1 500 ₽</span>
-                    <button class="btn" onclick="buyProduct('Beat Pack 1', 1500)">Выбрать</button>
+                <img src="https://i.imgur.com/6Y2u9Zd.png" alt="Beat Pack 1">
+                <div class="card-info">
+                    <div class="card-title">Beat Pack 1</div>
+                    <div class="card-desc">Набор из 5 качественных битов.</div>
+                    <div class="card-bottom">
+                        <span class="price">1 500 ₽</span>
+                        <button class="btn" onclick="buyProduct('Beat Pack 1', 1500)">Выбрать</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -130,11 +141,14 @@
             <button class="back-btn" onclick="goBack()">← BACK</button>
             <h2>VOCAL PRESETS</h2>
             <div class="card">
-                <div class="card-title">Vocal пресеты (мой рак)</div>
-                <div class="card-desc">Цепочки/пресеты вокала из моих самых удачных треков.</div>
-                <div class="card-bottom">
-                    <span class="price">2 490 ₽</span>
-                    <button class="btn" onclick="buyProduct('Vocal пресеты (мой рак)', 2490)">Выбрать</button>
+                <img src="https://i.imgur.com/7Vx8wKl.png" alt="Vocal пресеты">
+                <div class="card-info">
+                    <div class="card-title">Vocal пресеты (мой рак)</div>
+                    <div class="card-desc">Цепочки/пресеты вокала из моих самых удачных треков.</div>
+                    <div class="card-bottom">
+                        <span class="price">2 490 ₽</span>
+                        <button class="btn" onclick="buyProduct('Vocal пресеты (мой рак)', 2490)">Выбрать</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,19 +157,25 @@
             <button class="back-btn" onclick="goBack()">← BACK</button>
             <h2>TEMPLATE</h2>
             <div class="card">
-                <div class="card-title">Template для Logic Pro</div>
-                <div class="card-desc">Готовый проект с роутингом и базовым миксом.</div>
-                <div class="card-bottom">
-                    <span class="price">1 990 ₽</span>
-                    <button class="btn" onclick="buyProduct('Logic Pro', 1990)">Выбрать</button>
+                <img src="https://i.imgur.com/z3c9H4u.png" alt="Logic Pro">
+                <div class="card-info">
+                    <div class="card-title">Template для Logic Pro</div>
+                    <div class="card-desc">Готовый проект с роутингом и базовым миксом.</div>
+                    <div class="card-bottom">
+                        <span class="price">1 990 ₽</span>
+                        <button class="btn" onclick="buyProduct('Logic Pro', 1990)">Выбрать</button>
+                    </div>
                 </div>
             </div>
             <div class="card">
-                <div class="card-title">Template для FL Studio</div>
-                <div class="card-desc">Структура проекта, микшер, группировка.</div>
-                <div class="card-bottom">
-                    <span class="price">1 990 ₽</span>
-                    <button class="btn" onclick="buyProduct('FL Studio', 1990)">Выбрать</button>
+                <img src="https://i.imgur.com/m8T7s5g.png" alt="FL Studio">
+                <div class="card-info">
+                    <div class="card-title">Template для FL Studio</div>
+                    <div class="card-desc">Структура проекта, микшер, группировка.</div>
+                    <div class="card-bottom">
+                        <span class="price">1 990 ₽</span>
+                        <button class="btn" onclick="buyProduct('FL Studio', 1990)">Выбрать</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -168,7 +188,7 @@
         let isLoaded = false;
 
         function switchScreen() {
-            if (isLoaded) return; // Защита от двойного срабатывания
+            if (isLoaded) return;
             isLoaded = true;
             if (loaderScreen) loaderScreen.style.display = 'none';
             if (mainContainer) mainContainer.style.display = 'flex';
@@ -177,25 +197,16 @@
             }
         }
 
-        // 1. Запасной таймер на 5 секунд (если гифка загружается слишком долго)
         setTimeout(() => {
-            if (!isLoaded) {
-                switchScreen();
-            }
+            if (!isLoaded) switchScreen();
         }, 5000);
 
-        // 2. Быстрое срабатывание, если гифка загрузилась раньше
         if (loaderGif) {
-            // Если гифка уже загружена (из кэша), onload может не сработать, поэтому проверяем complete
             if (loaderGif.complete) {
-                setTimeout(() => {
-                    if (!isLoaded) switchScreen();
-                }, 300); // Небольшая задержка для первого кадра
+                setTimeout(() => { if (!isLoaded) switchScreen(); }, 300);
             } else {
                 loaderGif.onload = () => {
-                    setTimeout(() => {
-                        if (!isLoaded) switchScreen();
-                    }, 300);
+                    setTimeout(() => { if (!isLoaded) switchScreen(); }, 300);
                 };
             }
         }
