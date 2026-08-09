@@ -37,7 +37,7 @@
         function buyProduct(productName) {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
-                alert("Пожалуйста, откройте этот магазин через красную кнопку в Telegram (на телефоне).");
+                alert("Для оформления заказа откройте магазин через кнопку в Telegram.");
                 return;
             }
 
@@ -55,7 +55,7 @@
                 alert(data.message);
                 window.Telegram.WebApp.close();
             })
-            .catch(() => alert('Ошибка при отправке заказа. Проверьте токен бота в настройках Vercel.'));
+            .catch(() => alert('Ошибка при отправке заказа. Проверьте токен бота.'));
         }
     </script>
 </body>
