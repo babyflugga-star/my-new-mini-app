@@ -8,8 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #000; color: #fff; font-family: 'Press Start 2P', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        
+        body { background: #000; color: #fff; font-family: 'Press Start 2P', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
         #loader-screen {
             display: flex;
             flex-direction: column;
@@ -27,33 +27,32 @@
             margin-bottom: 40px;
             image-rendering: pixelated;
         }
-        
+
         .loader-wrapper {
             width: 80%;
             max-width: 400px;
-            padding: 4px;
-            border: 4px solid #fff;
-            background: #000;
-            image-rendering: pixelated;
+            border: 4px solid white;
+            background: #111;
+            padding: 2px;
         }
         .loader-bar {
-            width: 100%;
             height: 24px;
-            background: #000;
+            width: 100%;
+            background: #222;
             position: relative;
         }
         .loader-progress {
             height: 100%;
             width: 0%;
-            background: #fff;
+            background: white;
             transition: width 0.1s linear;
-            box-shadow: inset 0 0 0 1px #000;
-            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), 
+            box-shadow: inset 0 0 0 2px #000;
+            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000),
                               linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
             background-size: 8px 8px;
             background-position: 0 0, 4px 4px;
         }
-        
+
         #main-container {
             display: none;
             height: 100vh;
@@ -62,10 +61,10 @@
             padding: 20px;
             overflow-y: auto;
         }
-        
+
         h1 { font-size: 14px; text-align: center; margin-bottom: 30px; color: #fff; }
         h2 { font-size: 12px; margin: 20px 0; color: #aaa; border-bottom: 2px solid #333; padding-bottom: 8px; }
-        
+
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -83,13 +82,7 @@
             image-rendering: pixelated;
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
-        .menu-item img { 
-            width: 48px; height: 48px; 
-            margin-bottom: 10px; 
-            image-rendering: pixelated;
-            filter: invert(1);
-        }
-        
+
         .card {
             background: #111; border: 2px solid #333;
             padding: 15px; margin-bottom: 15px;
@@ -99,16 +92,16 @@
         .card-desc { font-size: 8px; color: #999; line-height: 1.5; font-family: sans-serif; }
         .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
         .price { font-size: 12px; }
-        .btn { 
-            background: #fff; color: #000; border: none; 
-            padding: 8px 16px; font-family: 'Press Start 2P', monospace; 
-            font-size: 8px; cursor: pointer; 
+        .btn {
+            background: #fff; color: #000; border: none;
+            padding: 8px 16px; font-family: 'Press Start 2P', monospace;
+            font-size: 8px; cursor: pointer;
             border: 2px solid #000;
         }
         .btn:active { transform: scale(0.9); }
 
         .back-btn {
-            background: none; border: none; color: #fff; 
+            background: none; border: none; color: #fff;
             font-size: 10px; margin-bottom: 15px; cursor: pointer; text-align: left;
         }
 
@@ -117,9 +110,8 @@
     </style>
 </head>
 <body>
-
     <div id="loader-screen">
-        <img src="https://i.postimg.cc/brQQfd7N/IMG-4696.png" alt="Logo">
+        <img src="https://i.imgur.com/KL2y07V.png" alt="Logo">
         <div class="loader-wrapper">
             <div class="loader-bar">
                 <div class="loader-progress" id="progress-bar"></div>
@@ -147,7 +139,6 @@
         <div id="beats-screen" class="category-screen">
             <button class="back-btn" onclick="goBack()">← BACK</button>
             <h2>BEATS</h2>
-            
             <div class="card">
                 <div class="card-title">Beat Pack 1</div>
                 <div class="card-desc">Набор из 5 качественных битов.</div>
@@ -161,7 +152,6 @@
         <div id="presets-screen" class="category-screen">
             <button class="back-btn" onclick="goBack()">← BACK</button>
             <h2>VOCAL PRESETS</h2>
-
             <div class="card">
                 <div class="card-title">Vocal пресеты (мой рак)</div>
                 <div class="card-desc">Цепочки/пресеты вокала из моих самых удачных треков.</div>
@@ -175,7 +165,6 @@
         <div id="templates-screen" class="category-screen">
             <button class="back-btn" onclick="goBack()">← BACK</button>
             <h2>TEMPLATE</h2>
-
             <div class="card">
                 <div class="card-title">Template для Logic Pro</div>
                 <div class="card-desc">Готовый проект с роутингом и базовым миксом.</div>
@@ -184,7 +173,6 @@
                     <button class="btn" onclick="buyProduct('Logic Pro', 1990)">Выбрать</button>
                 </div>
             </div>
-
             <div class="card">
                 <div class="card-title">Template для FL Studio</div>
                 <div class="card-desc">Структура проекта, микшер, группировка.</div>
@@ -197,26 +185,28 @@
     </div>
 
     <script>
-        let progress = 0;
-        const progressBar = document.getElementById('progress-bar');
-        const loaderScreen = document.getElementById('loader-screen');
-        const mainContainer = document.getElementById('main-container');
+        setTimeout(() => {
+            let progress = 0;
+            const progressBar = document.getElementById('progress-bar');
+            const loaderScreen = document.getElementById('loader-screen');
+            const mainContainer = document.getElementById('main-container');
 
-        const interval = setInterval(() => {
-            progress += 2;
-            if(progress >= 100) {
-                progress = 100;
-                clearInterval(interval);
-                setTimeout(() => {
-                    loaderScreen.style.display = 'none';
-                    mainContainer.style.display = 'flex';
-                    if(window.Telegram && window.Telegram.WebApp) {
-                        window.Telegram.WebApp.ready();
-                    }
-                }, 300);
-            }
-            progressBar.style.width = progress + '%';
-        }, 50);
+            const interval = setInterval(() => {
+                progress += 2;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loaderScreen.style.display = 'none';
+                        mainContainer.style.display = 'flex';
+                        if (window.Telegram && window.Telegram.WebApp) {
+                            window.Telegram.WebApp.ready();
+                        }
+                    }, 300);
+                }
+                progressBar.style.width = progress + '%';
+            }, 50);
+        }, 200);
 
         function openCategory(id) {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
