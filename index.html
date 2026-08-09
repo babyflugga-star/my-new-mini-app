@@ -115,7 +115,6 @@
             pointer-events: auto;
         }
 
-        /* Размер PRESS START теперь как у LOADING */
         #intro-screen .press-start {
             font-size: 12px;
             letter-spacing: 4px;
@@ -210,31 +209,32 @@
             display: block;
         }
 
+        /* --- ИЗМЕНЕНИЯ В КАРТОЧКАХ --- */
         .card-info {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            justify-content: space-between; /* распределяет элементы по высоте */
+            /* gap: 6px; убрано, чтобы работало space-between */
         }
 
         .card-title {
-            font-size: 10px;
+            font-size: 15px; /* увеличено в 1.5 раза (было 10px) */
         }
 
         .card-desc {
-            font-size: 8px;
+            font-size: 16px; /* увеличено в 2 раза (было 8px) */
             color: #999;
             line-height: 1.5;
             font-family: sans-serif;
-            margin-top: 2px;
-            margin-bottom: 4px;
+            /* margin-top и margin-bottom убраны для центрирования */
         }
 
         .card-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 6px;
+            margin-top: 6px; /* небольшой отступ от описания */
         }
 
         .price {
