@@ -9,7 +9,6 @@
         body { background-color: #1a1a1a; color: white; font-family: sans-serif; padding: 20px; }
         .card { background: #2d2d2d; padding: 20px; border-radius: 12px; margin-bottom: 15px; }
         .btn { background: #7b61ff; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
-        .btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
@@ -37,7 +36,7 @@
         function buyProduct(productName) {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
-                alert("Пожалуйста, откройте этот магазин через красную кнопку в Telegram (на телефоне).");
+                alert("Ошибка: откройте магазин через красную кнопку Telegram.");
                 return;
             }
 
@@ -55,7 +54,7 @@
                 alert(data.message);
                 window.Telegram.WebApp.close();
             })
-            .catch(() => alert('Ошибка при отправке заказа. Проверьте токен бота в настройках Vercel.'));
+            .catch(() => alert('Ошибка при отправке заказа. Проверьте токен.'));
         }
     </script>
 </body>
