@@ -23,17 +23,16 @@
             background: #000;
         }
         #loader-screen img.logo {
-            max-width: 85%;
-            max-height: 50vh;
+            max-width: 90%; /* Максимальная ширина 90% экрана */
             width: auto;
             height: auto;
             object-fit: contain;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             image-rendering: pixelated;
         }
         #loader-screen img.loader-gif {
-            width: 200px;
-            max-width: 60%;
+            width: 180px;
+            max-width: 50%;
             height: auto;
             image-rendering: pixelated;
         }
@@ -179,7 +178,6 @@
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
 
-        // Ждём ровно 4 секунды, а потом переключаем экран
         setTimeout(() => {
             loaderScreen.style.display = 'none';
             mainContainer.style.display = 'flex';
