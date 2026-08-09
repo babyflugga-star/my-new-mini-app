@@ -10,7 +10,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #000; color: #fff; font-family: 'Press Start 2P', monospace; height: 100vh; width: 100vw; overflow: hidden; margin: 0; }
 
-        /* Загрузочный экран — без flex, просто как контейнер */
         #loader-screen {
             position: fixed;
             top: 0;
@@ -21,16 +20,16 @@
             z-index: 10;
         }
 
-        /* Логотип — строго по центру экрана через абсолютное позиционирование */
+        /* Логотип — строго по центру + увеличен на 25% без упирания в края */
         #loader-screen img.logo {
             position: fixed;
             left: 50%;
             top: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 90%;
+            transform: translate(-50%, -50%) scale(1.25);
             width: auto;
             height: auto;
-            object-fit: contain;
+            max-width: 90vw;
+            max-height: 90vh;
             image-rendering: pixelated;
         }
 
