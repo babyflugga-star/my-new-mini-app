@@ -18,6 +18,7 @@
             margin: 0;
         }
 
+        /* Экран загрузки с плавным переходом */
         #loader-screen {
             position: fixed;
             top: 0;
@@ -30,6 +31,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
         }
 
         #loader-screen img.logo {
@@ -355,15 +358,30 @@
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
-        // ---- Переключение экрана загрузки ----
+        // ---- Переключение экрана загрузки (плавное) ----
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
         const progressBar = document.querySelector('.progress-bar');
 
         progressBar.addEventListener('animationend', () => {
-            loaderScreen.style.display = 'none';
-            mainContainer.style.display = 'flex';
-            if (webapp) webapp.ready();
+            // Плавное исчезновение экрана загрузки
+            loaderScreen.style.opacity = '0';
+            setTimeout(() => {
+                loaderScreen.style.display = 'none';
+                mainContainer.style.display = 'flex';
+                if (webapp) webapp.ready();
+            }, 500); // соответствует времени перехода opacity
+        });
+
+        // ---- Первое взаимодействие (звук телевизора) ----
+        let firstInteraction = true;
+        document.addEventListener('pointerdown', function firstClick() {
+            if (!firstInteraction) return;
+            firstInteraction = false;
+            initAudio();
+            tvStaticSound();
+            // Удаляем обработчик, чтобы звук играл только один раз
+            document.removeEventListener('pointerdown', firstClick);
         });
 
         // ---- Навигация и покупка ----
@@ -404,11 +422,6 @@
 
         // ---- Анимация нажатия через JavaScript ----
         document.addEventListener('DOMContentLoaded', () => {
-            // Атмосферный звук при запуске (только один раз)
-            initAudio();
-            tvStaticSound();
-
-            // Обработчики нажатий на кнопки
             const interactiveElements = document.querySelectorAll('.menu-item, .btn, .back-btn');
 
             interactiveElements.forEach(el => {
