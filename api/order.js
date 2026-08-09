@@ -13,27 +13,36 @@ export default async function handler(req, res) {
 
     const { userId, username, product } = req.body;
     const botToken = process.env.BOT_TOKEN;
+    const shopId = process.env.YOKASSA_SHOP_ID;
+    const secretKey = process.env.YOKASSA_SECRET_KEY;
 
-    if (!botToken) {
-        return res.status(500).json({ message: 'Токен бота не найден в настройках Vercel' });
+    if (!botToken || !shopId || !secretKey) {
+        return res.status(500).json({ message: 'Ошибка: не хватает ключей в Vercel' });
     }
 
     try {
-        const message = `✅ Новый заказ!\n\nПокупатель: @${username || userId}\nТовар: ${product}`;
+        // Формируем ссылку на оплату через ЮKassa (упрощенный формат)
+        const paymentUrl = `https://yoomoney.ru/quickpay/confirm?receiver=${shopId}&quickpay-form=shop&targets=${encodeURIComponent(product)}&sum=1990`;
+
+        const message = `✅ Заказ оформлен!\n\nТовар: ${product}\n\nДля получения товара оплатите по ссылке:`;
 
         const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
         await fetch(telegramUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id: 5721182448,
-                text: message
+                chat_id: userId,
+                text: message,
+                reply_markup: {
+                    inline_keyboard: [
+                        [{ text: "💳 Оплатить", url: paymentUrl }]
+                    ]
+                }
             })
         });
 
-        return res.status(200).json({ message: 'Заказ отправлен боту!' });
+        return res.status(200).json({ message: 'Ссылка на оплату отправлена!' });
     } catch (error) {
-        return res.status(500).json({ message: 'Ошибка отправки в Telegram' });
+        return res.status(500).json({ message: 'Ошибка при создании платежа' });
     }
 }
