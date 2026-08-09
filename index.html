@@ -106,9 +106,8 @@
             position: relative;
         }
 
-        /* === ИЗМЕНЕНИЕ: заголовок увеличен до 21px === */
         h1 {
-            font-size: 21px; /* было 18px, увеличено на ~17% */
+            font-size: 21px;
             text-align: center;
             margin-bottom: 30px;
             color: #fff;
@@ -155,13 +154,18 @@
             gap: 15px;
             align-items: center;
         }
-        .card img {
-            width: 60px; height: 60px;
+
+        /* Обновлённые стили для SVG‑иконок */
+        .card svg.card-icon {
+            width: 60px;
+            height: 60px;
             border-radius: 6px;
-            object-fit: cover;
-            image-rendering: pixelated;
             border: 2px solid #555;
+            flex-shrink: 0;
+            shape-rendering: crispEdges;
+            display: block;
         }
+
         .card-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
         .card-title { font-size: 10px; }
         .card-desc { font-size: 8px; color: #999; line-height: 1.5; font-family: sans-serif; }
@@ -235,7 +239,7 @@
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>BEATS</h2>
             <div class="card">
-                <img src="https://i.imgur.com/6Y2u9Zd.png" alt="Beat Pack 1">
+                <img src="https://i.imgur.com/6Y2u9Zd.png" alt="Beat Pack 1" style="width:60px;height:60px;border-radius:6px;border:2px solid #555;image-rendering:pixelated;object-fit:cover;">
                 <div class="card-info">
                     <div class="card-title">Beat Pack 1</div>
                     <div class="card-desc">Набор из 5 качественных битов.</div>
@@ -251,7 +255,7 @@
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>VOCAL PRESETS</h2>
             <div class="card">
-                <img src="https://i.imgur.com/7Vx8wKl.png" alt="Vocal пресеты">
+                <img src="https://i.imgur.com/7Vx8wKl.png" alt="Vocal пресеты" style="width:60px;height:60px;border-radius:6px;border:2px solid #555;image-rendering:pixelated;object-fit:cover;">
                 <div class="card-info">
                     <div class="card-title">Vocal пресеты (мой рак)</div>
                     <div class="card-desc">Цепочки/пресеты вокала из моих самых удачных треков.</div>
@@ -267,7 +271,13 @@
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>TEMPLATE</h2>
             <div class="card">
-                <img src="https://i.imgur.com/z3c9H4u.png" alt="Logic Pro">
+                <!-- Пиксельная иконка Logic Pro -->
+                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                    <rect width="32" height="32" fill="#0055FF"/>
+                    <rect x="6" y="6" width="20" height="20" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+                    <rect x="10" y="10" width="4" height="12" fill="#FFFFFF"/>
+                    <rect x="14" y="18" width="8" height="4" fill="#FFFFFF"/>
+                </svg>
                 <div class="card-info">
                     <div class="card-title">Template для Logic Pro</div>
                     <div class="card-desc">Готовый проект с роутингом и базовым миксом.</div>
@@ -278,7 +288,12 @@
                 </div>
             </div>
             <div class="card">
-                <img src="https://i.imgur.com/m8T7s5g.png" alt="FL Studio">
+                <!-- Пиксельная иконка FL Studio -->
+                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                    <rect x="6" y="8" width="20" height="18" fill="#FF8800"/>
+                    <rect x="12" y="4" width="8" height="4" fill="#00CC00"/>
+                    <rect x="14" y="2" width="4" height="2" fill="#00CC00"/>
+                </svg>
                 <div class="card-info">
                     <div class="card-title">Template для FL Studio</div>
                     <div class="card-desc">Структура проекта, микшер, группировка.</div>
