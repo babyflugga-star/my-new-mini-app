@@ -10,27 +10,36 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #000; color: #fff; font-family: 'Press Start 2P', monospace; height: 100vh; width: 100vw; overflow: hidden; margin: 0; }
 
+        /* Загрузочный экран — без flex, просто как контейнер */
         #loader-screen {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            position: absolute;
-            top: 0; left: 0;
-            z-index: 10;
+            height: 100%;
             background: #000;
+            z-index: 10;
         }
+
+        /* Логотип — строго по центру экрана через абсолютное позиционирование */
         #loader-screen img.logo {
-            max-width: 90%; /* Максимальная ширина 90% экрана */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
             width: auto;
             height: auto;
             object-fit: contain;
-            margin-bottom: 25px;
             image-rendering: pixelated;
         }
+
+        /* Гифка загрузки — снизу, независимо от логотипа */
         #loader-screen img.loader-gif {
+            position: fixed;
+            left: 50%;
+            bottom: 60px;
+            transform: translateX(-50%);
             width: 180px;
             max-width: 50%;
             height: auto;
