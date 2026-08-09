@@ -106,8 +106,9 @@
             position: relative;
         }
 
+        /* FLUGGA STORE: размер шрифта увеличен до 25px */
         h1 {
-            font-size: 21px;
+            font-size: 25px; /* было 21px */
             text-align: center;
             margin-bottom: 30px;
             color: #fff;
@@ -130,10 +131,11 @@
             margin-top: 20px;
         }
 
+        /* Ячейки категорий: увеличен padding для большей высоты */
         .menu-item {
             background: #111;
             border: 2px solid #fff;
-            padding: 30px 10px;
+            padding: 40px 10px; /* было 30px 10px */
             text-align: center;
             font-size: 14px;
             cursor: pointer;
@@ -155,7 +157,6 @@
             align-items: center;
         }
 
-        /* Обновлённые стили для SVG‑иконок */
         .card svg.card-icon {
             width: 60px;
             height: 60px;
@@ -294,7 +295,6 @@
                 <!-- FL Studio: перерисовано по вашему референсу -->
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
-                    <!-- Основное тело фрукта (овал с расширением в верхней части) -->
                     <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
                     <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
                     <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
@@ -302,14 +302,11 @@
                     <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
                     <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
                     <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
-                    <!-- Светлый блик для объёма -->
                     <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
-                    <!-- Листья (левая и правая группы) -->
                     <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
                     <rect x="4" y="6" width="4" height="4" fill="#009900"/>
                     <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
                     <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
-                    <!-- Стебель -->
                     <rect x="14" y="0" width="2" height="4" fill="#886644"/>
                 </svg>
                 <div class="card-info">
