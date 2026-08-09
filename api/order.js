@@ -21,10 +21,36 @@ export default async function handler(req, res) {
     }
 
     try {
-        // Формируем ссылку на оплату через ЮKassa (упрощенный формат)
-        const paymentUrl = `https://yoomoney.ru/quickpay/confirm?receiver=${shopId}&quickpay-form=shop&targets=${encodeURIComponent(product)}&sum=1990`;
+        const amount = product === 'Vocal пресеты (мой рак)' ? '2490.00' : '1990.00';
+        const yooKassaUrl = 'https://api.yookassa.ru/v3/payments';
+        const auth = Buffer.from(`${shopId}:${secretKey}`).toString('base64');
+        const idempotenceKey = `order_${userId}_${Date.now()}`;
 
-        const message = `✅ Заказ оформлен!\n\nТовар: ${product}\n\nДля получения товара оплатите по ссылке:`;
+        const paymentData = {
+            amount: { value: amount, currency: 'RUB' },
+            confirmation: { type: 'redirect', return_url: 'https://t.me/FLUGGA_STORE_BOT' },
+            capture: true,
+            description: `Заказ: ${product} от @${username || userId}`
+        };
+
+        const response = await fetch(yooKassaUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Basic ${auth}`,
+                'Idempotence-Key': idempotenceKey
+            },
+            body: JSON.stringify(paymentData)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.description || 'Ошибка создания платежа');
+        }
+
+        const paymentUrl = data.confirmation.confirmation_url;
+        const message = `✅ Заказ оформлен!\n\nТовар: ${product}\nСумма: ${amount} ₽\n\nОплатите по ссылке:`;
 
         const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
         await fetch(telegramUrl, {
@@ -35,7 +61,7 @@ export default async function handler(req, res) {
                 text: message,
                 reply_markup: {
                     inline_keyboard: [
-                        [{ text: "💳 Оплатить", url: paymentUrl }]
+                        [{ text: "💳 Перейти к оплате", url: paymentUrl }]
                     ]
                 }
             })
@@ -43,6 +69,6 @@ export default async function handler(req, res) {
 
         return res.status(200).json({ message: 'Ссылка на оплату отправлена!' });
     } catch (error) {
-        return res.status(500).json({ message: 'Ошибка при создании платежа' });
+        return res.status(500).json({ message: 'Ошибка оплаты: ' + error.message });
     }
 }
