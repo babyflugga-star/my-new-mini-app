@@ -131,12 +131,13 @@
             margin-top: 20px;
         }
 
+        /* Увеличенные ячейки */
         .menu-item {
             background: #111;
             border: 2px solid #fff;
-            padding: 40px 10px;
+            padding: 55px 10px;  /* увеличено с 40px */
             text-align: center;
-            font-size: 14px;
+            font-size: 17px;      /* увеличено с 14px */
             cursor: pointer;
             image-rendering: pixelated;
             transition: none;
@@ -252,7 +253,7 @@
             </div>
         </div>
 
-        <!-- VOCAL PRESETS (теперь с подкатегориями) -->
+        <!-- VOCAL PRESETS (подкатегории) -->
         <div id="presets-screen" class="category-screen">
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>VOCAL PRESETS</h2>
@@ -271,7 +272,6 @@
             <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
             <h2>FL Studio</h2>
             <div class="card">
-                <!-- Иконка FL Studio (можно использовать существующий SVG или упрощённый) -->
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
                     <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
@@ -304,7 +304,6 @@
             <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
             <h2>Logic Pro</h2>
             <div class="card">
-                <!-- Иконка Logic Pro -->
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
                     <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
@@ -531,7 +530,7 @@
         initAudio();
         startTvAtmosphere();
 
-        // ---- Навигация (основные категории) ----
+        // ---- Навигация ----
         function openCategory(id) {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById(id + '-screen').classList.add('active');
@@ -542,9 +541,7 @@
             document.getElementById('menu-screen').classList.add('active');
         }
 
-        // ---- Навигация (подкатегории внутри VOCAL PRESETS) ----
         function openSubCategory(id) {
-            // Скрываем все экраны, затем показываем подкатегорию
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById(id + '-screen').classList.add('active');
         }
