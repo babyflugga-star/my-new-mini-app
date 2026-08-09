@@ -170,7 +170,6 @@
         .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
         .price { font-size: 12px; }
 
-        /* Кнопки теперь красные с белым текстом */
         .btn {
             background: #ff0000;
             color: #fff;
@@ -179,7 +178,7 @@
             font-family: 'Press Start 2P', monospace;
             font-size: 8px;
             cursor: pointer;
-            border: 2px solid #fff; /* белая рамка для контраста */
+            border: 2px solid #fff;
             transition: none;
         }
         .btn:active {
@@ -265,7 +264,7 @@
             </div>
         </div>
 
-        <!-- FL STUDIO -->
+        <!-- VOCAL PRESETS SUB: FL STUDIO -->
         <div id="flstudio-screen" class="category-screen">
             <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
             <h2>FL Studio</h2>
@@ -297,7 +296,7 @@
             </div>
         </div>
 
-        <!-- LOGIC PRO -->
+        <!-- VOCAL PRESETS SUB: LOGIC PRO -->
         <div id="logicpro-screen" class="category-screen">
             <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
             <h2>Logic Pro</h2>
@@ -322,10 +321,26 @@
             </div>
         </div>
 
-        <!-- TEMPLATES -->
+        <!-- TEMPLATES (обновлённая структура) -->
         <div id="templates-screen" class="category-screen">
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2>TEMPLATE</h2>
+            <div class="menu-grid">
+                <div class="menu-item" onclick="openTemplateLogicPro(); clickSound()">
+                    <div>Template Logic Pro</div>
+                    <div style="font-size:10px; color:#999; margin-top:4px;">Full Project + Master</div>
+                </div>
+                <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()">
+                    <div>Template FL Studio</div>
+                    <div style="font-size:10px; color:#999; margin-top:4px;">Full Project + Master</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEMPLATES: LOGIC PRO (товар) -->
+        <div id="template-logicpro-screen" class="category-screen">
+            <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
+            <h2>Template Logic Pro</h2>
             <div class="card">
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
@@ -337,14 +352,40 @@
                     <rect x="14" y="14" width="4" height="4" fill="#000000"/>
                 </svg>
                 <div class="card-info">
-                    <div class="card-title">Template для Logic Pro</div>
-                    <div class="card-desc">Готовый проект с роутингом и базовым миксом.</div>
+                    <div class="card-title">Template Logic Pro</div>
+                    <div class="card-desc">Full Project + Master</div>
                     <div class="card-bottom">
                         <span class="price">1 990 ₽</span>
-                        <button class="btn" onclick="buyProduct('Logic Pro', 1990); clickSound()">ВЫБРАТЬ</button>
+                        <button class="btn" onclick="buyProduct('Template Logic Pro', 1990); clickSound()">ВЫБРАТЬ</button>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- TEMPLATES: FL STUDIO (подкатегории) -->
+        <div id="template-flstudio-screen" class="category-screen">
+            <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
+            <h2>Template FL Studio</h2>
+            <div class="menu-grid">
+                <div class="menu-item" onclick="openTemplateItem(); clickSound()">
+                    <div>Перед тем как</div>
+                    <div style="font-size:10px; color:#999; margin-top:4px;">Full project, Beat, Vocal x Effect</div>
+                </div>
+                <div class="menu-item" onclick="openTemplateItem(); clickSound()">
+                    <div>Сделаю тебе больно</div>
+                    <div style="font-size:10px; color:#999; margin-top:4px;">Full project, Beat, Vocal x Effect</div>
+                </div>
+                <div class="menu-item" onclick="openTemplateItem(); clickSound()">
+                    <div>Кистями</div>
+                    <div style="font-size:10px; color:#999; margin-top:4px;">Full project, Beat, Vocal x Effect</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEMPLATES: общий экран товара (для трёх ячеек FL Studio) -->
+        <div id="template-item-screen" class="category-screen">
+            <button class="back-btn" onclick="goBackToFLStudioTemplates(); clickSound()">← BACK</button>
+            <h2>FLUGGA Template Pack</h2>
             <div class="card">
                 <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                     <rect width="32" height="32" fill="#222222"/>
@@ -363,11 +404,11 @@
                     <rect x="14" y="0" width="2" height="4" fill="#886644"/>
                 </svg>
                 <div class="card-info">
-                    <div class="card-title">Template для FL Studio</div>
-                    <div class="card-desc">Структура проекта, микшер, группировка.</div>
+                    <div class="card-title">FLUGGA Template Pack</div>
+                    <div class="card-desc">Полный проект + мастеринг</div>
                     <div class="card-bottom">
                         <span class="price">1 990 ₽</span>
-                        <button class="btn" onclick="buyProduct('FL Studio', 1990); clickSound()">ВЫБРАТЬ</button>
+                        <button class="btn" onclick="buyProduct('FLUGGA Template Pack', 1990); clickSound()">ВЫБРАТЬ</button>
                     </div>
                 </div>
             </div>
@@ -528,7 +569,7 @@
         initAudio();
         startTvAtmosphere();
 
-        // ---- Навигация ----
+        // ---- Навигация (главные категории) ----
         function openCategory(id) {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById(id + '-screen').classList.add('active');
@@ -539,6 +580,7 @@
             document.getElementById('menu-screen').classList.add('active');
         }
 
+        // ---- Навигация VOCAL PRESETS ----
         function openSubCategory(id) {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById(id + '-screen').classList.add('active');
@@ -547,6 +589,32 @@
         function goBackToPresets() {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById('presets-screen').classList.add('active');
+        }
+
+        // ---- Навигация TEMPLATES ----
+        function openTemplateLogicPro() {
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('template-logicpro-screen').classList.add('active');
+        }
+
+        function openTemplateFLStudio() {
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('template-flstudio-screen').classList.add('active');
+        }
+
+        function goBackToTemplates() {
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('templates-screen').classList.add('active');
+        }
+
+        function openTemplateItem() {
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('template-item-screen').classList.add('active');
+        }
+
+        function goBackToFLStudioTemplates() {
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('template-flstudio-screen').classList.add('active');
         }
 
         // ---- Покупка ----
