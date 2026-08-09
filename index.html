@@ -16,7 +16,6 @@
             width: 100vw;
             overflow: hidden;
             margin: 0;
-            /* Градиент + зерно */
             background: radial-gradient(circle at 20% 30%, #1a1a1a, #000 80%);
             position: relative;
         }
@@ -50,82 +49,38 @@
             box-shadow: inset 0 0 80px rgba(255, 0, 0, 0.05), inset 0 0 120px rgba(0, 150, 255, 0.03);
         }
 
-        #loader-screen {
+        /* Экран вступления (заменяет старый loader) */
+        #intro-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #000;
-            z-index: 10;
+            background: transparent;
+            z-index: 20;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             opacity: 1;
-            transition: opacity 0.5s ease;
+            transition: opacity 1s ease;
+            pointer-events: auto;
         }
-
-        #loader-screen img.logo {
-            position: fixed;
-            left: 50%;
-            width: auto;
-            height: auto;
-            max-width: 90vw;
-            max-height: 90vh;
-            image-rendering: pixelated;
-        }
-
-        .loader-bottom {
-            position: fixed;
-            left: 0;
-            bottom: 60px;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            pointer-events: none;
-        }
-
-        .loading-text {
-            font-size: 12px;
-            letter-spacing: 4px;
+        #intro-screen .press-start {
+            font-size: 24px;
+            letter-spacing: 8px;
             color: #fff;
-            animation: blink 1s step-start infinite;
+            animation: pulse 1.5s ease-in-out infinite;
+            cursor: pointer;
+            user-select: none;
+            z-index: 21;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        .progress-wrapper {
-            width: 80%;
-            max-width: 400px;
-            border: 4px solid #fff;
-            background: #111;
-            padding: 2px;
-            image-rendering: pixelated;
-        }
-
-        .progress-bar {
-            height: 20px;
-            width: 0%;
-            background: #fff;
-            box-shadow: inset 0 0 0 2px #000;
-            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000),
-                              linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
-            background-size: 8px 8px;
-            background-position: 0 0, 4px 4px;
-            animation: load 4s linear forwards;
-        }
-
-        @keyframes load {
-            from { width: 0%; }
-            to { width: 100%; }
-        }
-
+        /* Основной контейнер (скрыт до нажатия) */
         #main-container {
             display: none;
             height: 100dvh;
@@ -141,6 +96,7 @@
         h1 {
             font-size: 25px;
             text-align: center;
+            margin-top: 40px;          /* опущен вниз */
             margin-bottom: 30px;
             color: #fff;
             -webkit-text-stroke: 1px #ff0000;
@@ -209,7 +165,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px; /* увеличен отступ между строками */
         }
 
         .card-title {
@@ -221,13 +177,15 @@
             color: #999;
             line-height: 1.5;
             font-family: sans-serif;
+            margin-top: 2px;      /* небольшой отступ сверху */
+            margin-bottom: 4px;   /* отступ снизу, чтобы не прилипало к цене */
         }
 
         .card-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         .price {
@@ -271,16 +229,13 @@
     </style>
 </head>
 <body>
-    <div id="loader-screen">
-        <img class="logo" src="https://i.imgur.com/KL2y07V.png" alt="Logo">
-        <div class="loader-bottom">
-            <div class="loading-text">LOADING</div>
-            <div class="progress-wrapper">
-                <div class="progress-bar"></div>
-            </div>
-        </div>
+
+    <!-- Экран вступления -->
+    <div id="intro-screen">
+        <div class="press-start" onclick="startApp()">PRESS START</div>
     </div>
 
+    <!-- Основной контейнер (изначально скрыт) -->
     <div id="main-container">
         <h1>FLUGGA STORE</h1>
 
@@ -567,110 +522,71 @@
             setTimeout(() => playTone(784, 0.2, 'square', 0.15), 300);
         }
 
-        // ---- Атмосфера CRT с LFO (без белого шума) ----
-        let tvNodes = null;
+        // ---- Фоновая музыка ----
+        let bgMusic = null;
+        let bgMusicGain = null;
+        let isMusicMuted = false; // состояние можно сохранить в localStorage
 
-        function startTvAtmosphere() {
-            if (!audioCtx) initAudio();
-            if (!audioCtx) return;
-            if (tvNodes) return;
-
+        function startBackgroundMusic() {
+            if (bgMusic) return; // уже играет
             try {
-                const osc1 = audioCtx.createOscillator();
-                const osc2 = audioCtx.createOscillator();
+                initAudio();
+                // Создаём простой луп (можно заменить на аудиофайл)
+                // Для примера используем генератор низкой частоты с небольшим изменением
+                const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 120; // низкий гул
+                // Добавляем небольшую модуляцию
                 const lfo = audioCtx.createOscillator();
                 const lfoGain = audioCtx.createGain();
-
-                osc1.type = 'sine';
-                osc2.type = 'sine';
-                osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
-                osc2.frequency.setValueAtTime(75, audioCtx.currentTime);
-
-                lfo.frequency.setValueAtTime(0.3, audioCtx.currentTime);
-                lfoGain.gain.setValueAtTime(5, audioCtx.currentTime);
-
+                lfo.frequency.value = 0.5;
+                lfoGain.gain.value = 30;
                 lfo.connect(lfoGain);
-                lfoGain.connect(osc1.frequency);
-
+                lfoGain.connect(osc.frequency);
+                // Настраиваем громкость
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.02, audioCtx.currentTime + 0.5);
-
-                osc1.connect(gain);
-                osc2.connect(gain);
+                gain.gain.linearRampToValueAtTime(0.12, audioCtx.currentTime + 2.5); // плавное нарастание до 12%
+                osc.connect(gain);
                 gain.connect(audioCtx.destination);
-
-                osc1.start();
-                osc2.start();
+                osc.start();
                 lfo.start();
 
-                tvNodes = { osc1, osc2, lfo, gain };
+                bgMusic = osc;
+                bgMusicGain = gain;
 
-                setTimeout(() => {
-                    if (tvNodes) {
-                        try { osc1.stop(); osc2.stop(); lfo.stop(); } catch(e) {}
-                        tvNodes = null;
-                    }
-                }, 10000);
+                // Если музыка отключена, сразу приглушаем
+                if (isMusicMuted) {
+                    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                }
 
-            } catch (e) {}
-        }
-
-        function stopTvAtmosphere(fadeOutDuration = 500) {
-            if (!tvNodes) return;
-            try {
-                const { osc1, osc2, lfo, gain } = tvNodes;
-                const currentTime = audioCtx.currentTime;
-                gain.gain.setValueAtTime(gain.gain.value, currentTime);
-                gain.gain.linearRampToValueAtTime(0, currentTime + fadeOutDuration / 1000);
-                setTimeout(() => {
-                    try { osc1.stop(); osc2.stop(); lfo.stop(); } catch(e) {}
-                    tvNodes = null;
-                }, fadeOutDuration);
+                // Не останавливаем при переходах между разделами
             } catch (e) {
-                tvNodes = null;
+                console.warn('Фоновая музыка не поддерживается');
             }
         }
 
-        // ---- Центрирование логотипа с Safe Area ----
-        const logo = document.querySelector('#loader-screen img.logo');
-        const webapp = window.Telegram?.WebApp;
+        // ---- Вступление ----
+        function startApp() {
+            const intro = document.getElementById('intro-screen');
+            const main = document.getElementById('main-container');
 
-        function centerLogo() {
-            if (!logo) return;
-            let topOffset = 0;
-            if (webapp && webapp.viewportStableHeight) {
-                const stableHeight = webapp.viewportStableHeight;
-                const windowHeight = window.innerHeight;
-                const diff = windowHeight - stableHeight;
-                if (diff > 0) topOffset = diff / 2;
-            }
-            logo.style.top = '50%';
-            logo.style.transform = `translate(-50%, calc(-50% + ${topOffset}px)) scale(1.25)`;
-        }
+            // Запускаем музыку
+            startBackgroundMusic();
 
-        centerLogo();
-        window.addEventListener('resize', centerLogo);
-        if (webapp) webapp.onEvent('viewportChanged', centerLogo);
-
-        // ---- Переключение экрана загрузки (плавное) ----
-        const loaderScreen = document.getElementById('loader-screen');
-        const mainContainer = document.getElementById('main-container');
-        const progressBar = document.querySelector('.progress-bar');
-
-        progressBar.addEventListener('animationend', () => {
-            stopTvAtmosphere(500);
-            loaderScreen.style.opacity = '0';
+            // Плавное исчезновение intro
+            intro.style.opacity = '0';
             setTimeout(() => {
-                loaderScreen.style.display = 'none';
-                mainContainer.style.display = 'flex';
-                if (webapp) webapp.ready();
-            }, 500);
-        });
+                intro.style.display = 'none';
+                main.style.display = 'flex';
+                if (window.Telegram && window.Telegram.WebApp) {
+                    window.Telegram.WebApp.ready();
+                }
+            }, 1000);
+        }
 
-        // ---- Запуск атмосферы при старте ----
-        initAudio();
-        startTvAtmosphere();
+        // ---- Центрирование логотипа с Safe Area (оставлено, но не используется) ----
+        // (можно удалить, если не нужно)
 
         // ---- Навигация (главные категории) ----
         function openCategory(id) {
