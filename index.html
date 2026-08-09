@@ -9,7 +9,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: #000; /* плоский чёрный */
+            background: #000;
             color: #fff;
             font-family: 'Press Start 2P', monospace;
             height: 100dvh;
@@ -19,7 +19,7 @@
             position: relative;
         }
 
-        /* Экран загрузки (появляется первым) */
+        /* Экран загрузки (появляется первым, остаётся видимым) */
         #loader-screen {
             position: fixed;
             top: 0;
@@ -59,16 +59,46 @@
             pointer-events: none;
         }
 
+        /* Текст LOADING и PRESS START находятся в одном контейнере, но виден только один */
+        .loader-text-container {
+            position: relative;
+            height: 24px; /* чтобы занимал фиксированное место */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
         .loading-text {
             font-size: 12px;
             letter-spacing: 4px;
             color: #fff;
             animation: blink 1s step-start infinite;
+            position: absolute;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .press-start-text {
+            font-size: 12px;
+            letter-spacing: 4px;
+            color: #fff;
+            animation: pulse 1.5s ease-in-out infinite;
+            cursor: pointer;
+            user-select: none;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
 
         .progress-wrapper {
@@ -97,39 +127,7 @@
             to { width: 100%; }
         }
 
-        /* Экран PRESS START (появляется после загрузки) */
-        #intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 20;
-            display: none; /* изначально скрыт */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.8s ease;
-            pointer-events: auto;
-        }
-
-        #intro-screen .press-start {
-            font-size: 12px;
-            letter-spacing: 4px;
-            color: #fff;
-            animation: pulse 1.5s ease-in-out infinite;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        /* Основной контейнер (появляется после PRESS START) */
+        /* Основной контейнер (появляется после нажатия PRESS START) */
         #main-container {
             display: none;
             height: 100dvh;
@@ -209,32 +207,29 @@
             display: block;
         }
 
-        /* --- ИЗМЕНЕНИЯ В КАРТОЧКАХ --- */
         .card-info {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* распределяет элементы по высоте */
-            /* gap: 6px; убрано, чтобы работало space-between */
+            justify-content: space-between;
         }
 
         .card-title {
-            font-size: 15px; /* увеличено в 1.5 раза (было 10px) */
+            font-size: 15px;
         }
 
         .card-desc {
-            font-size: 16px; /* увеличено в 2 раза (было 8px) */
+            font-size: 16px;
             color: #999;
             line-height: 1.5;
             font-family: sans-serif;
-            /* margin-top и margin-bottom убраны для центрирования */
         }
 
         .card-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 6px; /* небольшой отступ от описания */
+            margin-top: 6px;
         }
 
         .price {
@@ -277,20 +272,18 @@
     </style>
 </head>
 <body>
-    <!-- Экран загрузки -->
+    <!-- Экран загрузки (остаётся видимым до нажатия PRESS START) -->
     <div id="loader-screen">
         <img class="logo" src="https://i.imgur.com/KL2y07V.png" alt="Logo">
         <div class="loader-bottom">
-            <div class="loading-text">LOADING</div>
+            <div class="loader-text-container">
+                <div class="loading-text" id="loading-text">LOADING</div>
+                <div class="press-start-text" id="press-start-text" onclick="startApp()">PRESS START</div>
+            </div>
             <div class="progress-wrapper">
                 <div class="progress-bar"></div>
             </div>
         </div>
-    </div>
-
-    <!-- Экран PRESS START (появляется после загрузки) -->
-    <div id="intro-screen">
-        <div class="press-start" onclick="startApp()">PRESS START</div>
     </div>
 
     <!-- Основной контейнер -->
@@ -598,30 +591,27 @@
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
-        // ---- Переключение экрана загрузки -> PRESS START ----
+        // ---- Переключение экрана загрузки: замена LOADING на PRESS START ----
         const loaderScreen = document.getElementById('loader-screen');
-        const introScreen = document.getElementById('intro-screen');
         const progressBar = document.querySelector('.progress-bar');
+        const loadingText = document.getElementById('loading-text');
+        const pressStartText = document.getElementById('press-start-text');
 
         progressBar.addEventListener('animationend', () => {
-            // Скрываем загрузчик и показываем PRESS START
-            loaderScreen.style.opacity = '0';
+            // Плавно заменяем LOADING на PRESS START
+            loadingText.style.opacity = '0';
             setTimeout(() => {
-                loaderScreen.style.display = 'none';
-                introScreen.style.display = 'flex';
-                // Плавное появление
-                setTimeout(() => {
-                    introScreen.style.opacity = '1';
-                }, 50);
+                loadingText.style.display = 'none';
+                pressStartText.style.opacity = '1';
             }, 500);
         });
 
         // ---- Запуск приложения после нажатия PRESS START ----
         function startApp() {
             const mainContainer = document.getElementById('main-container');
-            introScreen.style.opacity = '0';
+            loaderScreen.style.opacity = '0';
             setTimeout(() => {
-                introScreen.style.display = 'none';
+                loaderScreen.style.display = 'none';
                 mainContainer.style.display = 'flex';
                 if (webapp) webapp.ready();
             }, 500);
