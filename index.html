@@ -5,38 +5,233 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Flugga Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #1a1a1a; color: white; font-family: sans-serif; padding: 20px; }
-        .card { background: #2d2d2d; padding: 20px; border-radius: 12px; margin-bottom: 15px; }
-        .btn { background: #7b61ff; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #000; color: #fff; font-family: 'Press Start 2P', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        
+        #loader-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 10;
+        }
+        #loader-screen img {
+            max-width: 85%;
+            height: auto;
+            margin-bottom: 40px;
+            image-rendering: pixelated;
+        }
+        
+        .loader-wrapper {
+            width: 80%;
+            max-width: 400px;
+            padding: 4px;
+            border: 4px solid #fff;
+            background: #000;
+            image-rendering: pixelated;
+        }
+        .loader-bar {
+            width: 100%;
+            height: 24px;
+            background: #000;
+            position: relative;
+        }
+        .loader-progress {
+            height: 100%;
+            width: 0%;
+            background: #fff;
+            transition: width 0.1s linear;
+            box-shadow: inset 0 0 0 1px #000;
+            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), 
+                              linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+            background-size: 8px 8px;
+            background-position: 0 0, 4px 4px;
+        }
+        
+        #main-container {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        h1 { font-size: 14px; text-align: center; margin-bottom: 30px; color: #fff; }
+        h2 { font-size: 12px; margin: 20px 0; color: #aaa; border-bottom: 2px solid #333; padding-bottom: 8px; }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .menu-item {
+            background: #111;
+            border: 2px solid #fff;
+            padding: 30px 10px;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            image-rendering: pixelated;
+        }
+        .menu-item:active { transform: scale(0.95); background: #333; }
+        .menu-item img { 
+            width: 48px; height: 48px; 
+            margin-bottom: 10px; 
+            image-rendering: pixelated;
+            filter: invert(1);
+        }
+        
+        .card {
+            background: #111; border: 2px solid #333;
+            padding: 15px; margin-bottom: 15px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .card-title { font-size: 10px; }
+        .card-desc { font-size: 8px; color: #999; line-height: 1.5; font-family: sans-serif; }
+        .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .price { font-size: 12px; }
+        .btn { 
+            background: #fff; color: #000; border: none; 
+            padding: 8px 16px; font-family: 'Press Start 2P', monospace; 
+            font-size: 8px; cursor: pointer; 
+            border: 2px solid #000;
+        }
+        .btn:active { transform: scale(0.9); }
+
+        .back-btn {
+            background: none; border: none; color: #fff; 
+            font-size: 10px; margin-bottom: 15px; cursor: pointer; text-align: left;
+        }
+
+        .category-screen { display: none; }
+        .category-screen.active { display: block; }
     </style>
 </head>
 <body>
-    <h1>FLUGGA STORE</h1>
-    
-    <div class="card">
-        <h3>Template для Logic Pro</h3>
-        <p>1 990 ₽</p>
-        <button class="btn" onclick="buyProduct('Logic Pro')">Выбрать</button>
+
+    <div id="loader-screen">
+        <img src="https://i.postimg.cc/brQQfd7N/IMG-4696.png" alt="Logo">
+        <div class="loader-wrapper">
+            <div class="loader-bar">
+                <div class="loader-progress" id="progress-bar"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>Template для FL Studio</h3>
-        <p>1 990 ₽</p>
-        <button class="btn" onclick="buyProduct('FL Studio')">Выбрать</button>
-    </div>
+    <div id="main-container">
+        <h1>FLUGGA STORE</h1>
 
-    <div class="card">
-        <h3>Vocal пресеты (мой рак)</h3>
-        <p>2 490 ₽</p>
-        <button class="btn" onclick="buyProduct('Vocal Presets')">Выбрать</button>
+        <div id="menu-screen" class="category-screen active">
+            <div class="menu-grid">
+                <div class="menu-item" onclick="openCategory('beats')">
+                    <span>BEATS</span>
+                </div>
+                <div class="menu-item" onclick="openCategory('presets')">
+                    <span>VOCAL PRESETS</span>
+                </div>
+                <div class="menu-item" onclick="openCategory('templates')">
+                    <span>TEMPLATE</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="beats-screen" class="category-screen">
+            <button class="back-btn" onclick="goBack()">← BACK</button>
+            <h2>BEATS</h2>
+            
+            <div class="card">
+                <div class="card-title">Beat Pack 1</div>
+                <div class="card-desc">Набор из 5 качественных битов.</div>
+                <div class="card-bottom">
+                    <span class="price">1 500 ₽</span>
+                    <button class="btn" onclick="buyProduct('Beat Pack 1', 1500)">Выбрать</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="presets-screen" class="category-screen">
+            <button class="back-btn" onclick="goBack()">← BACK</button>
+            <h2>VOCAL PRESETS</h2>
+
+            <div class="card">
+                <div class="card-title">Vocal пресеты (мой рак)</div>
+                <div class="card-desc">Цепочки/пресеты вокала из моих самых удачных треков.</div>
+                <div class="card-bottom">
+                    <span class="price">2 490 ₽</span>
+                    <button class="btn" onclick="buyProduct('Vocal пресеты (мой рак)', 2490)">Выбрать</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="templates-screen" class="category-screen">
+            <button class="back-btn" onclick="goBack()">← BACK</button>
+            <h2>TEMPLATE</h2>
+
+            <div class="card">
+                <div class="card-title">Template для Logic Pro</div>
+                <div class="card-desc">Готовый проект с роутингом и базовым миксом.</div>
+                <div class="card-bottom">
+                    <span class="price">1 990 ₽</span>
+                    <button class="btn" onclick="buyProduct('Logic Pro', 1990)">Выбрать</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">Template для FL Studio</div>
+                <div class="card-desc">Структура проекта, микшер, группировка.</div>
+                <div class="card-bottom">
+                    <span class="price">1 990 ₽</span>
+                    <button class="btn" onclick="buyProduct('FL Studio', 1990)">Выбрать</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        function buyProduct(productName) {
+        let progress = 0;
+        const progressBar = document.getElementById('progress-bar');
+        const loaderScreen = document.getElementById('loader-screen');
+        const mainContainer = document.getElementById('main-container');
+
+        const interval = setInterval(() => {
+            progress += 2;
+            if(progress >= 100) {
+                progress = 100;
+                clearInterval(interval);
+                setTimeout(() => {
+                    loaderScreen.style.display = 'none';
+                    mainContainer.style.display = 'flex';
+                    if(window.Telegram && window.Telegram.WebApp) {
+                        window.Telegram.WebApp.ready();
+                    }
+                }, 300);
+            }
+            progressBar.style.width = progress + '%';
+        }, 50);
+
+        function openCategory(id) {
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(id + '-screen').classList.add('active');
+        }
+
+        function goBack() {
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('menu-screen').classList.add('active');
+        }
+
+        function buyProduct(productName, productPrice) {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
-            if (!user) {
-                alert("Ошибка!");
+            if (!user || !user.id) {
+                alert("Откройте магазин через красную кнопку Telegram.");
                 return;
             }
 
@@ -46,7 +241,8 @@
                 body: JSON.stringify({
                     userId: user.id,
                     username: user.username || user.first_name,
-                    product: productName
+                    product: productName,
+                    price: productPrice
                 })
             })
             .then(res => res.json())
@@ -54,7 +250,7 @@
                 alert(data.message);
                 window.Telegram.WebApp.close();
             })
-            .catch(() => alert('Ошибка при отправке заказа. Проверьте токен.'));
+            .catch(() => alert('Ошибка при отправке заказа.'));
         }
     </script>
 </body>

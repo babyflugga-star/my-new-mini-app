@@ -3,15 +3,10 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
+    if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'POST') return res.status(405).json({ message: 'Метод не разрешен' });
 
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Метод не разрешен' });
-    }
-
-    const { userId, username, product } = req.body;
+    const { userId, username, product, price } = req.body;
     const botToken = process.env.BOT_TOKEN;
     const shopId = process.env.YOKASSA_SHOP_ID;
     const secretKey = process.env.YOKASSA_SECRET_KEY;
@@ -21,7 +16,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const amount = product === 'Vocal пресеты (мой рак)' ? '2490.00' : '1990.00';
+        const amount = price.toFixed(2);
         const yooKassaUrl = 'https://api.yookassa.ru/v3/payments';
         const auth = Buffer.from(`${shopId}:${secretKey}`).toString('base64');
         const idempotenceKey = `order_${userId}_${Date.now()}`;
@@ -30,7 +25,7 @@ export default async function handler(req, res) {
             amount: { value: amount, currency: 'RUB' },
             confirmation: { type: 'redirect', return_url: 'https://t.me/FLUGGA_STORE_BOT' },
             capture: true,
-            description: `Заказ: ${product} от @${username || userId}`
+            description: `Заказ: ${product} (${amount}₽) от @${username || userId}`
         };
 
         const response = await fetch(yooKassaUrl, {
@@ -45,24 +40,19 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error(data.description || 'Ошибка создания платежа');
-        }
+        if (!response.ok) throw new Error(data.description || 'Ошибка создания платежа');
 
         const paymentUrl = data.confirmation.confirmation_url;
         const message = `✅ Заказ оформлен!\n\nТовар: ${product}\nСумма: ${amount} ₽\n\nОплатите по ссылке:`;
 
-        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-        await fetch(telegramUrl, {
+        await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: userId,
                 text: message,
                 reply_markup: {
-                    inline_keyboard: [
-                        [{ text: "💳 Перейти к оплате", url: paymentUrl }]
-                    ]
+                    inline_keyboard: [[{ text: "💳 Перейти к оплате", url: paymentUrl }]]
                 }
             })
         });
