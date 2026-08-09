@@ -35,8 +35,8 @@
     <script>
         function buyProduct(productName) {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
-            if (!user || !user.id) {
-                alert("Ошибка: откройте магазин через красную кнопку Telegram.");
+            if (!user) {
+                alert("Ошибка!");
                 return;
             }
 
