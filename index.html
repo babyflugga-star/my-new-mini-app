@@ -106,13 +106,17 @@
             position: relative;
         }
 
-        /* Увеличенный заголовок */
+        /* === ИЗМЕНЕНИЯ РАЗМЕРОВ ШРИФТА === */
         h1 {
-            font-size: 18px; /* было 14px */
+            font-size: 18px;
             text-align: center;
             margin-bottom: 30px;
             color: #fff;
+            /* Добавлен красный контур 1px */
+            -webkit-text-stroke: 1px #ff0000;
+            text-shadow: 0 0 0 #ff0000; /* fallback для старых браузеров */
         }
+
         h2 {
             font-size: 12px;
             margin: 20px 0;
@@ -128,16 +132,19 @@
             margin-top: 20px;
         }
 
-        /* Увеличенный текст категорий */
         .menu-item {
             background: #111;
             border: 2px solid #fff;
             padding: 30px 10px;
             text-align: center;
-            font-size: 14px; /* было 12px */
+            font-size: 14px;
             cursor: pointer;
             image-rendering: pixelated;
             transition: none;
+        }
+        .menu-item:active {
+            transform: scale(0.95);
+            background: #333;
         }
 
         .card {
@@ -173,16 +180,25 @@
             border: 2px solid #000;
             transition: none;
         }
+        .btn:active {
+            transform: scale(0.9);
+        }
 
+        /* === ИЗМЕНЕНИЕ КНОПКИ BACK === */
         .back-btn {
             background: none;
             border: none;
             color: #fff;
-            font-size: 10px;
+            font-size: 13px;          /* увеличено с 10px */
+            padding: 8px 0;           /* добавлен padding для удобства нажатия */
             margin-bottom: 15px;
             cursor: pointer;
             text-align: left;
             transition: none;
+        }
+        .back-btn:active {
+            transform: scale(0.92);
+            color: #888;
         }
 
         .category-screen { display: none; }
