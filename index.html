@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #000; color: #fff; font-family: 'Press Start 2P', monospace; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body { background: #000; color: #fff; font-family: 'Press Start 2P', monospace; height: 100vh; width: 100vw; overflow: hidden; margin: 0; }
 
         #loader-screen {
             display: flex;
@@ -20,10 +20,14 @@
             position: absolute;
             top: 0; left: 0;
             z-index: 10;
+            background: #000;
         }
         #loader-screen img.logo {
             max-width: 85%;
+            max-height: 50vh;
+            width: auto;
             height: auto;
+            object-fit: contain;
             margin-bottom: 30px;
             image-rendering: pixelated;
         }
@@ -41,25 +45,18 @@
             flex-direction: column;
             padding: 20px;
             overflow-y: auto;
+            box-sizing: border-box;
+            position: relative;
         }
 
         h1 { font-size: 14px; text-align: center; margin-bottom: 30px; color: #fff; }
         h2 { font-size: 12px; margin: 20px 0; color: #aaa; border-bottom: 2px solid #333; padding-bottom: 8px; }
 
-        .menu-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
+        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
         .menu-item {
-            background: #111;
-            border: 2px solid #fff;
-            padding: 30px 10px;
-            text-align: center;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
+            background: #111; border: 2px solid #fff;
+            padding: 30px 10px; text-align: center;
+            font-size: 12px; cursor: pointer; transition: all 0.2s;
             image-rendering: pixelated;
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
@@ -71,10 +68,8 @@
         }
         .card img {
             width: 60px; height: 60px;
-            border-radius: 6px;
-            object-fit: cover;
-            image-rendering: pixelated;
-            border: 2px solid #555;
+            border-radius: 6px; object-fit: cover;
+            image-rendering: pixelated; border: 2px solid #555;
         }
         .card-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
         .card-title { font-size: 10px; }
@@ -84,8 +79,7 @@
         .btn {
             background: #fff; color: #000; border: none;
             padding: 8px 16px; font-family: 'Press Start 2P', monospace;
-            font-size: 8px; cursor: pointer;
-            border: 2px solid #000;
+            font-size: 8px; cursor: pointer; border: 2px solid #000;
         }
         .btn:active { transform: scale(0.9); }
 
@@ -184,32 +178,16 @@
     <script>
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
-        const loaderGif = document.querySelector('.loader-gif');
-        let isLoaded = false;
 
-        function switchScreen() {
-            if (isLoaded) return;
-            isLoaded = true;
-            if (loaderScreen) loaderScreen.style.display = 'none';
-            if (mainContainer) mainContainer.style.display = 'flex';
+        // Ждём ровно 4 секунды, а потом переключаем экран
+        setTimeout(() => {
+            loaderScreen.style.display = 'none';
+            mainContainer.style.display = 'flex';
+            
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.ready();
             }
-        }
-
-        setTimeout(() => {
-            if (!isLoaded) switchScreen();
-        }, 5000);
-
-        if (loaderGif) {
-            if (loaderGif.complete) {
-                setTimeout(() => { if (!isLoaded) switchScreen(); }, 300);
-            } else {
-                loaderGif.onload = () => {
-                    setTimeout(() => { if (!isLoaded) switchScreen(); }, 300);
-                };
-            }
-        }
+        }, 4000);
 
         function openCategory(id) {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
