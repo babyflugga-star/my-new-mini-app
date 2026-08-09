@@ -19,16 +19,18 @@ export default async function handler(req, res) {
     }
 
     try {
-        const message = `✅ Новый заказ!\n\nПокупатель: @${username || userId}\nТовар: ${product}`;
+        // Сообщение для администратора (вам)
+        const adminMessage = `✅ Новый заказ!\n\nПокупатель: @${username || userId}\nТовар: ${product}`;
 
         const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
+        // Отправляем уведомление администратору (ваш личный ID)
         await fetch(telegramUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id: userId,
-                text: message
+                chat_id: 5721182448,
+                text: adminMessage
             })
         });
 
