@@ -106,40 +106,83 @@
         h1 { font-size: 14px; text-align: center; margin-bottom: 30px; color: #fff; }
         h2 { font-size: 12px; margin: 20px 0; color: #aaa; border-bottom: 2px solid #333; padding-bottom: 8px; }
 
-        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px; }
-        .menu-item {
-            background: #111; border: 2px solid #fff;
-            padding: 30px 10px; text-align: center;
-            font-size: 12px; cursor: pointer; transition: all 0.2s;
-            image-rendering: pixelated;
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 20px;
         }
-        .menu-item:active { transform: scale(0.95); background: #333; }
+
+        .menu-item {
+            background: #111;
+            border: 2px solid #fff;
+            padding: 30px 10px;
+            text-align: center;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            image-rendering: pixelated;
+            /* Пиксельная анимация при нажатии */
+        }
+        .menu-item:active {
+            transform: scale(0.92);
+            border-color: #888;
+            background: #222;
+        }
 
         .card {
-            background: #111; border: 2px solid #333;
-            padding: 15px; margin-bottom: 15px;
-            display: flex; gap: 15px; align-items: center;
+            background: #111;
+            border: 2px solid #333;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
         }
         .card img {
-            width: 60px; height: 60px;
-            border-radius: 6px; object-fit: cover;
-            image-rendering: pixelated; border: 2px solid #555;
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+            image-rendering: pixelated;
+            border: 2px solid #555;
         }
         .card-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
         .card-title { font-size: 10px; }
         .card-desc { font-size: 8px; color: #999; line-height: 1.5; font-family: sans-serif; }
         .card-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
         .price { font-size: 12px; }
+
         .btn {
-            background: #fff; color: #000; border: none;
-            padding: 8px 16px; font-family: 'Press Start 2P', monospace;
-            font-size: 8px; cursor: pointer; border: 2px solid #000;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            cursor: pointer;
+            border: 2px solid #000;
+            transition: all 0.15s;
         }
-        .btn:active { transform: scale(0.9); }
+        .btn:active {
+            transform: scale(0.9);
+            border-color: #888;
+            background: #ddd;
+        }
 
         .back-btn {
-            background: none; border: none; color: #fff;
-            font-size: 10px; margin-bottom: 15px; cursor: pointer; text-align: left;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s;
+        }
+        .back-btn:active {
+            transform: scale(0.92);
+            color: #888;
         }
 
         .category-screen { display: none; }
@@ -162,13 +205,13 @@
 
         <div id="menu-screen" class="category-screen active">
             <div class="menu-grid">
-                <div class="menu-item" onclick="openCategory('beats'); categorySound()">
+                <div class="menu-item" onclick="openCategory('beats'); clickSound()">
                     <span>BEATS</span>
                 </div>
-                <div class="menu-item" onclick="openCategory('presets'); categorySound()">
+                <div class="menu-item" onclick="openCategory('presets'); clickSound()">
                     <span>VOCAL PRESETS</span>
                 </div>
-                <div class="menu-item" onclick="openCategory('templates'); categorySound()">
+                <div class="menu-item" onclick="openCategory('templates'); clickSound()">
                     <span>TEMPLATE</span>
                 </div>
             </div>
