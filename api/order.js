@@ -27,7 +27,7 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                chat_id: userId,
+                chat_id: 5721182448,
                 text: message
             })
         });
