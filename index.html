@@ -120,14 +120,8 @@
             text-align: center;
             font-size: 12px;
             cursor: pointer;
-            transition: all 0.2s;
             image-rendering: pixelated;
-            /* Пиксельная анимация при нажатии */
-        }
-        .menu-item:active {
-            transform: scale(0.92);
-            border-color: #888;
-            background: #222;
+            transition: none; /* JS управляет анимацией */
         }
 
         .card {
@@ -140,8 +134,7 @@
             align-items: center;
         }
         .card img {
-            width: 60px;
-            height: 60px;
+            width: 60px; height: 60px;
             border-radius: 6px;
             object-fit: cover;
             image-rendering: pixelated;
@@ -162,12 +155,7 @@
             font-size: 8px;
             cursor: pointer;
             border: 2px solid #000;
-            transition: all 0.15s;
-        }
-        .btn:active {
-            transform: scale(0.9);
-            border-color: #888;
-            background: #ddd;
+            transition: none; /* JS управляет анимацией */
         }
 
         .back-btn {
@@ -178,11 +166,7 @@
             margin-bottom: 15px;
             cursor: pointer;
             text-align: left;
-            transition: all 0.15s;
-        }
-        .back-btn:active {
-            transform: scale(0.92);
-            color: #888;
+            transition: none; /* JS управляет анимацией */
         }
 
         .category-screen { display: none; }
@@ -393,6 +377,33 @@
             })
             .catch(() => alert('Ошибка при отправке заказа.'));
         }
+
+        // ---- Анимация нажатия через JavaScript ----
+        document.addEventListener('DOMContentLoaded', () => {
+            // Выбираем все интерактивные элементы
+            const interactiveElements = document.querySelectorAll('.menu-item, .btn, .back-btn');
+
+            interactiveElements.forEach(el => {
+                // При нажатии (pointerdown) — уменьшаем scale
+                el.addEventListener('pointerdown', function(e) {
+                    // Не предотвращаем события, чтобы onclick сработал
+                    this.style.transition = 'none';
+                    this.style.transform = 'scale(0.94)';
+                });
+
+                // При отпускании (pointerup) — возвращаем scale
+                el.addEventListener('pointerup', function(e) {
+                    this.style.transition = 'none';
+                    this.style.transform = 'scale(1)';
+                });
+
+                // Если палец ушел с кнопки (pointerleave) — тоже возвращаем
+                el.addEventListener('pointerleave', function(e) {
+                    this.style.transition = 'none';
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
     </script>
 </body>
 </html>
