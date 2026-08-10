@@ -148,7 +148,7 @@
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
         
-        /* --- Общие стили для всех карточек --- */
+        /* --- Общие стили для обычных карточек --- */
         .card {
             background: #111;
             border: 2px solid #333;
@@ -180,16 +180,9 @@
             flex-direction: column;
         }
 
-        /* Верхняя строка: название и цена */
-        .card-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-
         .card-title {
             font-size: 15px;
+            margin-bottom: 4px;
         }
 
         .card-desc {
@@ -200,9 +193,10 @@
             margin-bottom: 8px;
         }
 
-        .card-bottom {
+        /* Новая строка для цены и кнопки (как на 5 скрине) */
+        .card-actions {
             display: flex;
-            justify-content: flex-end; /* кнопка справа */
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -407,12 +401,10 @@
                         <rect x="14" y="0" width="2" height="4" fill="#886644"/>
                     </svg>
                     <div class="card-info">
-                        <div class="card-header-row">
-                            <span class="card-title">FLUGGA Vocal Rec</span>
-                            <span class="price">2 490 ₽</span>
-                        </div>
+                        <div class="card-title">FLUGGA Vocal Rec</div>
                         <div class="card-desc">Main Vocal</div>
-                        <div class="card-bottom">
+                        <div class="card-actions">
+                            <span class="price">2 490 ₽</span>
                             <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490, 'FL Studio'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
@@ -433,12 +425,10 @@
                         <rect x="14" y="14" width="4" height="4" fill="#000000"/>
                     </svg>
                     <div class="card-info">
-                        <div class="card-header-row">
-                            <span class="card-title">FLUGGA Vocal Rec</span>
-                            <span class="price">2 490 ₽</span>
-                        </div>
+                        <div class="card-title">FLUGGA Vocal Rec</div>
                         <div class="card-desc">Main Vocal</div>
-                        <div class="card-bottom">
+                        <div class="card-actions">
+                            <span class="price">2 490 ₽</span>
                             <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490, 'Logic Pro'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
@@ -468,12 +458,10 @@
                         <rect x="14" y="14" width="4" height="4" fill="#000000"/>
                     </svg>
                     <div class="card-info">
-                        <div class="card-header-row">
-                            <span class="card-title">Template Logic Pro</span>
-                            <span class="price">5 990 ₽</span>
-                        </div>
+                        <div class="card-title">Template Logic Pro</div>
                         <div class="card-desc">Full Project + Master</div>
-                        <div class="card-bottom">
+                        <div class="card-actions">
+                            <span class="price">5 990 ₽</span>
                             <button class="btn" onclick="buyProduct('Template Logic Pro', 5990, 'Template Logic Pro'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
