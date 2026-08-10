@@ -8,6 +8,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100dvh;
+            width: 100vw;
+            overflow: hidden;
+            background: #000;
+        }
         body {
             background: #000;
             color: #fff;
@@ -42,6 +50,8 @@
             opacity: 1;
             transition: opacity 0.5s ease;
             pointer-events: auto;
+            /* убираем возможный скролл */
+            overflow: hidden;
         }
         #loader-screen img.logo {
             position: fixed;
@@ -183,13 +193,15 @@
         .card-title {
             font-size: 15px;
             margin-bottom: 4px;
+            white-space: nowrap; /* исправление 1: не переносить "Pro" */
         }
 
         .card-desc {
-            font-size: 12px;
+            font-size: 13px; /* чуть крупнее */
             color: #999;
             line-height: 1.5;
             font-family: sans-serif;
+            margin-top: 6px; /* отступ сверху для центрирования */
             margin-bottom: 8px;
         }
 
@@ -238,15 +250,18 @@
         .card.expandable .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: center; /* вертикальное центрирование заголовка и цены */
             pointer-events: none;
         }
         .card.expandable .card-header .card-title {
             font-size: 15px;
+            white-space: nowrap; /* исправление 1: не переносить заголовок */
+            line-height: 1.4; /* исправление 4: межстрочный интервал */
         }
         .card.expandable .card-header .card-price {
             font-size: 14px;
             color: #fff;
+            white-space: nowrap; /* исправление 3: не отрывать знак ₽ */
         }
         .card.expandable .card-expandable {
             max-height: 0;
