@@ -405,8 +405,12 @@
             <h1>FLUGGA STORE</h1>
             <div id="menu-screen" class="category-screen active">
                 <div class="menu-grid">
-                    <div class="menu-item" onclick="openCategory('templates'); clickSound()"><span>TEMPLATE</span></div>
-                    <div class="menu-item" onclick="openCategory('presets'); clickSound()"><span>VOCAL PRESETS</span></div>
+                    <div class="menu-item" onclick="openCategory('presets'); clickSound()">
+                        <span>VOCAL PRESETS</span>
+                    </div>
+                    <div class="menu-item" onclick="openCategory('templates'); clickSound()">
+                        <span>TEMPLATE</span>
+                    </div>
                 </div>
             </div>
             <!-- VOCAL PRESETS -->
@@ -478,8 +482,12 @@
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2 style="margin-top: 20px;">TEMPLATE</h2>
                 <div class="menu-grid">
-                    <div class="menu-item" onclick="openTemplateLogicPro(); clickSound()"><div>Template Logic Pro</div></div>
-                    <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()"><div>Template FL Studio</div></div>
+                    <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()">
+                        <div>Template FL Studio</div>
+                    </div>
+                    <div class="menu-item" onclick="openTemplateLogicPro(); clickSound()">
+                        <div>Template Logic Pro</div>
+                    </div>
                 </div>
             </div>
             <!-- TEMPLATES: LOGIC PRO -->
@@ -514,7 +522,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Перед тем как</span>
-                        <span class="card-price">5 990 ₽</span>
+                        <span class="card-price">6 990 ₽</span>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -529,7 +537,7 @@
                                     </button>
                                 </div>
                                 <div class="buy-row">
-                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Перед тем как', 5990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Перед тем как', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                                 </div>
                             </div>
                         </div>
@@ -539,7 +547,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Сделаю тебе больно</span>
-                        <span class="card-price">5 990 ₽</span>
+                        <span class="card-price">6 990 ₽</span>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -552,7 +560,7 @@
                                     </button>
                                 </div>
                                 <div class="buy-row">
-                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Сделаю тебе больно', 5990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Сделаю тебе больно', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                                 </div>
                             </div>
                         </div>
@@ -562,7 +570,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Кистями</span>
-                        <span class="card-price">5 990 ₽</span>
+                        <span class="card-price">6 990 ₽</span>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -575,7 +583,7 @@
                                     </button>
                                 </div>
                                 <div class="buy-row">
-                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Кистями', 5990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Кистями', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                                 </div>
                             </div>
                         </div>
@@ -590,8 +598,6 @@
         const webapp = window.Telegram?.WebApp;
         if (webapp) {
             webapp.ready();
-            // Синхронизируем expand с рендером через requestAnimationFrame,
-            // чтобы избежать промежуточных кадров
             requestAnimationFrame(() => {
                 webapp.expand();
             });
@@ -656,7 +662,6 @@
             logo.style.top = '50%';
             logo.style.transform = `translate(-50%, calc(-50% + ${topOffset}px)) scale(1.25)`;
         }
-        // Первый вызов с задержкой для стабилизации viewport
         setTimeout(centerLogo, 100);
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
@@ -682,7 +687,6 @@
                     setTimeout(() => {
                         loaderScreen.style.display = 'none';
                         mainContainer.style.display = 'flex';
-                        // Повторный ready УДАЛЁН, потому что он уже вызван в начале
                     }, 500);
                 } else {
                     progressBar.style.width = progress + '%';
