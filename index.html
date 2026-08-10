@@ -159,6 +159,8 @@
             z-index: 1;
             transition: border-color 0.3s;
             overflow: hidden;
+            /* убираем фиксированную высоту, чтобы карточки подстраивались под контент */
+            height: auto;
         }
         .card.active {
             border-color: #fff;
@@ -186,19 +188,20 @@
             margin-top: 0;
         }
         .card.active .card-expandable {
-            max-height: 600px; /* достаточно для контента */
+            max-height: 800px; /* достаточно для контента, но не завышено */
             opacity: 1;
-            margin-top: 20px;
+            margin-top: 15px;
         }
         .expand-content {
             display: flex;
             gap: 15px;
-            padding: 15px 5px 5px 5px;
+            padding: 10px 5px 5px 5px;
             border-top: 1px solid #333;
             flex-wrap: wrap;
+            align-items: flex-start;
         }
         .expand-content .screenshot {
-            width: 100px;
+            width: 140px; /* чуть больше, чем было 100px */
             height: auto;
             border: 2px solid #555;
             object-fit: cover;
@@ -210,10 +213,10 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            min-width: 140px;
+            min-width: 160px;
         }
         .expand-content .details-text {
-            font-size: 10px;
+            font-size: 12px; /* чуть крупнее */
             color: #999;
             line-height: 1.6;
             font-family: sans-serif;
@@ -443,7 +446,6 @@
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
-                            <!-- Заглушки для будущих файлов -->
                             <img class="screenshot" src="" alt="Screenshot" style="display:none;">
                             <div class="details">
                                 <div class="details-text">Full Project, Beat, Vocal, Vocal Effect Bus</div>
