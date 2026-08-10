@@ -59,7 +59,6 @@
             touch-action: manipulation;
         }
         #loader-screen img.logo {
-            /* JS будет управлять top и translate. Позиционируем абсолютно относительно #loader-screen */
             position: absolute;
             left: 50%;
             width: auto;
@@ -152,7 +151,7 @@
         }
         .menu-item {
             background: #111;
-            border: 2px solid #fff;
+            border: 2px solid #FF0000; /* изменено с белого на красный */
             padding: 55px 10px;
             text-align: center;
             font-size: 17px;
@@ -245,7 +244,7 @@
             flex-direction: column;
             gap: 0;
         }
-        .card.expandable.active { border-color: #fff; }
+        .card.expandable.active { border-color: #FF0000; } /* изменено с белого на красный */
         .card.expandable .card-header {
             display: flex;
             justify-content: space-between;
@@ -574,38 +573,31 @@
         const webapp = window.Telegram?.WebApp;
         const logo = document.querySelector('#loader-screen img.logo');
 
-        // ---- Инициализация Telegram WebApp ----
         if (webapp) {
             webapp.ready();
             requestAnimationFrame(() => {
                 webapp.expand();
-                // Центрируем логотип сразу после расширения в этом же кадре, чтобы избежать скачка.
                 centerLogo();
             });
         }
 
-        // ---- Функция центрирования логотипа ----
         function centerLogo() {
             if (!logo) return;
             let topPosition = 0;
             if (webapp && webapp.viewportStableHeight) {
                 const stableHeight = webapp.viewportStableHeight;
                 const diff = window.innerHeight - stableHeight;
-                // Вычисляем центр видимой чёрной области: (отступ сверху) + (половина высоты контента)
                 topPosition = diff + stableHeight / 2;
             } else {
-                // Fallback, если данные Telegram недоступны
                 topPosition = window.innerHeight / 2;
             }
             logo.style.top = topPosition + 'px';
             logo.style.transform = 'translate(-50%, -50%) scale(1.25)';
         }
 
-        // ---- Подписка на события изменения размеров ----
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
-        // ---- Фоновая анимация через Canvas ----
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -632,7 +624,6 @@
         window.addEventListener('resize', ()=>{ resize(); initParticles(); });
         resize(); initParticles(); drawParticles();
 
-        // ---- Звуковой движок (8‑бит) ----
         let audioCtx = null;
         function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); if (audioCtx.state==='suspended') audioCtx.resume(); }
         function playTone(freq, duration, type='square', volume=0.15) {
@@ -651,7 +642,6 @@
         function categorySound() { initAudio(); playTone(600, 0.1, 'square', 0.12); setTimeout(()=>playTone(800,0.1,'square',0.12),100); }
         function successSound() { initAudio(); playTone(523,0.15,'square',0.15); setTimeout(()=>playTone(659,0.15,'square',0.15),150); setTimeout(()=>playTone(784,0.2,'square',0.15),300); }
 
-        // ---- Анимация загрузки ----
         const progressBar = document.getElementById('progressBar');
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
@@ -680,7 +670,6 @@
         }
         document.addEventListener('DOMContentLoaded', startLoading);
 
-        // ---- Навигация ----
         function openCategory(id) {
             closeAllExpandableCards();
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
@@ -717,7 +706,6 @@
             document.getElementById('templates-screen').classList.add('active');
         }
 
-        // ---- Раскрывающиеся карточки ----
         let currentAudio = null;
         let currentPlayBtn = null;
 
@@ -790,7 +778,6 @@
             }
         }
 
-        // ---- Покупка ----
         function buyProduct(productName, productPrice, category = '') {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
