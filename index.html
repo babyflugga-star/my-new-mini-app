@@ -19,7 +19,6 @@
             position: relative;
         }
 
-        /* Экран загрузки */
         #loader-screen {
             position: fixed;
             top: 0;
@@ -91,6 +90,7 @@
             background-size: 8px 8px;
             background-position: 0 0, 4px 4px;
             animation: load 4s linear forwards;
+            will-change: width;
         }
 
         @keyframes load {
@@ -98,7 +98,6 @@
             to { width: 100%; }
         }
 
-        /* Основной контейнер */
         #main-container {
             display: none;
             height: 100dvh;
@@ -118,7 +117,8 @@
             margin-bottom: 30px;
             color: #fff;
             -webkit-text-stroke: 1px #ff0000;
-            text-shadow: 0 0 0 #ff0000;
+            /* Убрана лишняя тень, только обводка */
+            font-family: 'Press Start 2P', monospace;
         }
 
         h2 {
@@ -198,7 +198,6 @@
             margin-bottom: 4px;
         }
 
-        /* Специальные отступы для описаний */
         #flstudio-screen .card-desc,
         #logicpro-screen .card-desc,
         #template-logicpro-screen .card-desc,
@@ -252,19 +251,19 @@
         .category-screen { display: none; }
         .category-screen.active { display: block; }
 
-        /* ---- Глобальный CRT-эффект (исправлен для WebView) ---- */
-        /* Применяется только к текстовым элементам, чтобы не ломать анимацию .progress-bar */
-        h1, h2, h3, .menu-item, .card-title, .card-desc, .price, .btn, .back-btn, .loading-text, .press-start {
+        /* Оптимизированный CRT-эффект только для текста, с will-change для ускорения */
+        h1, h2, .menu-item, .card-title, .card-desc, .price, .btn, .back-btn, .loading-text {
+            will-change: opacity, text-shadow;
             animation: crt-glow 6s ease-in-out infinite alternate;
         }
         @keyframes crt-glow {
-            0% { opacity: 0.98; text-shadow: 0 0 2px rgba(255,255,255,0.2); }
-            100% { opacity: 1; text-shadow: 0 0 4px rgba(255,255,255,0.4); }
+            0% { opacity: 0.98; text-shadow: 0 0 1px rgba(255,255,255,0.15); }
+            100% { opacity: 1; text-shadow: 0 0 3px rgba(255,255,255,0.3); }
         }
-        /* Прогресс-бар защищен от поломок */
+        /* Исключаем элементы, где анимация мешает */
         .progress-bar {
             animation: load 4s linear forwards !important;
-            will-change: auto !important;
+            will-change: width !important;
         }
         .logo {
             animation: none !important;
