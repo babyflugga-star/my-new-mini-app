@@ -198,9 +198,11 @@
             margin-bottom: 4px;
         }
 
-        /* Специальные отступы для описания в VOCAL PRESETS */
+        /* Специальные отступы для описаний в разделах VOCAL PRESETS и TEMPLATES */
         #flstudio-screen .card-desc,
-        #logicpro-screen .card-desc {
+        #logicpro-screen .card-desc,
+        #template-logicpro-screen .card-desc,
+        #template-flstudio-screen .card-desc {
             margin-top: 10px;
             margin-bottom: 10px;
         }
@@ -369,18 +371,16 @@
             </div>
         </div>
 
-        <!-- TEMPLATES -->
+        <!-- TEMPLATES (главный экран, описания убраны) -->
         <div id="templates-screen" class="category-screen">
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2 style="margin-top: 20px;">TEMPLATE</h2>
             <div class="menu-grid">
                 <div class="menu-item" onclick="openTemplateLogicPro(); clickSound()">
                     <div>Template Logic Pro</div>
-                    <div style="font-size:10px; color:#999; margin-top:8px;">Full Project + Master</div>
                 </div>
                 <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()">
                     <div>Template FL Studio</div>
-                    <div style="font-size:10px; color:#999; margin-top:8px;">Full Project + Master</div>
                 </div>
             </div>
         </div>
