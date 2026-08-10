@@ -149,6 +149,7 @@
             gap: 15px;
             margin-top: 20px;
         }
+        /* Навигационные ячейки (Тип 1) — размеры НЕ МЕНЯЕМ */
         .menu-item {
             background: #111;
             border: 2px solid #fff;
@@ -163,6 +164,7 @@
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
         
+        /* Общие стили для обычных карточек (Тип 2 — конечные услуги) */
         .card {
             background: #111;
             border: 2px solid #333;
@@ -235,6 +237,7 @@
         }
         .btn:active { transform: scale(0.9); }
 
+        /* Раскрывающиеся карточки (Тип 2) */
         .card.expandable {
             padding: 20px 20px;
             margin-bottom: 15px;
@@ -395,7 +398,7 @@
                     <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()"><span>LOGIC PRO</span></div>
                 </div>
             </div>
-            <!-- VOCAL PRESETS SUB: FL STUDIO (переделано в раскрывающуюся карточку) -->
+            <!-- VOCAL PRESETS SUB: FL STUDIO -->
             <div id="flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>FL Studio</h2>
@@ -418,6 +421,7 @@
                             <rect x="14" y="0" width="2" height="4" fill="#886644"/>
                         </svg>
                         <span class="card-title">FLUGGA Vocal Rec</span>
+                        <button class="btn" onclick="event.stopPropagation(); buyProduct('FLUGGA Vocal Rec', 2490, 'FL Studio')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -426,15 +430,14 @@
                                     Main Vocal
                                 </div>
                                 <div class="buy-row" style="display:flex; justify-content:flex-end; align-items:center; margin-top:12px; padding-top:8px; border-top:1px solid #333;">
-                                    <span class="price" style="font-size:14px; white-space:nowrap; flex-shrink:0; margin-right:15px;">2 490 ₽</span>
-                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('FLUGGA Vocal Rec', 2490, 'FL Studio')">ВЫБРАТЬ</button>
+                                    <span class="price" style="font-size:14px; white-space:nowrap; flex-shrink:0;">2 490 ₽</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- VOCAL PRESETS SUB: LOGIC PRO (переделано в раскрывающуюся карточку) -->
+            <!-- VOCAL PRESETS SUB: LOGIC PRO -->
             <div id="logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>Logic Pro</h2>
@@ -450,6 +453,7 @@
                             <rect x="14" y="14" width="4" height="4" fill="#000000"/>
                         </svg>
                         <span class="card-title">FLUGGA Vocal Rec</span>
+                        <button class="btn" onclick="event.stopPropagation(); buyProduct('FLUGGA Vocal Rec', 2490, 'Logic Pro')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -458,8 +462,7 @@
                                     Main Vocal
                                 </div>
                                 <div class="buy-row" style="display:flex; justify-content:flex-end; align-items:center; margin-top:12px; padding-top:8px; border-top:1px solid #333;">
-                                    <span class="price" style="font-size:14px; white-space:nowrap; flex-shrink:0; margin-right:15px;">2 490 ₽</span>
-                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('FLUGGA Vocal Rec', 2490, 'Logic Pro')">ВЫБРАТЬ</button>
+                                    <span class="price" style="font-size:14px; white-space:nowrap; flex-shrink:0;">2 490 ₽</span>
                                 </div>
                             </div>
                         </div>
@@ -510,7 +513,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Перед тем как</span>
-                        <span class="card-price">6 990 ₽</span>
+                        <button class="btn" onclick="event.stopPropagation(); buyProduct('Перед тем как', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -525,7 +528,7 @@
                                     </button>
                                 </div>
                                 <div class="buy-row">
-                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Перед тем как', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                    <span class="price" style="font-size:14px; white-space:nowrap;">6 990 ₽</span>
                                 </div>
                             </div>
                         </div>
@@ -534,7 +537,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Сделаю тебе больно</span>
-                        <span class="card-price">6 990 ₽</span>
+                        <button class="btn" onclick="event.stopPropagation(); buyProduct('Сделаю тебе больно', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -547,7 +550,7 @@
                                     </button>
                                 </div>
                                 <div class="buy-row">
-                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Сделаю тебе больно', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                    <span class="price" style="font-size:14px; white-space:nowrap;">6 990 ₽</span>
                                 </div>
                             </div>
                         </div>
@@ -556,7 +559,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Кистями</span>
-                        <span class="card-price">6 990 ₽</span>
+                        <button class="btn" onclick="event.stopPropagation(); buyProduct('Кистями', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -569,7 +572,7 @@
                                     </button>
                                 </div>
                                 <div class="buy-row">
-                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Кистями', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                    <span class="price" style="font-size:14px; white-space:nowrap;">6 990 ₽</span>
                                 </div>
                             </div>
                         </div>
@@ -834,4 +837,3 @@
     </script>
 </body>
 </html>
-rm index.html.save
