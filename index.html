@@ -194,6 +194,15 @@
             color: #999;
             line-height: 1.5;
             font-family: sans-serif;
+            margin-top: 2px;
+            margin-bottom: 4px;
+        }
+
+        /* Специальные отступы для описания в VOCAL PRESETS */
+        #flstudio-screen .card-desc,
+        #logicpro-screen .card-desc {
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         .card-bottom {
@@ -326,7 +335,7 @@
                 </svg>
                 <div class="card-info">
                     <div class="card-title">FLUGGA Vocal Rec</div>
-                    <div class="card-desc">Профессиональная вокальная запись.</div>
+                    <div class="card-desc">Main Vocal</div>
                     <div class="card-bottom">
                         <span class="price">2 490 ₽</span>
                         <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">ВЫБРАТЬ</button>
@@ -351,7 +360,7 @@
                 </svg>
                 <div class="card-info">
                     <div class="card-title">FLUGGA Vocal Rec</div>
-                    <div class="card-desc">Профессиональная вокальная запись.</div>
+                    <div class="card-desc">Main Vocal</div>
                     <div class="card-bottom">
                         <span class="price">2 490 ₽</span>
                         <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">ВЫБРАТЬ</button>
@@ -565,7 +574,6 @@
         const mainContainer = document.getElementById('main-container');
 
         progressBar.addEventListener('animationend', () => {
-            // Плавное исчезновение загрузочного экрана
             loaderScreen.style.opacity = '0';
             setTimeout(() => {
                 loaderScreen.style.display = 'none';
