@@ -149,7 +149,6 @@
             gap: 15px;
             margin-top: 20px;
         }
-        /* Навигационные ячейки (Тип 1) — размеры НЕ МЕНЯЕМ */
         .menu-item {
             background: #111;
             border: 2px solid #fff;
@@ -164,7 +163,6 @@
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
         
-        /* Общие стили для обычных карточек (Тип 2 — конечные услуги) */
         .card {
             background: #111;
             border: 2px solid #333;
@@ -237,7 +235,6 @@
         }
         .btn:active { transform: scale(0.9); }
 
-        /* Раскрывающиеся карточки (Тип 2) */
         .card.expandable {
             padding: 20px 20px;
             margin-bottom: 15px;
@@ -482,26 +479,34 @@
                     </div>
                 </div>
             </div>
-            <!-- TEMPLATES: LOGIC PRO -->
+            <!-- TEMPLATES: LOGIC PRO (ИСПРАВЛЕНА В РАСКРЫВАЮЩУЮСЯ КАРТОЧКУ) -->
             <div id="template-logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template Logic Pro</h2>
-                <div class="card">
-                    <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                        <rect width="32" height="32" fill="#222222"/>
-                        <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
-                        <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
-                        <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
-                        <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
-                        <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
-                        <rect x="14" y="14" width="4" height="4" fill="#000000"/>
-                    </svg>
-                    <div class="card-info">
-                        <div class="card-title">Template Logic Pro</div>
-                        <div class="card-desc">Full Project + Master</div>
-                        <div class="card-actions">
-                            <span class="price">5 990 ₽</span>
-                            <button class="btn" onclick="buyProduct('Template Logic Pro', 5990, 'Template Logic Pro'); clickSound()">ВЫБРАТЬ</button>
+                <div class="card expandable" onclick="toggleCard(this)">
+                    <div class="card-header">
+                        <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                            <rect width="32" height="32" fill="#222222"/>
+                            <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
+                            <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
+                            <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
+                            <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
+                            <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
+                            <rect x="14" y="14" width="4" height="4" fill="#000000"/>
+                        </svg>
+                        <span class="card-title">Template Logic Pro</span>
+                        <button class="btn" onclick="event.stopPropagation(); buyProduct('Template Logic Pro', 5990, 'Template Logic Pro')">ВЫБРАТЬ</button>
+                    </div>
+                    <div class="card-expandable">
+                        <div class="expand-content">
+                            <div class="details" style="min-width:0; flex:1;">
+                                <div class="details-text" style="font-size:12px; color:#999; line-height:1.6; font-family:sans-serif;">
+                                    Full Project + Master
+                                </div>
+                                <div class="buy-row" style="display:flex; justify-content:flex-end; align-items:center; margin-top:12px; padding-top:8px; border-top:1px solid #333;">
+                                    <span class="price" style="font-size:14px; white-space:nowrap;">5 990 ₽</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
