@@ -117,7 +117,6 @@
             margin-bottom: 30px;
             color: #fff;
             -webkit-text-stroke: 1px #ff0000;
-            /* Убрана лишняя тень, только обводка */
             font-family: 'Press Start 2P', monospace;
         }
 
@@ -260,7 +259,6 @@
             0% { opacity: 0.98; text-shadow: 0 0 1px rgba(255,255,255,0.15); }
             100% { opacity: 1; text-shadow: 0 0 3px rgba(255,255,255,0.3); }
         }
-        /* Исключаем элементы, где анимация мешает */
         .progress-bar {
             animation: load 4s linear forwards !important;
             will-change: width !important;
@@ -288,34 +286,19 @@
 
         <div id="menu-screen" class="category-screen active">
             <div class="menu-grid">
-                <div class="menu-item" onclick="openCategory('beats'); clickSound()">
-                    <span>BEATS</span>
-                </div>
-                <div class="menu-item" onclick="openCategory('presets'); clickSound()">
-                    <span>VOCAL PRESETS</span>
-                </div>
+                <!-- TEMPLATE на первом месте -->
                 <div class="menu-item" onclick="openCategory('templates'); clickSound()">
                     <span>TEMPLATE</span>
                 </div>
+                <!-- VOCAL PRESETS на втором месте -->
+                <div class="menu-item" onclick="openCategory('presets'); clickSound()">
+                    <span>VOCAL PRESETS</span>
+                </div>
+                <!-- BEATS полностью скрыт, не добавляем -->
             </div>
         </div>
 
-        <!-- BEATS -->
-        <div id="beats-screen" class="category-screen">
-            <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
-            <h2>BEATS</h2>
-            <div class="card">
-                <img src="https://i.imgur.com/6Y2u9Zd.png" alt="Beat Pack 1">
-                <div class="card-info">
-                    <div class="card-title">Beat Pack 1</div>
-                    <div class="card-desc">Набор из 5 качественных битов.</div>
-                    <div class="card-bottom">
-                        <span class="price">1 500 ₽</span>
-                        <button class="btn" onclick="buyProduct('Beat Pack 1', 1500); clickSound()">ВЫБРАТЬ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- BEATS исключён, его экран не отображается -->
 
         <!-- VOCAL PRESETS -->
         <div id="presets-screen" class="category-screen">
