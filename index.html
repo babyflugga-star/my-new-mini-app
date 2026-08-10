@@ -102,7 +102,7 @@
             background-position: 0 0, 4px 4px;
         }
 
-        /* Исправление прокрутки: внутренний контейнер */
+        /* Основной контейнер с исправленной прокруткой и центрированием */
         #main-container {
             display: none;
             height: 100dvh;
@@ -110,7 +110,7 @@
             overflow-y: auto;
             position: relative;
             z-index: 1;
-            padding: 0; /* убираем padding, он будет у внутреннего контейнера */
+            padding: 0;
             box-sizing: border-box;
         }
 
@@ -118,8 +118,10 @@
             display: flex;
             flex-direction: column;
             padding: 20px;
-            min-height: 100%; /* чтобы padding учитывался при прокрутке */
+            min-height: 100%;
             box-sizing: border-box;
+            width: 100%;
+            margin: 0 auto; /* центрирование по горизонтали */
         }
 
         h1 {
@@ -262,7 +264,7 @@
         .category-screen { display: none; }
         .category-screen.active { display: block; }
 
-        /* Оптимизированный CRT-эффект только для текста */
+        /* CRT-эффект */
         h1, h2, .menu-item, .card-title, .card-desc, .price, .btn, .back-btn, .loading-text {
             will-change: opacity, text-shadow;
             animation: crt-glow 6s ease-in-out infinite alternate;
@@ -277,7 +279,6 @@
     </style>
 </head>
 <body>
-    <!-- Фоновый canvas -->
     <canvas id="bg-canvas"></canvas>
 
     <!-- Экран загрузки -->
@@ -291,7 +292,7 @@
         </div>
     </div>
 
-    <!-- Основной контейнер с исправленной прокруткой -->
+    <!-- Основной контейнер с центрированным контентом -->
     <div id="main-container">
         <div id="main-content">
             <h1>FLUGGA STORE</h1>
@@ -503,8 +504,8 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- #main-content -->
-    </div> <!-- #main-container -->
+        </div>
+    </div>
 
     <script>
         // ---- Фоновая анимация через Canvas ----
@@ -643,13 +644,13 @@
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
-        // ---- Анимация загрузки (JS-управление) ----
+        // ---- Анимация загрузки (сокращена до 2 секунд, убрана задержка) ----
         const progressBar = document.getElementById('progressBar');
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
 
         let progress = 0;
-        const duration = 4000;
+        const duration = 2000; // 2 секунды
         const stepTime = 20;
         const steps = duration / stepTime;
         const increment = 100 / steps;
@@ -663,14 +664,13 @@
                     progress = 100;
                     progressBar.style.width = '100%';
                     clearInterval(interval);
+                    // Без дополнительной задержки, сразу переход
+                    loaderScreen.style.opacity = '0';
                     setTimeout(() => {
-                        loaderScreen.style.opacity = '0';
-                        setTimeout(() => {
-                            loaderScreen.style.display = 'none';
-                            mainContainer.style.display = 'flex';
-                            if (webapp) webapp.ready();
-                        }, 500);
-                    }, 200);
+                        loaderScreen.style.display = 'none';
+                        mainContainer.style.display = 'flex';
+                        if (webapp) webapp.ready();
+                    }, 500);
                 } else {
                     progressBar.style.width = progress + '%';
                 }
