@@ -148,8 +148,80 @@
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
         
-        /* --- Стили для карточек с раскрытием --- */
+        /* --- Стили для обычных карточек (восстановлены исходные размеры) --- */
         .card {
+            background: #111;
+            border: 2px solid #333;
+            padding: 15px 20px; /* восстановлено */
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card svg.card-icon,
+        .card img {
+            width: 50px; /* уменьшено с 60px до исходного */
+            height: 50px;
+            border-radius: 6px;
+            border: 2px solid #555;
+            flex-shrink: 0;
+            shape-rendering: crispEdges;
+            image-rendering: pixelated;
+            object-fit: cover;
+            display: block;
+        }
+
+        .card-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px; /* восстановлено */
+        }
+
+        .card-title {
+            font-size: 10px; /* восстановлено с 15px */
+        }
+
+        .card-desc {
+            font-size: 8px; /* восстановлено с 16px */
+            color: #999;
+            line-height: 1.5;
+            font-family: sans-serif;
+            margin-top: 2px;
+            margin-bottom: 4px;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 6px; /* восстановлено */
+        }
+
+        .price {
+            font-size: 12px; /* восстановлено с 14px */
+        }
+
+        .btn {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            cursor: pointer;
+            border: 2px solid #000;
+            transition: none;
+            flex-shrink: 0; /* фиксируем кнопку справа */
+        }
+        .btn:active { transform: scale(0.9); }
+
+        /* --- Стили для раскрывающихся карточек (оставлены без изменений) --- */
+        .card.expandable {
+            /* копия стилей .card, но с дополнительными свойствами */
             background: #111;
             border: 2px solid #333;
             padding: 15px 20px;
@@ -159,40 +231,38 @@
             z-index: 1;
             transition: border-color 0.3s;
             overflow: hidden;
-            /* убираем фиксированную высоту, чтобы карточки подстраивались под контент */
             height: auto;
+            display: block; /* меняем flex на block, чтобы заголовок и контент шли вертикально */
         }
-        .card.active {
+        .card.expandable.active {
             border-color: #fff;
         }
-        .card-header {
+        .card.expandable .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            pointer-events: none; /* чтобы клик проходил на саму карточку */
+            pointer-events: none;
         }
-        .card-header .card-title {
+        .card.expandable .card-header .card-title {
             font-size: 15px;
         }
-        .card-header .card-price {
+        .card.expandable .card-header .card-price {
             font-size: 14px;
             color: #fff;
         }
-
-        /* Скрытый контент для раскрытия */
-        .card-expandable {
+        .card.expandable .card-expandable {
             max-height: 0;
             opacity: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-in-out, opacity 0.4s ease, margin 0.4s ease;
             margin-top: 0;
         }
-        .card.active .card-expandable {
-            max-height: 800px; /* достаточно для контента, но не завышено */
+        .card.expandable.active .card-expandable {
+            max-height: 800px;
             opacity: 1;
             margin-top: 15px;
         }
-        .expand-content {
+        .card.expandable .expand-content {
             display: flex;
             gap: 15px;
             padding: 10px 5px 5px 5px;
@@ -200,35 +270,35 @@
             flex-wrap: wrap;
             align-items: flex-start;
         }
-        .expand-content .screenshot {
-            width: 140px; /* чуть больше, чем было 100px */
+        .card.expandable .expand-content .screenshot {
+            width: 140px;
             height: auto;
             border: 2px solid #555;
             object-fit: cover;
             image-rendering: pixelated;
             flex-shrink: 0;
         }
-        .expand-content .details {
+        .card.expandable .expand-content .details {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             min-width: 160px;
         }
-        .expand-content .details-text {
-            font-size: 12px; /* чуть крупнее */
+        .card.expandable .expand-content .details-text {
+            font-size: 12px;
             color: #999;
             line-height: 1.6;
             font-family: sans-serif;
         }
-        .play-controls {
+        .card.expandable .play-controls {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-top: 10px;
             flex-wrap: wrap;
         }
-        .play-btn {
+        .card.expandable .play-btn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
@@ -242,13 +312,13 @@
             outline: none;
             flex-shrink: 0;
         }
-        .play-btn:active { transform: scale(0.9); }
-        .play-btn svg {
+        .card.expandable .play-btn:active { transform: scale(0.9); }
+        .card.expandable .play-btn svg {
             fill: #000;
             width: 14px;
             height: 14px;
         }
-        .card-expandable .btn {
+        .card.expandable .btn {
             background: #fff;
             color: #000;
             border: none;
@@ -260,11 +330,8 @@
             transition: none;
             width: auto;
         }
-        .card-expandable .btn:active { transform: scale(0.9); }
-        
-        .btn, .back-btn, .menu-item, .play-btn {
-            transition: none;
-        }
+        .card.expandable .btn:active { transform: scale(0.9); }
+
         .back-btn {
             background: none;
             border: none;
@@ -280,7 +347,7 @@
         .category-screen.active { display: block; }
         
         /* CRT-эффект */
-        h1, h2, .menu-item, .card-title, .card-price, .btn, .back-btn, .loading-text {
+        h1, h2, .menu-item, .card-title, .card-desc, .price, .btn, .back-btn, .loading-text {
             will-change: opacity, text-shadow;
             animation: crt-glow 6s ease-in-out infinite alternate;
         }
@@ -320,6 +387,7 @@
                     <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()"><span>LOGIC PRO</span></div>
                 </div>
             </div>
+            <!-- VOCAL PRESETS SUB: FL STUDIO -->
             <div id="flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>FL Studio</h2>
@@ -350,6 +418,7 @@
                     </div>
                 </div>
             </div>
+            <!-- VOCAL PRESETS SUB: LOGIC PRO -->
             <div id="logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>Logic Pro</h2>
@@ -406,20 +475,16 @@
                     </div>
                 </div>
             </div>
-
             <!-- TEMPLATES: FL STUDIO (три карточки с раскрытием) -->
             <div id="template-flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template FL Studio</h2>
-                
                 <!-- КАРТОЧКА 1: ПЕРЕД ТЕМ КАК -->
-                <div class="card" onclick="toggleCard(this)">
+                <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Перед тем как</span>
                         <span class="card-price">5 990 ₽</span>
                     </div>
-                    
-                    <!-- Расширяемый блок -->
                     <div class="card-expandable">
                         <div class="expand-content">
                             <img class="screenshot" src="/images/%D0%9F%D0%B5%D1%80%D0%B5%D0%B4%20%D1%82%D0%B5%D0%BC%20%D0%BA%D0%B0%D0%BA.png" alt="Project Screenshot">
@@ -437,9 +502,8 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- КАРТОЧКА 2: СДЕЛАЮ ТЕБЕ БОЛЬНО -->
-                <div class="card" onclick="toggleCard(this)">
+                <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Сделаю тебе больно</span>
                         <span class="card-price">5 990 ₽</span>
@@ -459,9 +523,8 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- КАРТОЧКА 3: КИСТЯМИ -->
-                <div class="card" onclick="toggleCard(this)">
+                <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Кистями</span>
                         <span class="card-price">5 990 ₽</span>
@@ -607,14 +670,11 @@
             document.getElementById('templates-screen').classList.add('active');
         }
 
-        // --- ЛОГИКА РАСКРЫВАЮЩИХСЯ КАРТОЧЕК ---
         function toggleCard(cardElement) {
-            const activeCards = document.querySelectorAll('.card.active');
-            // Закрываем все остальные открытые карточки
+            const activeCards = document.querySelectorAll('.card.expandable.active');
             activeCards.forEach(c => {
                 if (c !== cardElement) {
                     c.classList.remove('active');
-                    // Если внутри есть аудио, ставим на паузу
                     const playBtn = c.querySelector('.play-btn');
                     if (playBtn && playBtn.dataset.audio) {
                         const audio = new Audio(playBtn.dataset.audio);
@@ -626,7 +686,6 @@
             cardElement.classList.toggle('active');
         }
 
-        // --- ЛОГИКА АУДИО (один экземпляр, автозапуск) ---
         let currentAudio = null;
         let currentPlayBtn = null;
 
@@ -638,7 +697,6 @@
             }
 
             if (currentPlayBtn && currentPlayBtn !== btnElement) {
-                // Если играет другая кнопка, ставим её на паузу и сбрасываем
                 currentAudio.pause();
                 currentAudio.currentTime = 0;
                 currentPlayBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
@@ -647,13 +705,11 @@
             }
 
             if (currentPlayBtn === btnElement && currentAudio && !currentAudio.paused) {
-                // Если нажали на ту же кнопку и она играет -> пауза
                 currentAudio.pause();
                 btnElement.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
                 currentPlayBtn = null;
                 currentAudio = null;
             } else {
-                // Иначе начинаем играть
                 if (currentAudio) {
                     currentAudio.pause();
                     currentAudio = null;
@@ -679,7 +735,6 @@
             }
         }
 
-        // --- ЛОГИКА ПОКУПКИ ---
         function buyProduct(productName, productPrice, category = '') {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
@@ -715,7 +770,6 @@
             });
         }
 
-        // Click animation
         document.addEventListener('DOMContentLoaded', () => {
             const interactiveElements = document.querySelectorAll('.menu-item, .btn, .back-btn, .play-btn');
             interactiveElements.forEach(el => {
