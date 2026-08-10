@@ -252,29 +252,22 @@
         .category-screen { display: none; }
         .category-screen.active { display: block; }
 
-        /* ---- Глобальный CRT-эффект для всего текста ---- */
-        /* Применяется ко всем элементам, но влияет только на визуальное восприятие */
-        * {
+        /* ---- Глобальный CRT-эффект (исправлен для WebView) ---- */
+        /* Применяется только к текстовым элементам, чтобы не ломать анимацию .progress-bar */
+        h1, h2, h3, .menu-item, .card-title, .card-desc, .price, .btn, .back-btn, .loading-text, .press-start {
             animation: crt-glow 6s ease-in-out infinite alternate;
-            will-change: opacity, text-shadow;
         }
         @keyframes crt-glow {
             0% { opacity: 0.98; text-shadow: 0 0 2px rgba(255,255,255,0.2); }
             100% { opacity: 1; text-shadow: 0 0 4px rgba(255,255,255,0.4); }
         }
-        /* Исключаем элементы, где анимация может мешать (например, прогресс-бар) */
+        /* Прогресс-бар защищен от поломок */
         .progress-bar {
-            animation: none !important;
+            animation: load 4s linear forwards !important;
             will-change: auto !important;
         }
         .logo {
             animation: none !important;
-            will-change: auto !important;
-        }
-        /* Восстанавливаем анимацию для loading-text, так как она уже有自己的 анимацию */
-        .loading-text {
-            animation: blink 1s step-start infinite !important;
-            will-change: auto !important;
         }
     </style>
 </head>
