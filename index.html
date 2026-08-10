@@ -7,7 +7,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* Глобальные стили, предотвращающие артефакты */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body {
             margin: 0;
@@ -29,7 +28,6 @@
             margin: 0;
             position: relative;
         }
-        /* Скрываем полосу прокрутки везде */
         ::-webkit-scrollbar {
             display: none !important;
             width: 0 !important;
@@ -170,8 +168,6 @@
             z-index: 1;
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
-        
-        /* --- Общие стили для всех карточек --- */
         .card {
             background: #111;
             border: 2px solid #333;
@@ -184,7 +180,6 @@
             z-index: 1;
             overflow: visible;
         }
-
         .card svg.card-icon,
         .card img {
             width: 50px;
@@ -197,7 +192,6 @@
             object-fit: cover;
             display: block;
         }
-
         .card-info {
             flex: 1;
             display: flex;
@@ -205,14 +199,12 @@
             min-width: 0;
             gap: 4px;
         }
-
         .card-title {
             font-size: 15px;
             line-height: 1.5;
             word-break: break-word;
             overflow-wrap: break-word;
         }
-
         .card-desc {
             font-size: 13px;
             color: #999;
@@ -221,7 +213,6 @@
             word-break: break-word;
             overflow-wrap: break-word;
         }
-
         .card-actions {
             display: flex;
             justify-content: space-between;
@@ -230,13 +221,11 @@
             gap: 8px;
             margin-top: 4px;
         }
-
         .price {
             font-size: 14px;
             white-space: nowrap;
             flex-shrink: 0;
         }
-
         .btn {
             background: #fff;
             color: #000;
@@ -250,8 +239,6 @@
             flex-shrink: 0;
         }
         .btn:active { transform: scale(0.9); }
-
-        /* --- Стили для раскрывающихся карточек (Template FL Studio) --- */
         .card.expandable {
             padding: 20px 20px;
             margin-bottom: 15px;
@@ -362,7 +349,6 @@
             padding-top: 8px;
             border-top: 1px solid #333;
         }
-
         .back-btn {
             background: none;
             border: none;
@@ -376,8 +362,6 @@
         .back-btn:active { transform: scale(0.92); color: #888; }
         .category-screen { display: none; }
         .category-screen.active { display: block; }
-        
-        /* CRT-эффект */
         h1, h2, .menu-item, .card-title, .card-desc, .price, .btn, .back-btn, .loading-text {
             will-change: opacity, text-shadow;
             animation: crt-glow 6s ease-in-out infinite alternate;
@@ -409,7 +393,6 @@
                     <div class="menu-item" onclick="openCategory('presets'); clickSound()"><span>VOCAL PRESETS</span></div>
                 </div>
             </div>
-            <!-- VOCAL PRESETS -->
             <div id="presets-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2>VOCAL PRESETS</h2>
@@ -418,7 +401,6 @@
                     <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()"><span>LOGIC PRO</span></div>
                 </div>
             </div>
-            <!-- VOCAL PRESETS SUB: FL STUDIO -->
             <div id="flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>FL Studio</h2>
@@ -449,7 +431,6 @@
                     </div>
                 </div>
             </div>
-            <!-- VOCAL PRESETS SUB: LOGIC PRO -->
             <div id="logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>Logic Pro</h2>
@@ -473,7 +454,6 @@
                     </div>
                 </div>
             </div>
-            <!-- TEMPLATES -->
             <div id="templates-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2 style="margin-top: 20px;">TEMPLATE</h2>
@@ -482,7 +462,6 @@
                     <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()"><div>Template FL Studio</div></div>
                 </div>
             </div>
-            <!-- TEMPLATES: LOGIC PRO -->
             <div id="template-logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template Logic Pro</h2>
@@ -506,11 +485,9 @@
                     </div>
                 </div>
             </div>
-            <!-- TEMPLATES: FL STUDIO (три карточки с раскрытием) -->
             <div id="template-flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template FL Studio</h2>
-                <!-- КАРТОЧКА 1: ПЕРЕД ТЕМ КАК -->
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Перед тем как</span>
@@ -535,7 +512,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- КАРТОЧКА 2: СДЕЛАЮ ТЕБЕ БОЛЬНО -->
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Сделаю тебе больно</span>
@@ -558,7 +534,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- КАРТОЧКА 3: КИСТЯМИ -->
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Кистями</span>
@@ -590,11 +565,7 @@
         const webapp = window.Telegram?.WebApp;
         if (webapp) {
             webapp.ready();
-            // Синхронизируем expand с рендером через requestAnimationFrame,
-            // чтобы избежать промежуточных кадров
-            requestAnimationFrame(() => {
-                webapp.expand();
-            });
+            // Убрали webapp.expand() и requestAnimationFrame
         }
 
         // ---- Фоновая анимация через Canvas ----
@@ -656,7 +627,6 @@
             logo.style.top = '50%';
             logo.style.transform = `translate(-50%, calc(-50% + ${topOffset}px)) scale(1.25)`;
         }
-        // Первый вызов с задержкой для стабилизации viewport
         setTimeout(centerLogo, 100);
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
@@ -666,7 +636,7 @@
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
         let progress = 0;
-        const duration = 2000; // 2 секунды
+        const duration = 2000;
         const stepTime = 20;
         const increment = 100 / (duration / stepTime);
         function startLoading() {
@@ -682,7 +652,7 @@
                     setTimeout(() => {
                         loaderScreen.style.display = 'none';
                         mainContainer.style.display = 'flex';
-                        if (webapp) webapp.ready();
+                        // Убрали повторный вызов webapp.ready()
                     }, 500);
                 } else {
                     progressBar.style.width = progress + '%';
