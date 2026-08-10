@@ -148,11 +148,11 @@
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
         
-        /* --- Стили для обычных карточек (восстановлены исходные размеры) --- */
+        /* --- Стили для обычных карточек (увеличенные шрифты) --- */
         .card {
             background: #111;
             border: 2px solid #333;
-            padding: 15px 20px; /* восстановлено */
+            padding: 15px 20px;
             margin-bottom: 20px;
             display: flex;
             gap: 20px;
@@ -163,7 +163,7 @@
 
         .card svg.card-icon,
         .card img {
-            width: 50px; /* уменьшено с 60px до исходного */
+            width: 50px;
             height: 50px;
             border-radius: 6px;
             border: 2px solid #555;
@@ -178,15 +178,15 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 4px; /* восстановлено */
+            gap: 6px; /* чуть больше воздуха */
         }
 
         .card-title {
-            font-size: 10px; /* восстановлено с 15px */
+            font-size: 14px; /* увеличено с 10px */
         }
 
         .card-desc {
-            font-size: 8px; /* восстановлено с 16px */
+            font-size: 12px; /* увеличено с 8px */
             color: #999;
             line-height: 1.5;
             font-family: sans-serif;
@@ -198,11 +198,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 6px; /* восстановлено */
+            margin-top: 8px;
         }
 
         .price {
-            font-size: 12px; /* восстановлено с 14px */
+            font-size: 14px; /* увеличено с 12px */
         }
 
         .btn {
@@ -215,13 +215,12 @@
             cursor: pointer;
             border: 2px solid #000;
             transition: none;
-            flex-shrink: 0; /* фиксируем кнопку справа */
+            flex-shrink: 0;
         }
         .btn:active { transform: scale(0.9); }
 
-        /* --- Стили для раскрывающихся карточек (оставлены без изменений) --- */
+        /* --- Стили для раскрывающихся карточек (оставлены без изменений, кроме кнопки) --- */
         .card.expandable {
-            /* копия стилей .card, но с дополнительными свойствами */
             background: #111;
             border: 2px solid #333;
             padding: 15px 20px;
@@ -232,7 +231,7 @@
             transition: border-color 0.3s;
             overflow: hidden;
             height: auto;
-            display: block; /* меняем flex на block, чтобы заголовок и контент шли вертикально */
+            display: block;
         }
         .card.expandable.active {
             border-color: #fff;
@@ -296,7 +295,6 @@
             align-items: center;
             gap: 12px;
             margin-top: 10px;
-            flex-wrap: wrap;
         }
         .card.expandable .play-btn {
             width: 40px;
@@ -318,7 +316,20 @@
             width: 14px;
             height: 14px;
         }
-        .card.expandable .btn {
+
+        /* Новая структура для цены и кнопки «Выбрать» в раскрывающихся карточках */
+        .card.expandable .buy-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid #333;
+        }
+        .card.expandable .buy-row .price {
+            font-size: 14px;
+        }
+        .card.expandable .buy-row .btn {
             background: #fff;
             color: #000;
             border: none;
@@ -328,9 +339,8 @@
             cursor: pointer;
             border: 2px solid #000;
             transition: none;
-            width: auto;
         }
-        .card.expandable .btn:active { transform: scale(0.9); }
+        .card.expandable .buy-row .btn:active { transform: scale(0.9); }
 
         .back-btn {
             background: none;
@@ -496,6 +506,9 @@
                                     <button class="play-btn" onclick="event.stopPropagation(); toggleAudio(this, '/audio/%D0%9F%D0%B5%D1%80%D0%B5%D0%B4%20%D1%82%D0%B5%D0%BC%20%D0%BA%D0%B0%D0%BA%20(MAIN).mp3')">
                                         <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                                     </button>
+                                </div>
+                                <div class="buy-row">
+                                    <span class="price">5 990 ₽</span>
                                     <button class="btn" onclick="event.stopPropagation(); buyProduct('Перед тем как', 5990, 'Template FL Studio')">ВЫБРАТЬ</button>
                                 </div>
                             </div>
@@ -517,6 +530,9 @@
                                     <button class="play-btn" onclick="event.stopPropagation(); toggleAudio(this, '')">
                                         <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                                     </button>
+                                </div>
+                                <div class="buy-row">
+                                    <span class="price">5 990 ₽</span>
                                     <button class="btn" onclick="event.stopPropagation(); buyProduct('Сделаю тебе больно', 5990, 'Template FL Studio')">ВЫБРАТЬ</button>
                                 </div>
                             </div>
@@ -538,6 +554,9 @@
                                     <button class="play-btn" onclick="event.stopPropagation(); toggleAudio(this, '')">
                                         <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                                     </button>
+                                </div>
+                                <div class="buy-row">
+                                    <span class="price">5 990 ₽</span>
                                     <button class="btn" onclick="event.stopPropagation(); buyProduct('Кистями', 5990, 'Template FL Studio')">ВЫБРАТЬ</button>
                                 </div>
                             </div>
