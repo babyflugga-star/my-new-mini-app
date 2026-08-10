@@ -7,7 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* Глобальные стили, предотвращающие синюю полоску */
+        /* Глобальные стили, предотвращающие артефакты */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body {
             margin: 0;
@@ -586,9 +586,18 @@
     </div>
 
     <script>
+        // ---- Инициализация Telegram WebApp ----
         const webapp = window.Telegram?.WebApp;
-        if (webapp) { webapp.ready(); webapp.expand(); }
+        if (webapp) {
+            webapp.ready();
+            // Синхронизируем expand с рендером через requestAnimationFrame,
+            // чтобы избежать промежуточных кадров
+            requestAnimationFrame(() => {
+                webapp.expand();
+            });
+        }
 
+        // ---- Фоновая анимация через Canvas ----
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -615,6 +624,7 @@
         window.addEventListener('resize', ()=>{ resize(); initParticles(); });
         resize(); initParticles(); drawParticles();
 
+        // ---- Звуковой движок (8‑бит) ----
         let audioCtx = null;
         function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); if (audioCtx.state==='suspended') audioCtx.resume(); }
         function playTone(freq, duration, type='square', volume=0.15) {
@@ -633,6 +643,7 @@
         function categorySound() { initAudio(); playTone(600, 0.1, 'square', 0.12); setTimeout(()=>playTone(800,0.1,'square',0.12),100); }
         function successSound() { initAudio(); playTone(523,0.15,'square',0.15); setTimeout(()=>playTone(659,0.15,'square',0.15),150); setTimeout(()=>playTone(784,0.2,'square',0.15),300); }
 
+        // ---- Центрирование логотипа ----
         const logo = document.querySelector('#loader-screen img.logo');
         function centerLogo() {
             if (!logo) return;
@@ -645,15 +656,17 @@
             logo.style.top = '50%';
             logo.style.transform = `translate(-50%, calc(-50% + ${topOffset}px)) scale(1.25)`;
         }
+        // Первый вызов с задержкой для стабилизации viewport
         setTimeout(centerLogo, 100);
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
+        // ---- Анимация загрузки ----
         const progressBar = document.getElementById('progressBar');
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
         let progress = 0;
-        const duration = 2000;
+        const duration = 2000; // 2 секунды
         const stepTime = 20;
         const increment = 100 / (duration / stepTime);
         function startLoading() {
@@ -678,7 +691,44 @@
         }
         document.addEventListener('DOMContentLoaded', startLoading);
 
-        // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ АУДИО И КАРТОЧЕК ---
+        // ---- Навигация ----
+        function openCategory(id) {
+            closeAllExpandableCards();
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(id + '-screen').classList.add('active');
+        }
+        function goBack() {
+            closeAllExpandableCards();
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('menu-screen').classList.add('active');
+        }
+        function openSubCategory(id) {
+            closeAllExpandableCards();
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById(id + '-screen').classList.add('active');
+        }
+        function goBackToPresets() {
+            closeAllExpandableCards();
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('presets-screen').classList.add('active');
+        }
+        function openTemplateLogicPro() {
+            closeAllExpandableCards();
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('template-logicpro-screen').classList.add('active');
+        }
+        function openTemplateFLStudio() {
+            closeAllExpandableCards();
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('template-flstudio-screen').classList.add('active');
+        }
+        function goBackToTemplates() {
+            closeAllExpandableCards();
+            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
+            document.getElementById('templates-screen').classList.add('active');
+        }
+
+        // ---- Раскрывающиеся карточки ----
         let currentAudio = null;
         let currentPlayBtn = null;
 
@@ -751,42 +801,7 @@
             }
         }
 
-        function openCategory(id) {
-            closeAllExpandableCards();
-            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
-            document.getElementById(id + '-screen').classList.add('active');
-        }
-        function goBack() {
-            closeAllExpandableCards();
-            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
-            document.getElementById('menu-screen').classList.add('active');
-        }
-        function openSubCategory(id) {
-            closeAllExpandableCards();
-            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
-            document.getElementById(id + '-screen').classList.add('active');
-        }
-        function goBackToPresets() {
-            closeAllExpandableCards();
-            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
-            document.getElementById('presets-screen').classList.add('active');
-        }
-        function openTemplateLogicPro() {
-            closeAllExpandableCards();
-            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
-            document.getElementById('template-logicpro-screen').classList.add('active');
-        }
-        function openTemplateFLStudio() {
-            closeAllExpandableCards();
-            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
-            document.getElementById('template-flstudio-screen').classList.add('active');
-        }
-        function goBackToTemplates() {
-            closeAllExpandableCards();
-            document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
-            document.getElementById('templates-screen').classList.add('active');
-        }
-
+        // ---- Покупка ----
         function buyProduct(productName, productPrice, category = '') {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
@@ -822,6 +837,7 @@
             });
         }
 
+        // ---- Анимация нажатия ----
         document.addEventListener('DOMContentLoaded', () => {
             const interactiveElements = document.querySelectorAll('.menu-item, .btn, .back-btn, .play-btn');
             interactiveElements.forEach(el => {
