@@ -11,10 +11,10 @@
         html, body {
             margin: 0;
             padding: 0;
-            height: 100dvh;
-            width: 100vw;
+            height: 100%;
             overflow: hidden;
             background: #000;
+            -webkit-overflow-scrolling: none;
         }
         body {
             background: #000;
@@ -25,6 +25,10 @@
             overflow: hidden;
             margin: 0;
             position: relative;
+        }
+        /* Скрываем полосу прокрутки везде */
+        ::-webkit-scrollbar {
+            display: none !important;
         }
         #bg-canvas {
             position: fixed;
@@ -50,8 +54,8 @@
             opacity: 1;
             transition: opacity 0.5s ease;
             pointer-events: auto;
-            /* убираем возможный скролл */
             overflow: hidden;
+            -webkit-overflow-scrolling: none;
         }
         #loader-screen img.logo {
             position: fixed;
@@ -169,6 +173,8 @@
             align-items: center;
             position: relative;
             z-index: 1;
+            overflow: hidden; /* чтобы элементы не вылезали */
+            width: 100%;
         }
 
         .card svg.card-icon,
@@ -188,32 +194,35 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            min-width: 0; /* важно для flex-элементов, чтобы текст не вылезал */
         }
 
         .card-title {
             font-size: 15px;
             margin-bottom: 4px;
-            white-space: nowrap; /* исправление 1: не переносить "Pro" */
+            white-space: nowrap;
         }
 
         .card-desc {
-            font-size: 13px; /* чуть крупнее */
+            font-size: 13px;
             color: #999;
             line-height: 1.5;
             font-family: sans-serif;
-            margin-top: 6px; /* отступ сверху для центрирования */
+            margin-top: 6px;
             margin-bottom: 8px;
         }
 
-        /* Новая строка для цены и кнопки (как на 5 скрине) */
         .card-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap; /* чтобы на маленьких экранах не ломалось */
+            gap: 8px;
         }
 
         .price {
             font-size: 14px;
+            white-space: nowrap;
         }
 
         .btn {
@@ -242,7 +251,9 @@
             transition: border-color 0.3s;
             overflow: hidden;
             height: auto;
-            display: block;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
         }
         .card.expandable.active {
             border-color: #fff;
@@ -250,18 +261,24 @@
         .card.expandable .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: center; /* вертикальное центрирование заголовка и цены */
+            align-items: center;
             pointer-events: none;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .card.expandable .card-header .card-title {
             font-size: 15px;
-            white-space: nowrap; /* исправление 1: не переносить заголовок */
-            line-height: 1.4; /* исправление 4: межстрочный интервал */
+            white-space: normal; /* разрешаем перенос длинных слов */
+            line-height: 1.4;
+            flex: 1;
+            min-width: 0;
         }
         .card.expandable .card-header .card-price {
             font-size: 14px;
             color: #fff;
-            white-space: nowrap; /* исправление 3: не отрывать знак ₽ */
+            white-space: nowrap;
+            flex-shrink: 0;
         }
         .card.expandable .card-expandable {
             max-height: 0;
@@ -385,7 +402,7 @@
                     <div class="menu-item" onclick="openCategory('presets'); clickSound()"><span>VOCAL PRESETS</span></div>
                 </div>
             </div>
-            <!-- VOCAL PRESETS -->
+            <!-- VOCAL PRESETS (не трогаем, оставляем как есть) -->
             <div id="presets-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2>VOCAL PRESETS</h2>
@@ -458,7 +475,7 @@
                     <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()"><div>Template FL Studio</div></div>
                 </div>
             </div>
-            <!-- TEMPLATES: LOGIC PRO -->
+            <!-- TEMPLATES: LOGIC PRO (исправлена карточка) -->
             <div id="template-logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template Logic Pro</h2>
@@ -482,7 +499,7 @@
                     </div>
                 </div>
             </div>
-            <!-- TEMPLATES: FL STUDIO (три карточки с раскрытием) -->
+            <!-- TEMPLATES: FL STUDIO (исправлены ячейки с раскрытием) -->
             <div id="template-flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template FL Studio</h2>
