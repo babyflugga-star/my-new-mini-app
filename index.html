@@ -250,7 +250,6 @@
                     <div class="menu-item" onclick="openCategory('presets'); clickSound()"><span>VOCAL PRESETS</span></div>
                 </div>
             </div>
-            <!-- VOCAL PRESETS -->
             <div id="presets-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2>VOCAL PRESETS</h2>
@@ -312,7 +311,6 @@
                     </div>
                 </div>
             </div>
-            <!-- TEMPLATES -->
             <div id="templates-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2 style="margin-top: 20px;">TEMPLATE</h2>
@@ -556,7 +554,7 @@
             document.getElementById('templates-screen').classList.add('active');
         }
 
-        // Updated buyProduct with category parameter
+        // Updated buyProduct with category and detailed error handling
         function buyProduct(productName, productPrice, category = '') {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
@@ -574,13 +572,23 @@
                     category: category
                 })
             })
-            .then(res => res.json())
+            .then(async res => {
+                if (!res.ok) {
+                    // Попытаемся получить текст ошибки от сервера
+                    const errorText = await res.text();
+                    throw new Error(`HTTP ${res.status}: ${errorText}`);
+                }
+                return res.json();
+            })
             .then(data => {
                 alert(data.message);
                 successSound();
                 window.Telegram.WebApp.close();
             })
-            .catch(() => alert('Ошибка при отправке заказа.'));
+            .catch(err => {
+                console.error('Ошибка при отправке заказа:', err);
+                alert('Ошибка при отправке заказа: ' + err.message);
+            });
         }
 
         // Click animation
