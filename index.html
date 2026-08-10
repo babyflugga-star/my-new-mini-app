@@ -7,6 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
+        /* Глобальные стили, предотвращающие синюю полоску */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body {
             margin: 0;
@@ -15,6 +16,8 @@
             overflow: hidden;
             background: #000;
             -webkit-overflow-scrolling: none;
+            overscroll-behavior: none;
+            touch-action: manipulation;
         }
         body {
             background: #000;
@@ -25,10 +28,13 @@
             overflow: hidden;
             margin: 0;
             position: relative;
+            touch-action: manipulation;
         }
         /* Скрываем полосу прокрутки везде */
         ::-webkit-scrollbar {
             display: none !important;
+            width: 0 !important;
+            height: 0 !important;
         }
         #bg-canvas {
             position: fixed;
@@ -56,6 +62,8 @@
             pointer-events: auto;
             overflow: hidden;
             -webkit-overflow-scrolling: none;
+            overscroll-behavior: none;
+            touch-action: manipulation;
         }
         #loader-screen img.logo {
             position: fixed;
@@ -116,6 +124,8 @@
             z-index: 1;
             padding: 0;
             box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: none;
         }
         #main-content {
             display: flex;
@@ -162,25 +172,25 @@
         }
         .menu-item:active { transform: scale(0.95); background: #333; }
         
-        /* --- Общие стили для обычных карточек --- */
+        /* --- Общие стили для всех карточек --- */
         .card {
             background: #111;
             border: 2px solid #333;
-            padding: 15px 20px;
+            padding: 20px 25px; /* увеличен padding для "воздуха" */
             margin-bottom: 20px;
             display: flex;
             gap: 20px;
             align-items: center;
             position: relative;
             z-index: 1;
-            overflow: hidden; /* чтобы элементы не вылезали */
-            width: 100%;
+            overflow: visible; /* не скрываем контент */
+            height: auto; /* высота определяется содержимым */
         }
 
         .card svg.card-icon,
         .card img {
-            width: 50px;
-            height: 50px;
+            width: 60px; /* чуть больше для лучшей читаемости */
+            height: 60px;
             border-radius: 6px;
             border: 2px solid #555;
             flex-shrink: 0;
@@ -194,35 +204,40 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            min-width: 0; /* важно для flex-элементов, чтобы текст не вылезал */
+            min-width: 0; /* позволяет flex-элементу сжиматься */
+            gap: 6px; /* увеличили отступ между элементами */
         }
 
         .card-title {
             font-size: 15px;
-            margin-bottom: 4px;
-            white-space: nowrap;
+            line-height: 1.6; /* увеличен межстрочный интервал */
+            word-break: break-word;
+            overflow-wrap: break-word;
+            color: #fff;
         }
 
         .card-desc {
             font-size: 13px;
             color: #999;
-            line-height: 1.5;
+            line-height: 1.8; /* увеличен межстрочный интервал */
             font-family: sans-serif;
-            margin-top: 6px;
-            margin-bottom: 8px;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .card-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap; /* чтобы на маленьких экранах не ломалось */
-            gap: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 6px;
         }
 
         .price {
             font-size: 14px;
             white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .btn {
@@ -241,19 +256,13 @@
 
         /* --- Стили для раскрывающихся карточек (Template FL Studio) --- */
         .card.expandable {
-            background: #111;
-            border: 2px solid #333;
-            padding: 15px 20px;
+            padding: 20px 25px;
             margin-bottom: 15px;
             cursor: pointer;
-            position: relative;
-            z-index: 1;
             transition: border-color 0.3s;
-            overflow: hidden;
-            height: auto;
             display: flex;
             flex-direction: column;
-            width: 100%;
+            gap: 0;
         }
         .card.expandable.active {
             border-color: #fff;
@@ -265,14 +274,15 @@
             pointer-events: none;
             width: 100%;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
         .card.expandable .card-header .card-title {
             font-size: 15px;
-            white-space: normal; /* разрешаем перенос длинных слов */
-            line-height: 1.4;
             flex: 1;
             min-width: 0;
+            line-height: 1.6; /* увеличен межстрочный интервал */
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
         .card.expandable .card-header .card-price {
             font-size: 14px;
@@ -402,7 +412,7 @@
                     <div class="menu-item" onclick="openCategory('presets'); clickSound()"><span>VOCAL PRESETS</span></div>
                 </div>
             </div>
-            <!-- VOCAL PRESETS (не трогаем, оставляем как есть) -->
+            <!-- VOCAL PRESETS -->
             <div id="presets-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2>VOCAL PRESETS</h2>
@@ -475,7 +485,7 @@
                     <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()"><div>Template FL Studio</div></div>
                 </div>
             </div>
-            <!-- TEMPLATES: LOGIC PRO (исправлена карточка) -->
+            <!-- TEMPLATES: LOGIC PRO -->
             <div id="template-logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template Logic Pro</h2>
@@ -499,7 +509,7 @@
                     </div>
                 </div>
             </div>
-            <!-- TEMPLATES: FL STUDIO (исправлены ячейки с раскрытием) -->
+            <!-- TEMPLATES: FL STUDIO (три карточки с раскрытием) -->
             <div id="template-flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template FL Studio</h2>
