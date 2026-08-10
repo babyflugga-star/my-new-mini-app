@@ -98,7 +98,7 @@
             to { width: 100%; }
         }
 
-        /* Основной контейнер (появляется автоматически после загрузки) */
+        /* Основной контейнер */
         #main-container {
             display: none;
             height: 100dvh;
@@ -198,7 +198,7 @@
             margin-bottom: 4px;
         }
 
-        /* Специальные отступы для описаний в разделах VOCAL PRESETS и TEMPLATES */
+        /* Специальные отступы для описаний */
         #flstudio-screen .card-desc,
         #logicpro-screen .card-desc,
         #template-logicpro-screen .card-desc,
@@ -251,6 +251,31 @@
 
         .category-screen { display: none; }
         .category-screen.active { display: block; }
+
+        /* ---- Глобальный CRT-эффект для всего текста ---- */
+        /* Применяется ко всем элементам, но влияет только на визуальное восприятие */
+        * {
+            animation: crt-glow 6s ease-in-out infinite alternate;
+            will-change: opacity, text-shadow;
+        }
+        @keyframes crt-glow {
+            0% { opacity: 0.98; text-shadow: 0 0 2px rgba(255,255,255,0.2); }
+            100% { opacity: 1; text-shadow: 0 0 4px rgba(255,255,255,0.4); }
+        }
+        /* Исключаем элементы, где анимация может мешать (например, прогресс-бар) */
+        .progress-bar {
+            animation: none !important;
+            will-change: auto !important;
+        }
+        .logo {
+            animation: none !important;
+            will-change: auto !important;
+        }
+        /* Восстанавливаем анимацию для loading-text, так как она уже有自己的 анимацию */
+        .loading-text {
+            animation: blink 1s step-start infinite !important;
+            will-change: auto !important;
+        }
     </style>
 </head>
 <body>
@@ -371,7 +396,7 @@
             </div>
         </div>
 
-        <!-- TEMPLATES (главный экран, описания убраны) -->
+        <!-- TEMPLATES -->
         <div id="templates-screen" class="category-screen">
             <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
             <h2 style="margin-top: 20px;">TEMPLATE</h2>
