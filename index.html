@@ -102,16 +102,24 @@
             background-position: 0 0, 4px 4px;
         }
 
+        /* Исправление прокрутки: внутренний контейнер */
         #main-container {
             display: none;
             height: 100dvh;
             width: 100%;
-            flex-direction: column;
-            padding: 20px;
             overflow-y: auto;
-            box-sizing: border-box;
             position: relative;
             z-index: 1;
+            padding: 0; /* убираем padding, он будет у внутреннего контейнера */
+            box-sizing: border-box;
+        }
+
+        #main-content {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            min-height: 100%; /* чтобы padding учитывался при прокрутке */
+            box-sizing: border-box;
         }
 
         h1 {
@@ -283,218 +291,220 @@
         </div>
     </div>
 
-    <!-- Основной контейнер -->
+    <!-- Основной контейнер с исправленной прокруткой -->
     <div id="main-container">
-        <h1>FLUGGA STORE</h1>
+        <div id="main-content">
+            <h1>FLUGGA STORE</h1>
 
-        <div id="menu-screen" class="category-screen active">
-            <div class="menu-grid">
-                <div class="menu-item" onclick="openCategory('templates'); clickSound()">
-                    <span>TEMPLATE</span>
-                </div>
-                <div class="menu-item" onclick="openCategory('presets'); clickSound()">
-                    <span>VOCAL PRESETS</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- VOCAL PRESETS -->
-        <div id="presets-screen" class="category-screen">
-            <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
-            <h2>VOCAL PRESETS</h2>
-            <div class="menu-grid">
-                <div class="menu-item" onclick="openSubCategory('flstudio'); clickSound()">
-                    <span>FL STUDIO</span>
-                </div>
-                <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()">
-                    <span>LOGIC PRO</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- VOCAL PRESETS SUB: FL STUDIO -->
-        <div id="flstudio-screen" class="category-screen">
-            <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
-            <h2>FL Studio</h2>
-            <div class="card">
-                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                    <rect width="32" height="32" fill="#222222"/>
-                    <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
-                    <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
-                    <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
-                    <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
-                    <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
-                    <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
-                    <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
-                    <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
-                    <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
-                    <rect x="4" y="6" width="4" height="4" fill="#009900"/>
-                    <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
-                    <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
-                    <rect x="14" y="0" width="2" height="4" fill="#886644"/>
-                </svg>
-                <div class="card-info">
-                    <div class="card-title">FLUGGA Vocal Rec</div>
-                    <div class="card-desc">Main Vocal</div>
-                    <div class="card-bottom">
-                        <span class="price">2 490 ₽</span>
-                        <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">ВЫБРАТЬ</button>
+            <div id="menu-screen" class="category-screen active">
+                <div class="menu-grid">
+                    <div class="menu-item" onclick="openCategory('templates'); clickSound()">
+                        <span>TEMPLATE</span>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- VOCAL PRESETS SUB: LOGIC PRO -->
-        <div id="logicpro-screen" class="category-screen">
-            <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
-            <h2>Logic Pro</h2>
-            <div class="card">
-                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                    <rect width="32" height="32" fill="#222222"/>
-                    <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
-                    <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
-                    <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
-                    <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
-                    <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
-                    <rect x="14" y="14" width="4" height="4" fill="#000000"/>
-                </svg>
-                <div class="card-info">
-                    <div class="card-title">FLUGGA Vocal Rec</div>
-                    <div class="card-desc">Main Vocal</div>
-                    <div class="card-bottom">
-                        <span class="price">2 490 ₽</span>
-                        <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">ВЫБРАТЬ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TEMPLATES -->
-        <div id="templates-screen" class="category-screen">
-            <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
-            <h2 style="margin-top: 20px;">TEMPLATE</h2>
-            <div class="menu-grid">
-                <div class="menu-item" onclick="openTemplateLogicPro(); clickSound()">
-                    <div>Template Logic Pro</div>
-                </div>
-                <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()">
-                    <div>Template FL Studio</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TEMPLATES: LOGIC PRO -->
-        <div id="template-logicpro-screen" class="category-screen">
-            <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
-            <h2>Template Logic Pro</h2>
-            <div class="card">
-                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                    <rect width="32" height="32" fill="#222222"/>
-                    <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
-                    <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
-                    <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
-                    <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
-                    <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
-                    <rect x="14" y="14" width="4" height="4" fill="#000000"/>
-                </svg>
-                <div class="card-info">
-                    <div class="card-title">Template Logic Pro</div>
-                    <div class="card-desc">Full Project + Master</div>
-                    <div class="card-bottom">
-                        <span class="price">5 990 ₽</span>
-                        <button class="btn" onclick="buyProduct('Template Logic Pro', 5990); clickSound()">ВЫБРАТЬ</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TEMPLATES: FL STUDIO (три карточки) -->
-        <div id="template-flstudio-screen" class="category-screen">
-            <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
-            <h2>Template FL Studio</h2>
-            
-            <div class="card">
-                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                    <rect width="32" height="32" fill="#222222"/>
-                    <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
-                    <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
-                    <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
-                    <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
-                    <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
-                    <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
-                    <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
-                    <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
-                    <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
-                    <rect x="4" y="6" width="4" height="4" fill="#009900"/>
-                    <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
-                    <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
-                    <rect x="14" y="0" width="2" height="4" fill="#886644"/>
-                </svg>
-                <div class="card-info">
-                    <div class="card-title">Перед тем как</div>
-                    <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
-                    <div class="card-bottom">
-                        <span class="price">5 990 ₽</span>
-                        <button class="btn" onclick="buyProduct('Перед тем как', 5990); clickSound()">ВЫБРАТЬ</button>
+                    <div class="menu-item" onclick="openCategory('presets'); clickSound()">
+                        <span>VOCAL PRESETS</span>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                    <rect width="32" height="32" fill="#222222"/>
-                    <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
-                    <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
-                    <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
-                    <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
-                    <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
-                    <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
-                    <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
-                    <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
-                    <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
-                    <rect x="4" y="6" width="4" height="4" fill="#009900"/>
-                    <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
-                    <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
-                    <rect x="14" y="0" width="2" height="4" fill="#886644"/>
-                </svg>
-                <div class="card-info">
-                    <div class="card-title">Сделаю тебе больно</div>
-                    <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
-                    <div class="card-bottom">
-                        <span class="price">5 990 ₽</span>
-                        <button class="btn" onclick="buyProduct('Сделаю тебе больно', 5990); clickSound()">ВЫБРАТЬ</button>
+            <!-- VOCAL PRESETS -->
+            <div id="presets-screen" class="category-screen">
+                <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
+                <h2>VOCAL PRESETS</h2>
+                <div class="menu-grid">
+                    <div class="menu-item" onclick="openSubCategory('flstudio'); clickSound()">
+                        <span>FL STUDIO</span>
+                    </div>
+                    <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()">
+                        <span>LOGIC PRO</span>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                    <rect width="32" height="32" fill="#222222"/>
-                    <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
-                    <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
-                    <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
-                    <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
-                    <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
-                    <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
-                    <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
-                    <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
-                    <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
-                    <rect x="4" y="6" width="4" height="4" fill="#009900"/>
-                    <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
-                    <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
-                    <rect x="14" y="0" width="2" height="4" fill="#886644"/>
-                </svg>
-                <div class="card-info">
-                    <div class="card-title">Кистями</div>
-                    <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
-                    <div class="card-bottom">
-                        <span class="price">5 990 ₽</span>
-                        <button class="btn" onclick="buyProduct('Кистями', 5990); clickSound()">ВЫБРАТЬ</button>
+            <!-- VOCAL PRESETS SUB: FL STUDIO -->
+            <div id="flstudio-screen" class="category-screen">
+                <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
+                <h2>FL Studio</h2>
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                        <rect width="32" height="32" fill="#222222"/>
+                        <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
+                        <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
+                        <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
+                        <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
+                        <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
+                        <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
+                        <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
+                        <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
+                        <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
+                        <rect x="4" y="6" width="4" height="4" fill="#009900"/>
+                        <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
+                        <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
+                        <rect x="14" y="0" width="2" height="4" fill="#886644"/>
+                    </svg>
+                    <div class="card-info">
+                        <div class="card-title">FLUGGA Vocal Rec</div>
+                        <div class="card-desc">Main Vocal</div>
+                        <div class="card-bottom">
+                            <span class="price">2 490 ₽</span>
+                            <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">ВЫБРАТЬ</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+
+            <!-- VOCAL PRESETS SUB: LOGIC PRO -->
+            <div id="logicpro-screen" class="category-screen">
+                <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
+                <h2>Logic Pro</h2>
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                        <rect width="32" height="32" fill="#222222"/>
+                        <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
+                        <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
+                        <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
+                        <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
+                        <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
+                        <rect x="14" y="14" width="4" height="4" fill="#000000"/>
+                    </svg>
+                    <div class="card-info">
+                        <div class="card-title">FLUGGA Vocal Rec</div>
+                        <div class="card-desc">Main Vocal</div>
+                        <div class="card-bottom">
+                            <span class="price">2 490 ₽</span>
+                            <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">ВЫБРАТЬ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEMPLATES -->
+            <div id="templates-screen" class="category-screen">
+                <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
+                <h2 style="margin-top: 20px;">TEMPLATE</h2>
+                <div class="menu-grid">
+                    <div class="menu-item" onclick="openTemplateLogicPro(); clickSound()">
+                        <div>Template Logic Pro</div>
+                    </div>
+                    <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()">
+                        <div>Template FL Studio</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEMPLATES: LOGIC PRO -->
+            <div id="template-logicpro-screen" class="category-screen">
+                <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
+                <h2>Template Logic Pro</h2>
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                        <rect width="32" height="32" fill="#222222"/>
+                        <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
+                        <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
+                        <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
+                        <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
+                        <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
+                        <rect x="14" y="14" width="4" height="4" fill="#000000"/>
+                    </svg>
+                    <div class="card-info">
+                        <div class="card-title">Template Logic Pro</div>
+                        <div class="card-desc">Full Project + Master</div>
+                        <div class="card-bottom">
+                            <span class="price">5 990 ₽</span>
+                            <button class="btn" onclick="buyProduct('Template Logic Pro', 5990); clickSound()">ВЫБРАТЬ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEMPLATES: FL STUDIO (три карточки) -->
+            <div id="template-flstudio-screen" class="category-screen">
+                <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
+                <h2>Template FL Studio</h2>
+                
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                        <rect width="32" height="32" fill="#222222"/>
+                        <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
+                        <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
+                        <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
+                        <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
+                        <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
+                        <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
+                        <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
+                        <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
+                        <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
+                        <rect x="4" y="6" width="4" height="4" fill="#009900"/>
+                        <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
+                        <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
+                        <rect x="14" y="0" width="2" height="4" fill="#886644"/>
+                    </svg>
+                    <div class="card-info">
+                        <div class="card-title">Перед тем как</div>
+                        <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
+                        <div class="card-bottom">
+                            <span class="price">5 990 ₽</span>
+                            <button class="btn" onclick="buyProduct('Перед тем как', 5990); clickSound()">ВЫБРАТЬ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                        <rect width="32" height="32" fill="#222222"/>
+                        <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
+                        <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
+                        <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
+                        <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
+                        <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
+                        <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
+                        <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
+                        <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
+                        <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
+                        <rect x="4" y="6" width="4" height="4" fill="#009900"/>
+                        <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
+                        <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
+                        <rect x="14" y="0" width="2" height="4" fill="#886644"/>
+                    </svg>
+                    <div class="card-info">
+                        <div class="card-title">Сделаю тебе больно</div>
+                        <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
+                        <div class="card-bottom">
+                            <span class="price">5 990 ₽</span>
+                            <button class="btn" onclick="buyProduct('Сделаю тебе больно', 5990); clickSound()">ВЫБРАТЬ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                        <rect width="32" height="32" fill="#222222"/>
+                        <rect x="8" y="8" width="16" height="18" rx="4" ry="4" fill="#FF8800"/>
+                        <rect x="10" y="6" width="12" height="4" fill="#FFAA00"/>
+                        <rect x="12" y="4" width="8" height="4" fill="#FFCC00"/>
+                        <rect x="6" y="14" width="4" height="8" fill="#FF6600"/>
+                        <rect x="22" y="14" width="4" height="8" fill="#FF6600"/>
+                        <rect x="10" y="22" width="12" height="6" fill="#FF6600"/>
+                        <rect x="12" y="26" width="8" height="2" fill="#FF4400"/>
+                        <rect x="10" y="10" width="4" height="6" fill="#FFAA00"/>
+                        <rect x="6" y="2" width="8" height="6" fill="#00CC00"/>
+                        <rect x="4" y="6" width="4" height="4" fill="#009900"/>
+                        <rect x="14" y="0" width="8" height="6" fill="#00AA00"/>
+                        <rect x="18" y="4" width="4" height="4" fill="#00CC00"/>
+                        <rect x="14" y="0" width="2" height="4" fill="#886644"/>
+                    </svg>
+                    <div class="card-info">
+                        <div class="card-title">Кистями</div>
+                        <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
+                        <div class="card-bottom">
+                            <span class="price">5 990 ₽</span>
+                            <button class="btn" onclick="buyProduct('Кистями', 5990); clickSound()">ВЫБРАТЬ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- #main-content -->
+    </div> <!-- #main-container -->
 
     <script>
         // ---- Фоновая анимация через Canvas ----
@@ -515,11 +525,11 @@
         function createParticle() {
             return {
                 x: Math.random() * width,
-                y: Math.random() * height + height, // начинаем снизу или случайно
+                y: Math.random() * height + height,
                 size: Math.random() > 0.5 ? 1 : 2,
-                speed: 0.2 + Math.random() * 0.6, // медленно вверх
+                speed: 0.2 + Math.random() * 0.6,
                 opacity: 0.3 + Math.random() * 0.7,
-                flicker: Math.random() * 0.02 // небольшое изменение opacity
+                flicker: Math.random() * 0.02
             };
         }
 
@@ -527,7 +537,7 @@
             particles = [];
             for (let i = 0; i < PARTICLE_COUNT; i++) {
                 const p = createParticle();
-                p.y = Math.random() * height; // распределяем по высоте
+                p.y = Math.random() * height;
                 particles.push(p);
             }
         }
@@ -537,16 +547,13 @@
             ctx.fillStyle = '#fff';
 
             for (let p of particles) {
-                // движение вверх
                 p.y -= p.speed;
-                // мерцание
                 p.opacity += (Math.random() - 0.5) * p.flicker;
                 p.opacity = Math.min(1, Math.max(0.3, p.opacity));
 
                 ctx.globalAlpha = p.opacity;
                 ctx.fillRect(p.x, p.y, p.size, p.size);
 
-                // если ушла за верх, перерождаем снизу
                 if (p.y < -10) {
                     p.y = height + 10;
                     p.x = Math.random() * width;
@@ -642,8 +649,8 @@
         const mainContainer = document.getElementById('main-container');
 
         let progress = 0;
-        const duration = 4000; // 4 секунды
-        const stepTime = 20; // обновление каждые 20 мс
+        const duration = 4000;
+        const stepTime = 20;
         const steps = duration / stepTime;
         const increment = 100 / steps;
 
