@@ -18,8 +18,6 @@
             margin: 0;
             position: relative;
         }
-
-        /* Фоновый canvas */
         #bg-canvas {
             position: fixed;
             top: 0;
@@ -29,7 +27,6 @@
             z-index: 0;
             pointer-events: none;
         }
-
         #loader-screen {
             position: fixed;
             top: 0;
@@ -46,7 +43,6 @@
             transition: opacity 0.5s ease;
             pointer-events: auto;
         }
-
         #loader-screen img.logo {
             position: fixed;
             left: 50%;
@@ -59,7 +55,6 @@
             top: 50%;
             will-change: transform;
         }
-
         .loader-bottom {
             position: fixed;
             left: 0;
@@ -70,19 +65,16 @@
             align-items: center;
             gap: 16px;
         }
-
         .loading-text {
             font-size: 12px;
             letter-spacing: 4px;
             color: #fff;
             animation: blink 1s step-start infinite;
         }
-
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-
         .progress-wrapper {
             width: 80%;
             max-width: 400px;
@@ -91,7 +83,6 @@
             padding: 2px;
             image-rendering: pixelated;
         }
-
         .progress-bar {
             height: 20px;
             width: 0%;
@@ -102,8 +93,6 @@
             background-size: 8px 8px;
             background-position: 0 0, 4px 4px;
         }
-
-        /* Основной контейнер с исправленной прокруткой и центрированием */
         #main-container {
             display: none;
             height: 100dvh;
@@ -114,7 +103,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         #main-content {
             display: flex;
             flex-direction: column;
@@ -122,9 +110,8 @@
             min-height: 100%;
             box-sizing: border-box;
             width: 100%;
-            margin: 0 auto; /* центрирование по горизонтали */
+            margin: 0 auto;
         }
-
         h1 {
             font-size: 25px;
             text-align: center;
@@ -134,7 +121,6 @@
             -webkit-text-stroke: 1px #ff0000;
             font-family: 'Press Start 2P', monospace;
         }
-
         h2 {
             font-size: 12px;
             margin: 20px 0;
@@ -142,14 +128,12 @@
             border-bottom: 2px solid #333;
             padding-bottom: 8px;
         }
-
         .menu-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 15px;
             margin-top: 20px;
         }
-
         .menu-item {
             background: #111;
             border: 2px solid #fff;
@@ -162,11 +146,7 @@
             position: relative;
             z-index: 1;
         }
-        .menu-item:active {
-            transform: scale(0.95);
-            background: #333;
-        }
-
+        .menu-item:active { transform: scale(0.95); background: #333; }
         .card {
             background: #111;
             border: 2px solid #333;
@@ -178,9 +158,7 @@
             position: relative;
             z-index: 1;
         }
-
-        .card svg.card-icon,
-        .card img {
+        .card svg.card-icon, .card img {
             width: 60px;
             height: 60px;
             border-radius: 6px;
@@ -191,18 +169,8 @@
             object-fit: cover;
             display: block;
         }
-
-        .card-info {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card-title {
-            font-size: 15px;
-        }
-
+        .card-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { font-size: 15px; }
         .card-desc {
             font-size: 16px;
             color: #999;
@@ -211,7 +179,6 @@
             margin-top: 2px;
             margin-bottom: 4px;
         }
-
         #flstudio-screen .card-desc,
         #logicpro-screen .card-desc,
         #template-logicpro-screen .card-desc,
@@ -219,18 +186,13 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
-
         .card-bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 6px;
         }
-
-        .price {
-            font-size: 14px;
-        }
-
+        .price { font-size: 14px; }
         .btn {
             background: #fff;
             color: #000;
@@ -242,10 +204,7 @@
             border: 2px solid #000;
             transition: none;
         }
-        .btn:active {
-            transform: scale(0.9);
-        }
-
+        .btn:active { transform: scale(0.9); }
         .back-btn {
             background: none;
             border: none;
@@ -257,15 +216,9 @@
             text-align: left;
             transition: none;
         }
-        .back-btn:active {
-            transform: scale(0.92);
-            color: #888;
-        }
-
+        .back-btn:active { transform: scale(0.92); color: #888; }
         .category-screen { display: none; }
         .category-screen.active { display: block; }
-
-        /* CRT-эффект */
         h1, h2, .menu-item, .card-title, .card-desc, .price, .btn, .back-btn, .loading-text {
             will-change: opacity, text-shadow;
             animation: crt-glow 6s ease-in-out infinite alternate;
@@ -274,15 +227,11 @@
             0% { opacity: 0.98; text-shadow: 0 0 1px rgba(255,255,255,0.15); }
             100% { opacity: 1; text-shadow: 0 0 3px rgba(255,255,255,0.3); }
         }
-        .logo {
-            animation: none !important;
-        }
+        .logo { animation: none !important; }
     </style>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
-
-    <!-- Экран загрузки -->
     <div id="loader-screen">
         <img class="logo" src="https://i.imgur.com/KL2y07V.png" alt="Logo">
         <div class="loader-bottom">
@@ -292,38 +241,24 @@
             </div>
         </div>
     </div>
-
-    <!-- Основной контейнер с центрированным контентом -->
     <div id="main-container">
         <div id="main-content">
             <h1>FLUGGA STORE</h1>
-
             <div id="menu-screen" class="category-screen active">
                 <div class="menu-grid">
-                    <div class="menu-item" onclick="openCategory('templates'); clickSound()">
-                        <span>TEMPLATE</span>
-                    </div>
-                    <div class="menu-item" onclick="openCategory('presets'); clickSound()">
-                        <span>VOCAL PRESETS</span>
-                    </div>
+                    <div class="menu-item" onclick="openCategory('templates'); clickSound()"><span>TEMPLATE</span></div>
+                    <div class="menu-item" onclick="openCategory('presets'); clickSound()"><span>VOCAL PRESETS</span></div>
                 </div>
             </div>
-
             <!-- VOCAL PRESETS -->
             <div id="presets-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2>VOCAL PRESETS</h2>
                 <div class="menu-grid">
-                    <div class="menu-item" onclick="openSubCategory('flstudio'); clickSound()">
-                        <span>FL STUDIO</span>
-                    </div>
-                    <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()">
-                        <span>LOGIC PRO</span>
-                    </div>
+                    <div class="menu-item" onclick="openSubCategory('flstudio'); clickSound()"><span>FL STUDIO</span></div>
+                    <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()"><span>LOGIC PRO</span></div>
                 </div>
             </div>
-
-            <!-- VOCAL PRESETS SUB: FL STUDIO -->
             <div id="flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>FL Studio</h2>
@@ -349,13 +284,11 @@
                         <div class="card-desc">Main Vocal</div>
                         <div class="card-bottom">
                             <span class="price">2 490 ₽</span>
-                            <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">ВЫБРАТЬ</button>
+                            <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490, 'FL Studio'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- VOCAL PRESETS SUB: LOGIC PRO -->
             <div id="logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>Logic Pro</h2>
@@ -374,27 +307,20 @@
                         <div class="card-desc">Main Vocal</div>
                         <div class="card-bottom">
                             <span class="price">2 490 ₽</span>
-                            <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490); clickSound()">ВЫБРАТЬ</button>
+                            <button class="btn" onclick="buyProduct('FLUGGA Vocal Rec', 2490, 'Logic Pro'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
                 </div>
             </div>
-
             <!-- TEMPLATES -->
             <div id="templates-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2 style="margin-top: 20px;">TEMPLATE</h2>
                 <div class="menu-grid">
-                    <div class="menu-item" onclick="openTemplateLogicPro(); clickSound()">
-                        <div>Template Logic Pro</div>
-                    </div>
-                    <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()">
-                        <div>Template FL Studio</div>
-                    </div>
+                    <div class="menu-item" onclick="openTemplateLogicPro(); clickSound()"><div>Template Logic Pro</div></div>
+                    <div class="menu-item" onclick="openTemplateFLStudio(); clickSound()"><div>Template FL Studio</div></div>
                 </div>
             </div>
-
-            <!-- TEMPLATES: LOGIC PRO -->
             <div id="template-logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template Logic Pro</h2>
@@ -413,17 +339,14 @@
                         <div class="card-desc">Full Project + Master</div>
                         <div class="card-bottom">
                             <span class="price">5 990 ₽</span>
-                            <button class="btn" onclick="buyProduct('Template Logic Pro', 5990); clickSound()">ВЫБРАТЬ</button>
+                            <button class="btn" onclick="buyProduct('Template Logic Pro', 5990, 'Template Logic Pro'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- TEMPLATES: FL STUDIO (три карточки) -->
             <div id="template-flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template FL Studio</h2>
-                
                 <div class="card">
                     <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                         <rect width="32" height="32" fill="#222222"/>
@@ -446,11 +369,10 @@
                         <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
                         <div class="card-bottom">
                             <span class="price">5 990 ₽</span>
-                            <button class="btn" onclick="buyProduct('Перед тем как', 5990); clickSound()">ВЫБРАТЬ</button>
+                            <button class="btn" onclick="buyProduct('Перед тем как', 5990, 'Template FL Studio'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
                 </div>
-
                 <div class="card">
                     <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                         <rect width="32" height="32" fill="#222222"/>
@@ -473,11 +395,10 @@
                         <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
                         <div class="card-bottom">
                             <span class="price">5 990 ₽</span>
-                            <button class="btn" onclick="buyProduct('Сделаю тебе больно', 5990); clickSound()">ВЫБРАТЬ</button>
+                            <button class="btn" onclick="buyProduct('Сделаю тебе больно', 5990, 'Template FL Studio'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
                 </div>
-
                 <div class="card">
                     <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                         <rect width="32" height="32" fill="#222222"/>
@@ -500,7 +421,7 @@
                         <div class="card-desc">Full Project, Beat, Vocal x Effect</div>
                         <div class="card-bottom">
                             <span class="price">5 990 ₽</span>
-                            <button class="btn" onclick="buyProduct('Кистями', 5990); clickSound()">ВЫБРАТЬ</button>
+                            <button class="btn" onclick="buyProduct('Кистями', 5990, 'Template FL Studio'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
                 </div>
@@ -509,165 +430,80 @@
     </div>
 
     <script>
-        // ---- Инициализация Telegram WebApp ----
         const webapp = window.Telegram?.WebApp;
+        if (webapp) { webapp.ready(); webapp.expand(); }
 
-        if (webapp) {
-            webapp.ready();
-            webapp.expand();
-        }
-
-        // ---- Фоновая анимация через Canvas ----
+        // Canvas particles (unchanged)
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
-
         let width, height;
         let particles = [];
         const PARTICLE_COUNT = 150;
-
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
-
+        function resize() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
         function createParticle() {
-            return {
-                x: Math.random() * width,
-                y: Math.random() * height + height,
-                size: Math.random() > 0.5 ? 1 : 2,
-                speed: 0.2 + Math.random() * 0.6,
-                opacity: 0.3 + Math.random() * 0.7,
-                flicker: Math.random() * 0.02
-            };
+            return { x: Math.random()*width, y: Math.random()*height+height, size: Math.random()>0.5?1:2, speed:0.2+Math.random()*0.6, opacity:0.3+Math.random()*0.7, flicker:Math.random()*0.02 };
         }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < PARTICLE_COUNT; i++) {
-                const p = createParticle();
-                p.y = Math.random() * height;
-                particles.push(p);
-            }
-        }
-
+        function initParticles() { particles = []; for (let i=0;i<PARTICLE_COUNT;i++) { const p=createParticle(); p.y=Math.random()*height; particles.push(p); } }
         function drawParticles() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = '#fff';
-
+            ctx.clearRect(0,0,width,height);
+            ctx.fillStyle='#fff';
             for (let p of particles) {
                 p.y -= p.speed;
-                p.opacity += (Math.random() - 0.5) * p.flicker;
+                p.opacity += (Math.random()-0.5)*p.flicker;
                 p.opacity = Math.min(1, Math.max(0.3, p.opacity));
-
                 ctx.globalAlpha = p.opacity;
                 ctx.fillRect(p.x, p.y, p.size, p.size);
-
-                if (p.y < -10) {
-                    p.y = height + 10;
-                    p.x = Math.random() * width;
-                    p.speed = 0.2 + Math.random() * 0.6;
-                    p.size = Math.random() > 0.5 ? 1 : 2;
-                    p.opacity = 0.3 + Math.random() * 0.7;
-                }
+                if (p.y < -10) { p.y = height+10; p.x=Math.random()*width; p.speed=0.2+Math.random()*0.6; p.size=Math.random()>0.5?1:2; p.opacity=0.3+Math.random()*0.7; }
             }
             requestAnimationFrame(drawParticles);
         }
+        window.addEventListener('resize', ()=>{ resize(); initParticles(); });
+        resize(); initParticles(); drawParticles();
 
-        window.addEventListener('resize', () => {
-            resize();
-            initParticles();
-        });
-
-        resize();
-        initParticles();
-        drawParticles();
-
-        // ---- Звуковой движок (8‑бит) ----
+        // Audio engine (unchanged)
         let audioCtx = null;
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-
-        function playTone(freq, duration, type = 'square', volume = 0.15) {
+        function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); if (audioCtx.state==='suspended') audioCtx.resume(); }
+        function playTone(freq, duration, type='square', volume=0.15) {
             if (!audioCtx) return;
             try {
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.value = freq;
+                osc.type = type; osc.frequency.value = freq;
                 gain.gain.setValueAtTime(volume, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch (e) {
-                // игнорируем ошибки аудио
-            }
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
         }
+        function clickSound() { initAudio(); playTone(800, 0.06, 'square', 0.1); }
+        function categorySound() { initAudio(); playTone(600, 0.1, 'square', 0.12); setTimeout(()=>playTone(800,0.1,'square',0.12),100); }
+        function successSound() { initAudio(); playTone(523,0.15,'square',0.15); setTimeout(()=>playTone(659,0.15,'square',0.15),150); setTimeout(()=>playTone(784,0.2,'square',0.15),300); }
 
-        function clickSound() {
-            initAudio();
-            playTone(800, 0.06, 'square', 0.1);
-        }
-
-        function categorySound() {
-            initAudio();
-            playTone(600, 0.1, 'square', 0.12);
-            setTimeout(() => playTone(800, 0.1, 'square', 0.12), 100);
-        }
-
-        function successSound() {
-            initAudio();
-            playTone(523, 0.15, 'square', 0.15);
-            setTimeout(() => playTone(659, 0.15, 'square', 0.15), 150);
-            setTimeout(() => playTone(784, 0.2, 'square', 0.15), 300);
-        }
-
-        // ---- Центрирование логотипа (с задержкой и событием viewportChanged) ----
+        // Logo centering (after viewport stabilization)
         const logo = document.querySelector('#loader-screen img.logo');
-
         function centerLogo() {
             if (!logo) return;
             let topOffset = 0;
             if (webapp && webapp.viewportStableHeight) {
                 const stableHeight = webapp.viewportStableHeight;
-                const windowHeight = window.innerHeight;
-                const diff = windowHeight - stableHeight;
+                const diff = window.innerHeight - stableHeight;
                 if (diff > 0) topOffset = diff / 2;
             }
             logo.style.top = '50%';
             logo.style.transform = `translate(-50%, calc(-50% + ${topOffset}px)) scale(1.25)`;
         }
-
-        // Первый вызов после небольшой задержки для стабилизации viewport
         setTimeout(centerLogo, 100);
-
-        // Повторный вызов при изменении размеров
         window.addEventListener('resize', centerLogo);
-        if (webapp) {
-            webapp.onEvent('viewportChanged', centerLogo);
-        }
+        if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
-        // ---- Анимация загрузки (сокращена до 2 секунд, убрана задержка) ----
+        // Loading animation (2 sec, no delay)
         const progressBar = document.getElementById('progressBar');
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
-
         let progress = 0;
-        const duration = 2000; // 2 секунды
+        const duration = 2000;
         const stepTime = 20;
-        const steps = duration / stepTime;
-        const increment = 100 / steps;
-
+        const increment = 100 / (duration / stepTime);
         function startLoading() {
             progress = 0;
             progressBar.style.width = '0%';
@@ -677,7 +513,6 @@
                     progress = 100;
                     progressBar.style.width = '100%';
                     clearInterval(interval);
-                    // Без дополнительной задержки, сразу переход
                     loaderScreen.style.opacity = '0';
                     setTimeout(() => {
                         loaderScreen.style.display = 'none';
@@ -689,49 +524,40 @@
                 }
             }, stepTime);
         }
-
         document.addEventListener('DOMContentLoaded', startLoading);
 
-        // ---- Навигация (главные категории) ----
+        // Navigation
         function openCategory(id) {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById(id + '-screen').classList.add('active');
         }
-
         function goBack() {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById('menu-screen').classList.add('active');
         }
-
-        // ---- Навигация VOCAL PRESETS ----
         function openSubCategory(id) {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById(id + '-screen').classList.add('active');
         }
-
         function goBackToPresets() {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById('presets-screen').classList.add('active');
         }
-
-        // ---- Навигация TEMPLATES ----
         function openTemplateLogicPro() {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById('template-logicpro-screen').classList.add('active');
         }
-
         function openTemplateFLStudio() {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById('template-flstudio-screen').classList.add('active');
         }
-
         function goBackToTemplates() {
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
             document.getElementById('templates-screen').classList.add('active');
         }
 
-        // ---- Покупка ----
-        function buyProduct(productName, productPrice) {
+        // Updated buyProduct with category parameter
+        function buyProduct(productName, productPrice, category = '') {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
                 alert("Откройте магазин через красную кнопку Telegram.");
@@ -744,7 +570,8 @@
                     userId: user.id,
                     username: user.username || user.first_name,
                     product: productName,
-                    price: productPrice
+                    price: productPrice,
+                    category: category
                 })
             })
             .then(res => res.json())
@@ -756,25 +583,13 @@
             .catch(() => alert('Ошибка при отправке заказа.'));
         }
 
-        // ---- Анимация нажатия через JavaScript ----
+        // Click animation
         document.addEventListener('DOMContentLoaded', () => {
             const interactiveElements = document.querySelectorAll('.menu-item, .btn, .back-btn');
-
             interactiveElements.forEach(el => {
-                el.addEventListener('pointerdown', function(e) {
-                    this.style.transition = 'none';
-                    this.style.transform = 'scale(0.94)';
-                });
-
-                el.addEventListener('pointerup', function(e) {
-                    this.style.transition = 'none';
-                    this.style.transform = 'scale(1)';
-                });
-
-                el.addEventListener('pointerleave', function(e) {
-                    this.style.transition = 'none';
-                    this.style.transform = 'scale(1)';
-                });
+                el.addEventListener('pointerdown', function() { this.style.transition='none'; this.style.transform='scale(0.94)'; });
+                el.addEventListener('pointerup', function() { this.style.transition='none'; this.style.transform='scale(1)'; });
+                el.addEventListener('pointerleave', function() { this.style.transition='none'; this.style.transform='scale(1)'; });
             });
         });
     </script>
