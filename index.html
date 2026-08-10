@@ -67,24 +67,9 @@
             animation: blink 1s step-start infinite;
         }
 
-        .press-start {
-            font-size: 12px;
-            letter-spacing: 4px;
-            color: #fff;
-            animation: pulse 1.5s ease-in-out infinite;
-            cursor: pointer;
-            user-select: none;
-            display: none;
-        }
-
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
         }
 
         .progress-wrapper {
@@ -113,7 +98,7 @@
             to { width: 100%; }
         }
 
-        /* Основной контейнер (появляется после нажатия PRESS START) */
+        /* Основной контейнер (появляется автоматически после загрузки) */
         #main-container {
             display: none;
             height: 100dvh;
@@ -263,7 +248,6 @@
         <img class="logo" src="https://i.imgur.com/KL2y07V.png" alt="Logo">
         <div class="loader-bottom">
             <div class="loading-text">LOADING</div>
-            <div class="press-start" id="pressStart">PRESS START</div>
             <div class="progress-wrapper">
                 <div class="progress-bar"></div>
             </div>
@@ -575,36 +559,20 @@
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
-        // ---- Переключение LOADING -> PRESS START ----
+        // ---- Автоматический переход после загрузки ----
         const progressBar = document.querySelector('.progress-bar');
-        const loadingText = document.querySelector('.loading-text');
-        const pressStart = document.getElementById('pressStart');
+        const loaderScreen = document.getElementById('loader-screen');
+        const mainContainer = document.getElementById('main-container');
 
         progressBar.addEventListener('animationend', () => {
-            loadingText.style.display = 'none';
-            pressStart.style.display = 'block';
-            pressStart.addEventListener('click', startApp);
-            pressStart.addEventListener('pointerup', (e) => {
-                e.preventDefault();
-                startApp();
-            });
-        });
-
-        // ---- Запуск приложения после нажатия PRESS START ----
-        function startApp() {
-            const loaderScreen = document.getElementById('loader-screen');
-            const mainContainer = document.getElementById('main-container');
-            const pressStart = document.getElementById('pressStart');
-            pressStart.removeEventListener('click', startApp);
-            pressStart.removeEventListener('pointerup', startApp);
-            
+            // Плавное исчезновение загрузочного экрана
             loaderScreen.style.opacity = '0';
             setTimeout(() => {
                 loaderScreen.style.display = 'none';
                 mainContainer.style.display = 'flex';
                 if (webapp) webapp.ready();
             }, 500);
-        }
+        });
 
         // ---- Навигация (главные категории) ----
         function openCategory(id) {
@@ -694,4 +662,3 @@
     </script>
 </body>
 </html>
-
