@@ -825,76 +825,55 @@
             }
         }
 
-        // Универсальная функция для кнопки «Выбрать/Оплатить» с диагностикой
+        // УНИВЕРСАЛЬНАЯ ФУНКЦИЯ ДЛЯ КНОПКИ «ВЫБРАТЬ/ОПЛАТИТЬ» С ДИАГНОСТИКОЙ
         function handleActionButton(event, btnElement, productName, productPrice, category) {
-            event.stopPropagation();
-            console.log('🟢 [handleActionButton] вызван', { productName, productPrice, category });
-
+            console.log('=== BUTTON CLICK ===');
+            console.log('button text:', btnElement.textContent);
             const card = btnElement.closest('.card.expandable');
-            if (!card) {
-                console.warn('❌ Карточка не найдена');
-                return;
-            }
+            console.log('card active (before):', card?.classList.contains('active'));
 
-            const isActive = card.classList.contains('active');
-            console.log('📌 card.active =', isActive);
+            event.stopPropagation();
 
-            if (isActive) {
-                console.log('➡️ Карточка открыта → вызываем buyProduct()');
+            console.log('CARD:', card);
+            console.log('IS ACTIVE:', card.classList.contains('active'));
+
+            if (!card) return;
+
+            if (card.classList.contains('active')) {
+                console.log('CALLING BUY PRODUCT');
                 buyProduct(productName, productPrice, category);
             } else {
-                console.log('➡️ Карточка закрыта → вызываем toggleCard()');
                 toggleCard(card);
             }
         }
 
         function buyProduct(productName, productPrice, category = '') {
-            console.log('💰 [buyProduct] СТАРТ', { productName, productPrice, category });
-
+            console.log('=== BUY PRODUCT CALLED ===');
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
                 alert("Откройте магазин через красную кнопку Telegram.");
-                console.warn('❌ Нет пользователя Telegram');
                 return;
             }
-
-            console.log('👤 Пользователь:', user.id, user.username);
-
-            const payload = {
-                userId: user.id,
-                username: user.username || user.first_name,
-                product: productName,
-                price: productPrice,
-                category: category
-            };
-            console.log('📤 POST /api/order payload:', payload);
-
             fetch('/api/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    userId: user.id,
+                    username: user.username || user.first_name,
+                    product: productName,
+                    price: productPrice,
+                    category: category
+                })
             })
-            .then(async res => {
-                console.log('📥 Статус ответа:', res.status);
-                if (!res.ok) {
-                    const errorText = await res.text();
-                    throw new Error(`HTTP ${res.status}: ${errorText}`);
-                }
-                return res.json();
-            })
+            .then(res => res.json())
             .then(data => {
-                console.log('📦 Ответ сервера:', data);
-                if (data.paymentUrl) {
-                    console.log('🔗 Открываем paymentUrl:', data.paymentUrl);
-                    window.Telegram.WebApp.openLink(data.paymentUrl);
-                    successSound();
-                } else {
-                    alert(data.message || 'Ссылка на оплату не получена.');
-                }
+                alert(data.message);
+                successSound();
+                window.Telegram.WebApp.close();
             })
             .catch(err => {
-                console.error('❌ Ошибка при отправке заказа:', err);
-                alert('Ошибка при отправке заказа: ' + err.message);
+                console.error('Ошибка:', err);
+                alert('Ошибка: ' + err.message);
             });
         }
 
