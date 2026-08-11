@@ -418,7 +418,7 @@
                             <rect x="14" y="0" width="2" height="4" fill="#886644"/>
                         </svg>
                         <span class="card-title">FLUGGA Vocal Rec</span>
-                        <button class="btn" onclick="event.stopPropagation(); buyProduct('FLUGGA Vocal Rec', 2490, 'FL Studio')">ВЫБРАТЬ</button>
+                        <button class="btn action-btn" onclick="handleActionButton(this, 'FLUGGA Vocal Rec', 2490, 'FL Studio')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -450,7 +450,7 @@
                             <rect x="14" y="14" width="4" height="4" fill="#000000"/>
                         </svg>
                         <span class="card-title">FLUGGA Vocal Rec</span>
-                        <button class="btn" onclick="event.stopPropagation(); buyProduct('FLUGGA Vocal Rec', 2490, 'Logic Pro')">ВЫБРАТЬ</button>
+                        <button class="btn action-btn" onclick="handleActionButton(this, 'FLUGGA Vocal Rec', 2490, 'Logic Pro')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -479,7 +479,7 @@
                     </div>
                 </div>
             </div>
-            <!-- TEMPLATES: LOGIC PRO (ИСПРАВЛЕНА В РАСКРЫВАЮЩУЮСЯ КАРТОЧКУ) -->
+            <!-- TEMPLATES: LOGIC PRO -->
             <div id="template-logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template Logic Pro</h2>
@@ -495,7 +495,7 @@
                             <rect x="14" y="14" width="4" height="4" fill="#000000"/>
                         </svg>
                         <span class="card-title">Template Logic Pro</span>
-                        <button class="btn" onclick="event.stopPropagation(); buyProduct('Template Logic Pro', 5990, 'Template Logic Pro')">ВЫБРАТЬ</button>
+                        <button class="btn action-btn" onclick="handleActionButton(this, 'Template Logic Pro', 5990, 'Template Logic Pro')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -518,7 +518,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Перед тем как</span>
-                        <button class="btn" onclick="event.stopPropagation(); buyProduct('Перед тем как', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                        <button class="btn action-btn" onclick="handleActionButton(this, 'Перед тем как', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -542,7 +542,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Сделаю тебе больно</span>
-                        <button class="btn" onclick="event.stopPropagation(); buyProduct('Сделаю тебе больно', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                        <button class="btn action-btn" onclick="handleActionButton(this, 'Сделаю тебе больно', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -564,7 +564,7 @@
                 <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Кистями</span>
-                        <button class="btn" onclick="event.stopPropagation(); buyProduct('Кистями', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                        <button class="btn action-btn" onclick="handleActionButton(this, 'Кистями', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -752,12 +752,43 @@
         }
 
         function toggleCard(cardElement) {
+            const actionBtn = cardElement.querySelector('.action-btn');
             if (cardElement.classList.contains('active')) {
-                closeAllExpandableCards();
-                return;
+                // Карточка открыта -> закрываем
+                cardElement.classList.remove('active');
+                if (actionBtn) {
+                    actionBtn.textContent = 'ВЫБРАТЬ';
+                    actionBtn.style.background = '#fff';
+                    actionBtn.style.color = '#000';
+                }
+            } else {
+                // Карточка закрыта -> открываем
+                // Закрываем все остальные открытые карточки
+                const activeCards = document.querySelectorAll('.card.expandable.active');
+                activeCards.forEach(c => {
+                    if (c !== cardElement) {
+                        c.classList.remove('active');
+                        const btn = c.querySelector('.action-btn');
+                        if (btn) {
+                            btn.textContent = 'ВЫБРАТЬ';
+                            btn.style.background = '#fff';
+                            btn.style.color = '#000';
+                        }
+                        const playBtn = c.querySelector('.play-btn');
+                        if (playBtn && playBtn.dataset.audio) {
+                            const audio = new Audio(playBtn.dataset.audio);
+                            audio.pause();
+                            playBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
+                        }
+                    }
+                });
+                cardElement.classList.add('active');
+                if (actionBtn) {
+                    actionBtn.textContent = 'ОПЛАТИТЬ';
+                    actionBtn.style.background = '#ff0000';
+                    actionBtn.style.color = '#fff';
+                }
             }
-            closeAllExpandableCards();
-            cardElement.classList.add('active');
         }
 
         function toggleAudio(btnElement, audioSrc) {
@@ -793,6 +824,20 @@
                     console.error("Ошибка воспроизведения:", err);
                     alert("Не удалось воспроизвести аудио. Проверьте путь к файлу.");
                 });
+            }
+        }
+
+        // Универсальная функция для кнопки «Выбрать/Оплатить»
+        function handleActionButton(btnElement, productName, productPrice, category = '') {
+            const card = btnElement.closest('.card.expandable');
+            if (!card) return;
+
+            if (card.classList.contains('active')) {
+                // Карточка открыта -> это кнопка «ОПЛАТИТЬ» -> выполняем покупку
+                buyProduct(productName, productPrice, category);
+            } else {
+                // Карточка закрыта -> это кнопка «ВЫБРАТЬ» -> раскрываем карточку
+                toggleCard(card);
             }
         }
 
@@ -832,7 +877,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const interactiveElements = document.querySelectorAll('.menu-item, .btn, .back-btn, .play-btn');
+            const interactiveElements = document.querySelectorAll('.menu-item, .btn, .back-btn, .play-btn, .action-btn');
             interactiveElements.forEach(el => {
                 el.addEventListener('pointerdown', function() { this.style.transition='none'; this.style.transform='scale(0.94)'; });
                 el.addEventListener('pointerup', function() { this.style.transition='none'; this.style.transform='scale(1)'; });
