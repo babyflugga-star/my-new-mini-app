@@ -839,6 +839,7 @@
             }
         }
 
+        // ИСПРАВЛЕННАЯ ФУНКЦИЯ buyProduct
         function buyProduct(productName, productPrice, category = '') {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
@@ -864,9 +865,15 @@
                 return res.json();
             })
             .then(data => {
-                alert(data.message);
-                successSound();
-                window.Telegram.WebApp.close();
+                if (data.paymentUrl) {
+                    // Открываем страницу оплаты (ЮKassa или другая платёжная система)
+                    window.open(data.paymentUrl, '_blank');
+                    successSound(); // звук успеха
+                } else {
+                    // Если сервер не вернул ссылку – показываем сообщение
+                    alert(data.message || 'Заказ создан, но ссылка на оплату не получена.');
+                }
+                // ❌ Удалён window.Telegram.WebApp.close() – приложение остаётся открытым
             })
             .catch(err => {
                 console.error('Ошибка при отправке заказа:', err);
