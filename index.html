@@ -825,8 +825,9 @@
             }
         }
 
-        // ДИАГНОСТИЧЕСКАЯ ВЕРСИЯ handleActionButton
+        // ДИАГНОСТИЧЕСКАЯ ВЕРСИЯ С АЛЕРТАМИ
         function handleActionButton(event, btnElement, productName, productPrice, category) {
+            alert('1. handleActionButton вызван');
             console.log('=== BUTTON CLICK ===');
             console.log('button text:', btnElement.textContent);
             const card = btnElement.closest('.card.expandable');
@@ -837,25 +838,33 @@
             console.log('CARD:', card);
             console.log('IS ACTIVE:', card.classList.contains('active'));
 
-            if (!card) return;
+            if (!card) {
+                alert('2. Карточка не найдена');
+                return;
+            }
 
             if (card.classList.contains('active')) {
+                alert('3. Карточка активна -> вызываем buyProduct');
                 console.log('CALLING BUY PRODUCT');
                 buyProduct(productName, productPrice, category);
             } else {
+                alert('3. Карточка НЕ активна -> вызываем toggleCard (закрытие/открытие)');
                 console.log('CALLING TOGGLECARD (закрытая карточка)');
                 toggleCard(card);
             }
         }
 
-        // ДИАГНОСТИЧЕСКАЯ ВЕРСИЯ buyProduct (старая рабочая, только с логами)
+        // buyProduct с ВАШИМ блоком .then(data => { ... })
         function buyProduct(productName, productPrice, category = '') {
+            alert('4. buyProduct СТАРТ');
             console.log('=== BUY PRODUCT CALLED ===');
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
-                alert("Откройте магазин через красную кнопку Telegram.");
+                alert('5. Ошибка: Нет пользователя Telegram');
+                console.warn('❌ Нет пользователя Telegram');
                 return;
             }
+            alert('6. Пользователь есть: ' + user.id);
             fetch('/api/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -867,13 +876,26 @@
                     category: category
                 })
             })
-            .then(res => res.json())
+            .then(res => {
+                alert('7. Получен ответ от сервера, статус: ' + res.status);
+                return res.json();
+            })
             .then(data => {
-                alert(data.message);
-                successSound();
-                window.Telegram.WebApp.close();
+                alert('8. Ответ сервера: ' + (data.message || 'нет сообщения'));
+                console.log('Ответ:', data);
+                // ВАШ БЛОК:
+                if (data.paymentUrl) {
+                    alert('9. Есть paymentUrl, открываем через window.open');
+                    window.open(data.paymentUrl, '_blank');
+                } else {
+                    alert('9. Нет paymentUrl, показываем сообщение и закрываем');
+                    alert(data.message);
+                    successSound();
+                    window.Telegram.WebApp.close();
+                }
             })
             .catch(err => {
+                alert('10. Ошибка в fetch: ' + err.message);
                 console.error('Ошибка:', err);
                 alert('Ошибка: ' + err.message);
             });
