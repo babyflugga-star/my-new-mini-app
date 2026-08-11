@@ -7,7 +7,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* ===== Оригинальные стили (без изменений) ===== */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html, body {
             margin: 0;
@@ -170,8 +169,8 @@
             padding: 15px 20px;
             margin-bottom: 20px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            gap: 20px;
+            align-items: center;
             position: relative;
             z-index: 1;
             overflow: visible;
@@ -188,24 +187,33 @@
             object-fit: cover;
             display: block;
         }
-        .card-header {
+        .card-info {
+            flex: 1;
             display: flex;
-            align-items: center;
-            gap: 15px;
+            flex-direction: column;
+            min-width: 0;
+            gap: 4px;
         }
         .card-title {
             font-size: 15px;
             line-height: 1.5;
             word-break: break-word;
             overflow-wrap: break-word;
-            flex: 1;
         }
-        .card-price-row {
+        .card-desc {
+            font-size: 13px;
+            color: #999;
+            line-height: 1.5;
+            font-family: sans-serif;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+        .card-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             margin-top: 4px;
         }
         .price {
@@ -226,25 +234,34 @@
             flex-shrink: 0;
         }
         .btn:active { transform: scale(0.9); }
-        .btn.pay-btn {
-            background: #ff0000;
-            color: #fff;
-            border-color: #fff;
-        }
-        .btn.select-btn {
-            background: #fff;
-            color: #000;
-            align-self: flex-end;
-        }
-        .btn.select-btn.closed {
-            background: #fff;
-            color: #000;
-        }
-        .btn.select-btn.opened {
-            background: #333;
-            color: #fff;
-        }
 
+        .card.expandable {
+            padding: 20px 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .card.expandable.active { border-color: #fff; }
+        .card.expandable .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: none;
+            width: 100%;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card.expandable .card-header .card-title {
+            font-size: 15px;
+            flex: 1;
+            min-width: 0;
+            line-height: 1.5;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
         .card.expandable .card-expandable {
             max-height: 0;
             opacity: 0;
@@ -312,6 +329,14 @@
             width: 14px;
             height: 14px;
         }
+        .card.expandable .buy-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid #333;
+        }
 
         .back-btn {
             background: none;
@@ -351,8 +376,6 @@
     <div id="main-container">
         <div id="main-content">
             <h1>FLUGGA STORE</h1>
-
-            <!-- ===== МЕНЮ ===== -->
             <div id="menu-screen" class="category-screen active">
                 <div class="menu-grid">
                     <div class="menu-item" onclick="openCategory('presets'); clickSound()">
@@ -363,8 +386,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- ===== VOCAL PRESETS ===== -->
+            <!-- VOCAL PRESETS -->
             <div id="presets-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2>VOCAL PRESETS</h2>
@@ -373,12 +395,11 @@
                     <div class="menu-item" onclick="openSubCategory('logicpro'); clickSound()"><span>LOGIC PRO</span></div>
                 </div>
             </div>
-
-            <!-- FL Studio Presets -->
+            <!-- VOCAL PRESETS SUB: FL STUDIO (переделано в раскрывающуюся карточку) -->
             <div id="flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>FL Studio</h2>
-                <div class="card expandable" data-product='{"name":"FLUGGA Vocal Rec","price":2490,"category":"FL Studio"}'>
+                <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                             <rect width="32" height="32" fill="#222222"/>
@@ -398,28 +419,26 @@
                         </svg>
                         <span class="card-title">FLUGGA Vocal Rec</span>
                     </div>
-                    <div class="card-price-row">
-                        <span class="price">2 490 ₽</span>
-                        <button class="btn pay-btn" data-product='{"name":"FLUGGA Vocal Rec","price":2490,"category":"FL Studio"}'>ОПЛАТИТЬ</button>
-                    </div>
                     <div class="card-expandable">
                         <div class="expand-content">
                             <div class="details" style="min-width:0; flex:1;">
                                 <div class="details-text" style="font-size:12px; color:#999; line-height:1.6; font-family:sans-serif;">
                                     Main Vocal
                                 </div>
+                                <div class="buy-row" style="display:flex; justify-content:flex-end; align-items:center; margin-top:12px; padding-top:8px; border-top:1px solid #333;">
+                                    <span class="price" style="font-size:14px; white-space:nowrap; flex-shrink:0; margin-right:15px;">2 490 ₽</span>
+                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('FLUGGA Vocal Rec', 2490, 'FL Studio')">ВЫБРАТЬ</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn select-btn closed">ВЫБРАТЬ</button>
                 </div>
             </div>
-
-            <!-- Logic Pro Presets -->
+            <!-- VOCAL PRESETS SUB: LOGIC PRO (переделано в раскрывающуюся карточку) -->
             <div id="logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToPresets(); clickSound()">← BACK</button>
                 <h2>Logic Pro</h2>
-                <div class="card expandable" data-product='{"name":"FLUGGA Vocal Rec","price":2490,"category":"Logic Pro"}'>
+                <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
                             <rect width="32" height="32" fill="#222222"/>
@@ -432,24 +451,22 @@
                         </svg>
                         <span class="card-title">FLUGGA Vocal Rec</span>
                     </div>
-                    <div class="card-price-row">
-                        <span class="price">2 490 ₽</span>
-                        <button class="btn pay-btn" data-product='{"name":"FLUGGA Vocal Rec","price":2490,"category":"Logic Pro"}'>ОПЛАТИТЬ</button>
-                    </div>
                     <div class="card-expandable">
                         <div class="expand-content">
                             <div class="details" style="min-width:0; flex:1;">
                                 <div class="details-text" style="font-size:12px; color:#999; line-height:1.6; font-family:sans-serif;">
                                     Main Vocal
                                 </div>
+                                <div class="buy-row" style="display:flex; justify-content:flex-end; align-items:center; margin-top:12px; padding-top:8px; border-top:1px solid #333;">
+                                    <span class="price" style="font-size:14px; white-space:nowrap; flex-shrink:0; margin-right:15px;">2 490 ₽</span>
+                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('FLUGGA Vocal Rec', 2490, 'Logic Pro')">ВЫБРАТЬ</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn select-btn closed">ВЫБРАТЬ</button>
                 </div>
             </div>
-
-            <!-- ===== TEMPLATES ===== -->
+            <!-- TEMPLATES -->
             <div id="templates-screen" class="category-screen">
                 <button class="back-btn" onclick="goBack(); clickSound()">← BACK</button>
                 <h2 style="margin-top: 20px;">TEMPLATE</h2>
@@ -462,54 +479,38 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Template Logic Pro -->
+            <!-- TEMPLATES: LOGIC PRO -->
             <div id="template-logicpro-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template Logic Pro</h2>
-                <div class="card expandable" data-product='{"name":"Template Logic Pro","price":5990,"category":"Template Logic Pro"}'>
-                    <div class="card-header">
-                        <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
-                            <rect width="32" height="32" fill="#222222"/>
-                            <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
-                            <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
-                            <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
-                            <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
-                            <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
-                            <rect x="14" y="14" width="4" height="4" fill="#000000"/>
-                        </svg>
-                        <span class="card-title">Template Logic Pro</span>
-                    </div>
-                    <div class="card-price-row">
-                        <span class="price">5 990 ₽</span>
-                        <button class="btn pay-btn" data-product='{"name":"Template Logic Pro","price":5990,"category":"Template Logic Pro"}'>ОПЛАТИТЬ</button>
-                    </div>
-                    <div class="card-expandable">
-                        <div class="expand-content">
-                            <div class="details" style="min-width:0; flex:1;">
-                                <div class="details-text" style="font-size:12px; color:#999; line-height:1.6; font-family:sans-serif;">
-                                    Full Project + Master
-                                </div>
-                            </div>
+                <div class="card">
+                    <svg class="card-icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+                        <rect width="32" height="32" fill="#222222"/>
+                        <rect x="4" y="4" width="24" height="24" rx="12" ry="12" fill="#aaaaaa"/>
+                        <rect x="6" y="6" width="20" height="20" rx="10" ry="10" fill="#dddddd"/>
+                        <rect x="8" y="8" width="16" height="16" rx="8" ry="8" fill="#bbbbbb"/>
+                        <rect x="10" y="10" width="12" height="12" rx="6" ry="6" fill="#eeeeee"/>
+                        <rect x="12" y="12" width="8" height="8" rx="4" ry="4" fill="#aaaaaa"/>
+                        <rect x="14" y="14" width="4" height="4" fill="#000000"/>
+                    </svg>
+                    <div class="card-info">
+                        <div class="card-title">Template Logic Pro</div>
+                        <div class="card-desc">Full Project + Master</div>
+                        <div class="card-actions">
+                            <span class="price">5 990 ₽</span>
+                            <button class="btn" onclick="buyProduct('Template Logic Pro', 5990, 'Template Logic Pro'); clickSound()">ВЫБРАТЬ</button>
                         </div>
                     </div>
-                    <button class="btn select-btn closed">ВЫБРАТЬ</button>
                 </div>
             </div>
-
-            <!-- Template FL Studio -->
+            <!-- TEMPLATES: FL STUDIO -->
             <div id="template-flstudio-screen" class="category-screen">
                 <button class="back-btn" onclick="goBackToTemplates(); clickSound()">← BACK</button>
                 <h2>Template FL Studio</h2>
-                
-                <!-- Товар 1: Перед тем как -->
-                <div class="card expandable" data-product='{"name":"Перед тем как","price":6990,"category":"Template FL Studio"}'>
+                <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Перед тем как</span>
-                    </div>
-                    <div class="card-price-row">
-                        <span class="price">6 990 ₽</span>
-                        <button class="btn pay-btn" data-product='{"name":"Перед тем как","price":6990,"category":"Template FL Studio"}'>ОПЛАТИТЬ</button>
+                        <span class="card-price">6 990 ₽</span>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -523,20 +524,17 @@
                                         <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                                     </button>
                                 </div>
+                                <div class="buy-row">
+                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Перед тем как', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn select-btn closed">ВЫБРАТЬ</button>
                 </div>
-
-                <!-- Товар 2: Сделаю тебе больно -->
-                <div class="card expandable" data-product='{"name":"Сделаю тебе больно","price":6990,"category":"Template FL Studio"}'>
+                <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Сделаю тебе больно</span>
-                    </div>
-                    <div class="card-price-row">
-                        <span class="price">6 990 ₽</span>
-                        <button class="btn pay-btn" data-product='{"name":"Сделаю тебе больно","price":6990,"category":"Template FL Studio"}'>ОПЛАТИТЬ</button>
+                        <span class="card-price">6 990 ₽</span>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -548,20 +546,17 @@
                                         <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                                     </button>
                                 </div>
+                                <div class="buy-row">
+                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Сделаю тебе больно', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn select-btn closed">ВЫБРАТЬ</button>
                 </div>
-
-                <!-- Товар 3: Кистями -->
-                <div class="card expandable" data-product='{"name":"Кистями","price":6990,"category":"Template FL Studio"}'>
+                <div class="card expandable" onclick="toggleCard(this)">
                     <div class="card-header">
                         <span class="card-title">Кистями</span>
-                    </div>
-                    <div class="card-price-row">
-                        <span class="price">6 990 ₽</span>
-                        <button class="btn pay-btn" data-product='{"name":"Кистями","price":6990,"category":"Template FL Studio"}'>ОПЛАТИТЬ</button>
+                        <span class="card-price">6 990 ₽</span>
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -573,19 +568,18 @@
                                         <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
                                     </button>
                                 </div>
+                                <div class="buy-row">
+                                    <button class="btn" onclick="event.stopPropagation(); buyProduct('Кистями', 6990, 'Template FL Studio')">ВЫБРАТЬ</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <button class="btn select-btn closed">ВЫБРАТЬ</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // 1. Telegram и загрузка
-        // ============================================================
         const webapp = window.Telegram?.WebApp;
         const logo = document.querySelector('#loader-screen img.logo');
 
@@ -614,9 +608,6 @@
         window.addEventListener('resize', centerLogo);
         if (webapp) webapp.onEvent('viewportChanged', centerLogo);
 
-        // ============================================================
-        // 2. Фоновый снег
-        // ============================================================
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
@@ -643,9 +634,6 @@
         window.addEventListener('resize', ()=>{ resize(); initParticles(); });
         resize(); initParticles(); drawParticles();
 
-        // ============================================================
-        // 3. Звуковые эффекты
-        // ============================================================
         let audioCtx = null;
         function initAudio() { if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); if (audioCtx.state==='suspended') audioCtx.resume(); }
         function playTone(freq, duration, type='square', volume=0.15) {
@@ -661,11 +649,9 @@
             } catch(e) {}
         }
         function clickSound() { initAudio(); playTone(800, 0.06, 'square', 0.1); }
+        function categorySound() { initAudio(); playTone(600, 0.1, 'square', 0.12); setTimeout(()=>playTone(800,0.1,'square',0.12),100); }
         function successSound() { initAudio(); playTone(523,0.15,'square',0.15); setTimeout(()=>playTone(659,0.15,'square',0.15),150); setTimeout(()=>playTone(784,0.2,'square',0.15),300); }
 
-        // ============================================================
-        // 4. Прогресс-бар и переход к основному контенту
-        // ============================================================
         const progressBar = document.getElementById('progressBar');
         const loaderScreen = document.getElementById('loader-screen');
         const mainContainer = document.getElementById('main-container');
@@ -686,8 +672,6 @@
                     setTimeout(() => {
                         loaderScreen.style.display = 'none';
                         mainContainer.style.display = 'flex';
-                        // После загрузки назначаем обработчики на кнопки
-                        initButtons();
                     }, 500);
                 } else {
                     progressBar.style.width = progress + '%';
@@ -696,9 +680,6 @@
         }
         document.addEventListener('DOMContentLoaded', startLoading);
 
-        // ============================================================
-        // 5. Навигация по категориям (без изменений)
-        // ============================================================
         function openCategory(id) {
             closeAllExpandableCards();
             document.querySelectorAll('.category-screen').forEach(el => el.classList.remove('active'));
@@ -735,9 +716,6 @@
             document.getElementById('templates-screen').classList.add('active');
         }
 
-        // ============================================================
-        // 6. Аудиоплеер (без изменений)
-        // ============================================================
         let currentAudio = null;
         let currentPlayBtn = null;
 
@@ -751,6 +729,27 @@
                 currentPlayBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
                 currentPlayBtn = null;
             }
+        }
+
+        function closeAllExpandableCards() {
+            stopGlobalAudio();
+            const activeCards = document.querySelectorAll('.card.expandable.active');
+            activeCards.forEach(c => {
+                c.classList.remove('active');
+                const playBtn = c.querySelector('.play-btn');
+                if (playBtn) {
+                    playBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
+                }
+            });
+        }
+
+        function toggleCard(cardElement) {
+            if (cardElement.classList.contains('active')) {
+                closeAllExpandableCards();
+                return;
+            }
+            closeAllExpandableCards();
+            cardElement.classList.add('active');
         }
 
         function toggleAudio(btnElement, audioSrc) {
@@ -789,77 +788,7 @@
             }
         }
 
-        // ============================================================
-        // 7. НОВАЯ ЛОГИКА КАРТОЧЕК
-        // ============================================================
-
-        // Закрыть все раскрытые карточки (используется при навигации)
-        function closeAllExpandableCards() {
-            stopGlobalAudio();
-            document.querySelectorAll('.card.expandable.active').forEach(card => {
-                card.classList.remove('active');
-                const selectBtn = card.querySelector('.select-btn');
-                if (selectBtn) {
-                    selectBtn.textContent = 'ВЫБРАТЬ';
-                    selectBtn.classList.remove('opened');
-                    selectBtn.classList.add('closed');
-                }
-                // Остановить аудио внутри
-                const playBtn = card.querySelector('.play-btn');
-                if (playBtn) {
-                    playBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
-                }
-            });
-        }
-
-        // Переключение карточки (только видимость)
-        function toggleCard(card) {
-            if (card.classList.contains('active')) {
-                // Закрыть
-                card.classList.remove('active');
-                const selectBtn = card.querySelector('.select-btn');
-                if (selectBtn) {
-                    selectBtn.textContent = 'ВЫБРАТЬ';
-                    selectBtn.classList.remove('opened');
-                    selectBtn.classList.add('closed');
-                }
-                // Остановить аудио внутри
-                const playBtn = card.querySelector('.play-btn');
-                if (playBtn) {
-                    playBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
-                }
-            } else {
-                // Закрыть все другие карточки
-                document.querySelectorAll('.card.expandable.active').forEach(c => {
-                    if (c !== card) {
-                        c.classList.remove('active');
-                        const btn = c.querySelector('.select-btn');
-                        if (btn) {
-                            btn.textContent = 'ВЫБРАТЬ';
-                            btn.classList.remove('opened');
-                            btn.classList.add('closed');
-                        }
-                        const pBtn = c.querySelector('.play-btn');
-                        if (pBtn) {
-                            pBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
-                        }
-                    }
-                });
-                // Открыть текущую
-                card.classList.add('active');
-                const selectBtn = card.querySelector('.select-btn');
-                if (selectBtn) {
-                    selectBtn.textContent = 'СКРЫТЬ';
-                    selectBtn.classList.remove('closed');
-                    selectBtn.classList.add('opened');
-                }
-            }
-        }
-
-        // ============================================================
-        // 8. ПОКУПКА (независимая функция)
-        // ============================================================
-        function buyProduct(productName, productPrice, category) {
+        function buyProduct(productName, productPrice, category = '') {
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
                 alert("Откройте магазин через красную кнопку Telegram.");
@@ -894,44 +823,6 @@
             });
         }
 
-        // ============================================================
-        // 9. Инициализация обработчиков (после загрузки)
-        // ============================================================
-        function initButtons() {
-            // Кнопки "ВЫБРАТЬ" – переключение карточки
-            document.querySelectorAll('.card .select-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation(); // чтобы не мешать другим обработчикам
-                    const card = this.closest('.card.expandable');
-                    if (card) toggleCard(card);
-                });
-            });
-
-            // Кнопки "ОПЛАТИТЬ" – вызов покупки
-            document.querySelectorAll('.card .pay-btn').forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.stopPropagation(); // безопасность
-                    const productData = this.dataset.product;
-                    if (productData) {
-                        try {
-                            const data = JSON.parse(productData);
-                            buyProduct(data.name, data.price, data.category);
-                        } catch (err) {
-                            console.error('Ошибка парсинга данных товара:', err);
-                            alert('Ошибка данных товара.');
-                        }
-                    } else {
-                        alert('Данные товара отсутствуют.');
-                    }
-                });
-            });
-
-            // Также добавляем обработчик на кнопки "ВЫБРАТЬ", которые могли быть добавлены динамически (но у нас всё статично)
-        }
-
-        // ============================================================
-        // 10. Дополнительно: визуальные эффекты нажатия (pointer)
-        // ============================================================
         document.addEventListener('DOMContentLoaded', () => {
             const interactiveElements = document.querySelectorAll('.menu-item, .btn, .back-btn, .play-btn');
             interactiveElements.forEach(el => {
