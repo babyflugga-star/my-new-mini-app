@@ -734,7 +734,7 @@
                 currentAudio = null;
             }
             if (currentPlayBtn) {
-                currentPlayBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
+                currentPlayBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>';
                 currentPlayBtn = null;
             }
         }
@@ -746,7 +746,7 @@
                 c.classList.remove('active');
                 const playBtn = c.querySelector('.play-btn');
                 if (playBtn) {
-                    playBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
+                    playBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>';
                 }
             });
         }
@@ -775,7 +775,7 @@
                         if (playBtn && playBtn.dataset.audio) {
                             const audio = new Audio(playBtn.dataset.audio);
                             audio.pause();
-                            playBtn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
+                            playBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>';
                         }
                     }
                 });
@@ -800,7 +800,7 @@
             }
             if (currentPlayBtn === btnElement && currentAudio && !currentAudio.paused) {
                 currentAudio.pause();
-                btnElement.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
+                btnElement.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>';
                 currentPlayBtn = null;
                 currentAudio = null;
             } else {
@@ -808,11 +808,11 @@
                 const audio = new Audio(audioSrc);
                 audio.loop = false;
                 audio.play().then(() => {
-                    btnElement.innerHTML = `<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+                    btnElement.innerHTML = '<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
                     currentAudio = audio;
                     currentPlayBtn = btnElement;
                     audio.addEventListener('ended', () => {
-                        btnElement.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>`;
+                        btnElement.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>';
                         if (currentPlayBtn === btnElement) {
                             currentPlayBtn = null;
                             currentAudio = null;
@@ -825,39 +825,57 @@
             }
         }
 
-        // Универсальная функция для кнопки «Выбрать/Оплатить»
+        // Универсальная функция для кнопки «Выбрать/Оплатить» с диагностикой
         function handleActionButton(event, btnElement, productName, productPrice, category) {
-            event.stopPropagation(); // Предотвращаем всплытие к карточке
+            event.stopPropagation();
+            console.log('🟢 [handleActionButton] вызван', { productName, productPrice, category });
+
             const card = btnElement.closest('.card.expandable');
-            if (!card) return;
-            if (card.classList.contains('active')) {
-                // Карточка открыта -> это кнопка «ОПЛАТИТЬ» -> выполняем покупку
+            if (!card) {
+                console.warn('❌ Карточка не найдена');
+                return;
+            }
+
+            const isActive = card.classList.contains('active');
+            console.log('📌 card.active =', isActive);
+
+            if (isActive) {
+                console.log('➡️ Карточка открыта → вызываем buyProduct()');
                 buyProduct(productName, productPrice, category);
             } else {
-                // Карточка закрыта -> это кнопка «ВЫБРАТЬ» -> раскрываем карточку
+                console.log('➡️ Карточка закрыта → вызываем toggleCard()');
                 toggleCard(card);
             }
         }
 
-        // ИСПРАВЛЕННАЯ ФУНКЦИЯ buyProduct
         function buyProduct(productName, productPrice, category = '') {
+            console.log('💰 [buyProduct] СТАРТ', { productName, productPrice, category });
+
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
                 alert("Откройте магазин через красную кнопку Telegram.");
+                console.warn('❌ Нет пользователя Telegram');
                 return;
             }
+
+            console.log('👤 Пользователь:', user.id, user.username);
+
+            const payload = {
+                userId: user.id,
+                username: user.username || user.first_name,
+                product: productName,
+                price: productPrice,
+                category: category
+            };
+            console.log('📤 POST /api/order payload:', payload);
+
             fetch('/api/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: user.id,
-                    username: user.username || user.first_name,
-                    product: productName,
-                    price: productPrice,
-                    category: category
-                })
+                body: JSON.stringify(payload)
             })
             .then(async res => {
+                console.log('📥 Статус ответа:', res.status);
                 if (!res.ok) {
                     const errorText = await res.text();
                     throw new Error(`HTTP ${res.status}: ${errorText}`);
@@ -865,18 +883,17 @@
                 return res.json();
             })
             .then(data => {
+                console.log('📦 Ответ сервера:', data);
                 if (data.paymentUrl) {
-                    // Открываем страницу оплаты (ЮKassa или другая платёжная система)
-                    window.open(data.paymentUrl, '_blank');
-                    successSound(); // звук успеха
+                    console.log('🔗 Открываем paymentUrl:', data.paymentUrl);
+                    window.Telegram.WebApp.openLink(data.paymentUrl);
+                    successSound();
                 } else {
-                    // Если сервер не вернул ссылку – показываем сообщение
-                    alert(data.message || 'Заказ создан, но ссылка на оплату не получена.');
+                    alert(data.message || 'Ссылка на оплату не получена.');
                 }
-                // ❌ Удалён window.Telegram.WebApp.close() – приложение остаётся открытым
             })
             .catch(err => {
-                console.error('Ошибка при отправке заказа:', err);
+                console.error('❌ Ошибка при отправке заказа:', err);
                 alert('Ошибка при отправке заказа: ' + err.message);
             });
         }

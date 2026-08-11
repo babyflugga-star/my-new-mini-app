@@ -1,90 +1,117 @@
 export default async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  console.log('=== /api/order CALLED ===');
+  console.log('METHOD:', req.method);
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const BOT_TOKEN = process.env.BOT_TOKEN;
+  const SHOP_ID = process.env.YOKASSA_SHOP_ID;
+  const SECRET_KEY = process.env.YOKASSA_SECRET_KEY;
+
+  console.log('ENV:', {
+    BOT_TOKEN: !!BOT_TOKEN,
+    SHOP_ID: !!SHOP_ID,
+    SECRET_KEY: !!SECRET_KEY,
+  });
+
+  if (!BOT_TOKEN || !SHOP_ID || !SECRET_KEY) {
+    console.error('Missing env vars');
+    return res.status(500).json({ error: 'Сервер не настроен' });
+  }
+
+  const { userId, username, product, price, category } = req.body;
+  console.log('BODY:', { userId, username, product, price, category });
+
+  if (!userId || !product || price === undefined || price === null) {
+    return res.status(400).json({ error: 'Неверные данные заказа' });
+  }
+
+  const amount = Number(price);
+  if (isNaN(amount) || amount <= 0) {
+    return res.status(400).json({ error: 'Цена должна быть числом > 0' });
+  }
+
+  try {
+    const idempotenceKey = `order_${userId}_${Date.now()}`;
+    const auth = Buffer.from(`${SHOP_ID}:${SECRET_KEY}`).toString('base64');
+
+    const paymentData = {
+      amount: {
+        value: amount.toFixed(2),
+        currency: 'RUB',
+      },
+      confirmation: {
+        type: 'redirect',
+        return_url: 'https://t.me/FLUGGA_STORE_BOT',
+      },
+      capture: true,
+      description: `Заказ: ${product} (${amount}₽) от @${username || userId}`,
+    };
+
+    console.log('Creating YooKassa payment...');
+    const yooResponse = await fetch('https://api.yookassa.ru/v3/payments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${auth}`,
+        'Idempotence-Key': idempotenceKey,
+      },
+      body: JSON.stringify(paymentData),
+    });
+
+    if (!yooResponse.ok) {
+      const errorText = await yooResponse.text();
+      console.error('ЮKassa error:', errorText);
+      throw new Error(`ЮKassa вернула ошибку: ${yooResponse.status}`);
     }
 
-    if (req.method !== 'POST') {
-        return res.status(405).json({ message: 'Метод не разрешен' });
+    const yooData = await yooResponse.json();
+    const paymentUrl = yooData?.confirmation?.confirmation_url;
+
+    console.log('YOOKASSA PAYMENT CREATED:', yooData.id);
+    console.log('PAYMENT URL:', paymentUrl);
+
+    if (!paymentUrl) {
+      throw new Error('ЮKassa не вернула ссылку на оплату');
     }
 
-    const { userId, username, product, price, category } = req.body;
+    // Отправляем сообщение в Telegram
+    const tgMessage = `✅ *Новый заказ!*\n\nКатегория: ${category || 'Не указана'}\nТовар: ${product}\nСумма: ${amount} ₽\n\nОплатите заказ по кнопке ниже:`;
+    const tgKeyboard = {
+      inline_keyboard: [
+        [{ text: '💳 Перейти к оплате', url: paymentUrl }],
+      ],
+    };
 
-    if (!userId || !product || price === undefined || price === null) {
-        return res.status(400).json({ message: 'Отсутствуют обязательные поля: userId, product, price' });
+    console.log('SENDING TELEGRAM MESSAGE TO:', userId);
+    const tgResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: userId,
+        text: tgMessage,
+        parse_mode: 'Markdown',
+        reply_markup: tgKeyboard,
+      }),
+    });
+
+    console.log('TELEGRAM RESPONSE STATUS:', tgResponse.status);
+    if (!tgResponse.ok) {
+      const tgError = await tgResponse.text();
+      console.error('Telegram error:', tgError);
     }
 
-    const botToken = process.env.BOT_TOKEN;
-    const shopId = process.env.YOKASSA_SHOP_ID;
-    const secretKey = process.env.YOKASSA_SECRET_KEY;
+    return res.status(200).json({
+      success: true,
+      message: 'Заказ создан',
+      paymentUrl: paymentUrl,
+      paymentId: yooData.id,
+    });
 
-    if (!botToken || !shopId || !secretKey) {
-        console.error('Missing environment variables:', { botToken: !!botToken, shopId: !!shopId, secretKey: !!secretKey });
-        return res.status(500).json({ message: 'Ошибка конфигурации: не хватает ключей в Vercel' });
-    }
-
-    try {
-        const amount = Number(price).toFixed(2);
-        const yooKassaUrl = 'https://api.yookassa.ru/v3/payments';
-        const auth = Buffer.from(`${shopId}:${secretKey}`).toString('base64');
-        const idempotenceKey = `order_${userId}_${Date.now()}`;
-
-        const paymentData = {
-            amount: { value: amount, currency: 'RUB' },
-            confirmation: { type: 'redirect', return_url: 'https://t.me/FLUGGA_STORE_BOT' },
-            capture: true,
-            description: `Заказ: ${product} (${amount}₽) от @${username || userId}`
-        };
-
-        const response = await fetch(yooKassaUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Basic ${auth}`,
-                'Idempotence-Key': idempotenceKey
-            },
-            body: JSON.stringify(paymentData)
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error('Ошибка ЮKassa:', data);
-            throw new Error(data.description || 'Ошибка создания платежа в ЮKassa');
-        }
-
-        const paymentUrl = data.confirmation.confirmation_url;
-        let message = `✅ Новый заказ!\n\n`;
-        if (category) {
-            message += `Категория: ${category}\n`;
-        }
-        message += `Товар: ${product}\nСумма: ${amount} ₽\n\nОплатите по ссылке:`;
-
-        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-        const telegramResponse = await fetch(telegramUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: userId,
-                text: message,
-                reply_markup: {
-                    inline_keyboard: [[{ text: "💳 Перейти к оплате", url: paymentUrl }]]
-                }
-            })
-        });
-
-        if (!telegramResponse.ok) {
-            const tgError = await telegramResponse.text();
-            console.error('Ошибка отправки в Telegram:', tgError);
-            throw new Error(`Ошибка Telegram: ${tgError}`);
-        }
-
-        return res.status(200).json({ message: 'Ссылка на оплату отправлена!' });
-    } catch (error) {
-        console.error('Ошибка в API:', error.message);
-        return res.status(500).json({ message: 'Ошибка: ' + error.message });
-    }
+  } catch (error) {
+    console.error('Ошибка в /api/order:', error);
+    return res.status(500).json({ error: error.message || 'Внутренняя ошибка сервера' });
+  }
 }
