@@ -419,6 +419,7 @@
                         </svg>
                         <span class="card-title">FLUGGA Vocal Rec</span>
                         <button class="btn action-btn" onclick="handleActionButton(event, this, 'FLUGGA Vocal Rec', 2490, 'FL Studio')">ВЫБРАТЬ</button>
+
                     </div>
                     <div class="card-expandable">
                         <div class="expand-content">
@@ -825,57 +826,76 @@
             }
         }
 
-        // ДИАГНОСТИЧЕСКАЯ ВЕРСИЯ handleActionButton
+        // Универсальная функция для кнопки «Выбрать/Оплатить» с диагностикой
         function handleActionButton(event, btnElement, productName, productPrice, category) {
-            console.log('=== BUTTON CLICK ===');
-            console.log('button text:', btnElement.textContent);
-            const card = btnElement.closest('.card.expandable');
-            console.log('card active (before):', card?.classList.contains('active'));
-
             event.stopPropagation();
+            console.log('🟢 [handleActionButton] вызван', { productName, productPrice, category });
 
-            console.log('CARD:', card);
-            console.log('IS ACTIVE:', card.classList.contains('active'));
+            const card = btnElement.closest('.card.expandable');
+            if (!card) {
+                console.warn('❌ Карточка не найдена');
+                return;
+            }
 
-            if (!card) return;
+            const isActive = card.classList.contains('active');
+            console.log('📌 card.active =', isActive);
 
-            if (card.classList.contains('active')) {
-                console.log('CALLING BUY PRODUCT');
+            if (isActive) {
+                console.log('➡️ Карточка открыта → вызываем buyProduct()');
                 buyProduct(productName, productPrice, category);
             } else {
-                console.log('CALLING TOGGLECARD (закрытая карточка)');
+                console.log('➡️ Карточка закрыта → вызываем toggleCard()');
                 toggleCard(card);
             }
         }
 
-        // ДИАГНОСТИЧЕСКАЯ ВЕРСИЯ buyProduct (старая рабочая, только с логами)
         function buyProduct(productName, productPrice, category = '') {
-            console.log('=== BUY PRODUCT CALLED ===');
+            console.log('💰 [buyProduct] СТАРТ', { productName, productPrice, category });
+
             const user = window.Telegram.WebApp.initDataUnsafe.user;
             if (!user || !user.id) {
                 alert("Откройте магазин через красную кнопку Telegram.");
+                console.warn('❌ Нет пользователя Telegram');
                 return;
             }
+
+            console.log('👤 Пользователь:', user.id, user.username);
+
+            const payload = {
+                userId: user.id,
+                username: user.username || user.first_name,
+                product: productName,
+                price: productPrice,
+                category: category
+            };
+            console.log('📤 POST /api/order payload:', payload);
+
             fetch('/api/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: user.id,
-                    username: user.username || user.first_name,
-                    product: productName,
-                    price: productPrice,
-                    category: category
-                })
+                body: JSON.stringify(payload)
             })
-            .then(res => res.json())
+            .then(async res => {
+                console.log('📥 Статус ответа:', res.status);
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    throw new Error(`HTTP ${res.status}: ${errorText}`);
+                }
+                return res.json();
+            })
             .then(data => {
-                alert(data.message);
-                successSound();
-                window.Telegram.WebApp.close();
+                console.log('📦 Ответ сервера:', data);
+                if (data.paymentUrl) {
+                    console.log('🔗 Открываем paymentUrl:', data.paymentUrl);
+                    window.Telegram.WebApp.openLink(data.paymentUrl);
+                    successSound();
+                } else {
+                    alert(data.message || 'Ссылка на оплату не получена.');
+                }
             })
             .catch(err => {
-                console.error('Ошибка:', err);
-                alert('Ошибка: ' + err.message);
+                console.error('❌ Ошибка при отправке заказа:', err);
+                alert('Ошибка при отправке заказа: ' + err.message);
             });
         }
 

@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   const SHOP_ID = process.env.YOKASSA_SHOP_ID;
   const SECRET_KEY = process.env.YOKASSA_SECRET_KEY;
 
-  console.log('ENV:', {
+  console.log('ENV vars present:', {
     BOT_TOKEN: !!BOT_TOKEN,
     SHOP_ID: !!SHOP_ID,
     SECRET_KEY: !!SECRET_KEY,
@@ -77,7 +77,6 @@ export default async function handler(req, res) {
       throw new Error('ЮKassa не вернула ссылку на оплату');
     }
 
-    // Отправляем сообщение в Telegram
     const tgMessage = `✅ *Новый заказ!*\n\nКатегория: ${category || 'Не указана'}\nТовар: ${product}\nСумма: ${amount} ₽\n\nОплатите заказ по кнопке ниже:`;
     const tgKeyboard = {
       inline_keyboard: [
